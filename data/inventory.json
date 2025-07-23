@@ -6,7 +6,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3C",
-    "description": "Công thức: C12H8N2.H2O, CAS: 5144-89-8, Trạng thái/Nồng độ: rắn, Tình trạng: Thùng 10 hộp"
+    "description": "Công thức: C12H8N2.H2O, CAS: 5144-89-8, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A001B",
@@ -15,7 +15,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3C",
-    "description": "Công thức: C12H8N2.H2O, CAS: 5144-89-8, Trạng thái/Nồng độ: rắn, Tình trạng: Thùng 10 hộp"
+    "description": "Công thức: C12H8N2.H2O, CAS: 5144-89-8, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A002",
@@ -942,7 +942,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3A",
-    "description": "Công thức: (NH4)2Fe(SO4)2.6H2O, CAS: 7783-85-9, Trạng thái/Nồng độ: rắn, Tình trạng: Đã mở (mất nhãn)"
+    "description": "Công thức: (NH4)2Fe(SO4)2.6H2O, CAS: 7783-85-9, Trạng thái/Nồng độ: rắn, Tình trạng: Đã mở"
   },
   {
     "id": "A039C",
@@ -1113,7 +1113,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2C",
-    "description": "Công thức: MnSO4.H20, CAS: 10034-96-5, Trạng thái/Nồng độ: RẮN, Tình trạng: NC - Đã mở, Theo dõi: Đang mượn"
+    "description": "Công thức: MnSO4.H20, CAS: 10034-96-5, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở, Theo dõi: Đang mượn"
   },
   {
     "id": "A048D",
@@ -1545,7 +1545,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: Fe(NO3)3.9H2O, CAS: 7782-61-8, Trạng thái/Nồng độ: LỎNG, Tình trạng: NC - Đã mở"
+    "description": "Công thức: Fe(NO3)3.9H2O, CAS: 7782-61-8, Trạng thái/Nồng độ: LỎNG, Tình trạng: Đã mở"
   },
   {
     "id": "A066-NC",
@@ -1554,7 +1554,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: Al(NO3)3.9H2O, CAS: 7784-27-2, Trạng thái/Nồng độ: RẮN, Tình trạng: NC-Đã mở, Theo dõi: Đang mượn"
+    "description": "Công thức: Al(NO3)3.9H2O, CAS: 7784-27-2, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở, Theo dõi: Đang mượn"
   },
   {
     "id": "A067-NC",
@@ -1563,7 +1563,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: Mg(NO3)2.6H2O, CAS: 13446-18-89, Trạng thái/Nồng độ: RẮN, Tình trạng: NC - Đã mở, Theo dõi: Đang mượn"
+    "description": "Công thức: Mg(NO3)2.6H2O, CAS: 13446-18-89, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở, Theo dõi: Đang mượn"
   },
   {
     "id": "A069A",
@@ -2688,7 +2688,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: NC - Đã mở"
+    "description": "Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "A109A",
@@ -2715,7 +2715,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: RẮN"
+    "description": "Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "A109D",
@@ -2877,7 +2877,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na2CO3, CAS: 497-19-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở - NC, Theo dõi: Đang mượn"
+    "description": "Công thức: Na2CO3, CAS: 497-19-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở, Theo dõi: Đang mượn"
   },
   {
     "id": "A115A",
@@ -3363,7 +3363,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: KHONG, CAS: KHONG, Trạng thái/Nồng độ: RẮN, Tình trạng: Túi nilon - còn nguyên"
+    "description": "Công thức: KHONG, CAS: KHONG, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A131A",
@@ -6009,7 +6009,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "Không rõ",
-    "description": "Công thức: C2HCl3O2, CAS: 76-03-9, Trạng thái/Nồng độ: LỎNG, Tình trạng: "
+    "description": "Công thức: C2HCl3O2, CAS: 76-03-9, Trạng thái/Nồng độ: LỎNG, Tình trạng: Đã mở"
   },
   {
     "id": "ITEM_669",
