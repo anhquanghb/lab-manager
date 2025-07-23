@@ -138,3 +138,21 @@ class DatabaseManager:
 
         results = self.inventory_data[self.inventory_data['description'].str.lower().str.contains(f"cas: {cas_number.lower()}", na=False)]
         return results
+
+    def get_item_details_for_summary(self, item_name):
+        """
+        Tìm kiếm tất cả các mục khớp với tên (hoặc mô tả nếu cần) và trả về DataFrame đầy đủ.
+        Dùng cho chức năng thống kê số lượng và liệt kê chi tiết.
+        """
+        if self.inventory_data.empty:
+            return pd.DataFrame()
+
+        item_name_lower = item_name.lower()
+
+        # Tìm kiếm trong cột 'name' hoặc 'description'
+        # Sử dụng str.contains để tìm kiếm linh hoạt hơn
+        results = self.inventory_data[
+            self.inventory_data['name'].str.lower().str.contains(item_name_lower, na=False) |
+            self.inventory_data['description'].str.lower().str.contains(item_name_lower, na=False)
+        ]
+        return results
