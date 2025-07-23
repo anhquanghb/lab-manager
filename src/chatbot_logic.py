@@ -1,11 +1,13 @@
 import pandas as pd
 from src.database_manager import DatabaseManager
 from src.nlp_processor import NLPProcessor
+from googletrans import Translator # Thêm dòng này để import Translator
 
 class ChatbotLogic:
     def __init__(self):
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
+        self.translator = Translator() # Khởi tạo Translator
 
     # Hàm trợ giúp để định dạng kết quả tìm kiếm (hiển thị nhiều mục)
     def _format_results(self, results, query_context=""):
@@ -19,35 +21,56 @@ class ChatbotLogic:
                          f"  Mô tả: {row['description']}\n\n")
         return response.strip()
 
+    def _translate_query(self, text, dest_lang='en', src_lang='auto'):
+        """Hàm trợ giúp để dịch truy vấn."""
+        try:
+            # Kiểm tra xem từ khóa có phải là công thức hóa học đơn giản không, để tránh dịch sai
+            # Ví dụ: H2SO4 không nên dịch thành H2SO4 (English)
+            if re.fullmatch(r'[A-Z0-9().-]+', text.upper()): # Chỉ chứa chữ hoa, số, dấu chấm, gạch ngang, ngoặc đơn
+                return text # Không dịch nếu là công thức hóa học
+
+            # Cố gắng dịch, nếu lỗi sẽ trả về None
+            translated = self.translator.translate(text, dest=dest_lang, src=src_lang)
+            if translated and translated.text.lower() != text.lower(): # Tránh dịch những từ không thay đổi
+                return translated.text
+        except Exception as e:
+            print(f"Lỗi khi dịch: {e}")
+        return None
+
     def _handle_no_results_fallback(self, original_user_query, specific_intent_query_text):
         """
         Xử lý các trường hợp không có kết quả từ tìm kiếm cụ thể bằng cách thử tìm kiếm dự phòng.
         Giai đoạn 1: Thử tìm kiếm chung.
-        Giai đoạn 2: Dịch thuật (sẽ thêm sau).
+        Giai đoạn 2: Dịch thuật.
         Giai đoạn 3: Sửa lỗi chính tả (sẽ thêm sau).
         """
         fallback_response = ""
 
-        # Thử tìm kiếm chung trên toàn bộ các trường
+        # GIAI ĐOẠN 1: Thử tìm kiếm chung trên toàn bộ các trường (với truy vấn đã làm sạch)
         general_search_results = self.db_manager.search_item(specific_intent_query_text)
         if not general_search_results.empty:
             fallback_response += f"Tôi không tìm thấy kết quả chính xác cho yêu cầu ban đầu của bạn, nhưng tôi tìm thấy các mục sau khi tìm kiếm chung với từ khóa '*{specific_intent_query_text}*':\n\n"
             fallback_response += self._format_results(general_search_results)
             return fallback_response
 
-        # --- Các Giai đoạn Fallback tiếp theo sẽ được thêm vào đây sau ---
-        # Ví dụ:
-        # translated_query = self._translate_query(original_user_query)
-        # if translated_query:
-        #    translated_results = self.db_manager.search_item(translated_query)
-        #    if not translated_results.empty:
-        #        return f"Tôi không tìm thấy bằng tiếng Việt, nhưng tôi tìm thấy bằng tiếng Anh ('{translated_query}'):\n\n" + self._format_results(translated_results)
+        # GIAI ĐOẠN 2: Dịch thuật
+        # Chỉ dịch phần query_text đã được làm sạch, không dịch toàn bộ user_query gốc
+        translated_query = self._translate_query(specific_intent_query_text, dest_lang='en')
+        if translated_query and translated_query.lower() != specific_intent_query_text.lower():
+            translated_results = self.db_manager.search_item(translated_query)
+            if not translated_results.empty:
+                fallback_response += f"Tôi không tìm thấy bằng tiếng Việt, nhưng tôi tìm thấy các mục sau khi dịch sang tiếng Anh ('*{translated_query}*'):\n\n"
+                fallback_response += self._format_results(translated_results)
+                return fallback_response
 
-        # spelling_corrected_query = self._correct_spelling(original_user_query)
-        # if spelling_corrected_query != original_user_query:
-        #    corrected_results = self.db_manager.search_item(spelling_corrected_query)
-        #    if not corrected_results.empty:
-        #        return f"Tôi không tìm thấy, có thể bạn muốn hỏi về '{spelling_corrected_query}'? Tôi tìm thấy:\n\n" + self._format_results(corrected_results)
+        # GIAI ĐOẠN 3: Sửa lỗi chính tả (sẽ thêm sau)
+        # spelling_corrected_query = self._correct_spelling(specific_intent_query_text)
+        # if spelling_corrected_query and spelling_corrected_query.lower() != specific_intent_query_text.lower():
+        #     corrected_results = self.db_manager.search_item(spelling_corrected_query)
+        #     if not corrected_results.empty:
+        #         fallback_response += f"Tôi không tìm thấy, có thể bạn muốn hỏi về '*{spelling_corrected_query}*' (đã sửa lỗi chính tả)? Tôi tìm thấy:\n\n"
+        #         fallback_response += self._format_results(corrected_results)
+        #         return fallback_response
 
         return self._format_results(pd.DataFrame(), specific_intent_query_text) # Vẫn không tìm thấy
 
@@ -146,24 +169,21 @@ class ChatbotLogic:
                 return self._handle_no_results_fallback(user_query, location)
             return self._format_results(results, f"vị trí '{location}'")
 
-        elif intent == "get_quantity": # Cập nhật cho thống kê số lượng và liệt kê chi tiết
+        elif intent == "get_quantity":
             item_name = parsed_query.get("item_name")
             if not item_name:
                 return "Bạn muốn hỏi số lượng của vật tư/hóa chất nào?"
 
-            # Gọi hàm mới để lấy tất cả chi tiết các mục liên quan
+            # Gọi hàm để lấy tất cả chi tiết các mục liên quan
             matching_items = self.db_manager.get_item_details_for_summary(item_name)
 
             if not matching_items.empty:
-                # Tính tổng số lượng
-                # Đảm bảo cột 'quantity' là số trước khi tính tổng
                 total_quantity = matching_items['quantity'].sum()
 
                 response = f"Tôi tìm thấy **{len(matching_items)}** mục liên quan đến **{item_name.capitalize()}**.\n"
                 response += f"Tổng số lượng hiện có là **{total_quantity} đơn vị**.\n\n"
                 response += "Chi tiết từng mục:\n"
 
-                # Liệt kê chi tiết từng mục
                 for index, row in matching_items.iterrows():
                     response += (f"- **{row['name']}** (ID: {row['id']}, Loại: {row['type']})\n"
                                  f"  Số lượng: {row['quantity']} {row['unit']}, Vị trí: {row['location']}.\n"
@@ -172,7 +192,7 @@ class ChatbotLogic:
             else:
                 return self._handle_no_results_fallback(user_query, item_name)
 
-        elif intent == "get_location": # Hàm cũ (tìm vị trí theo tên)
+        elif intent == "get_location":
             item_name = parsed_query.get("item_name")
             if not item_name:
                 return "Bạn muốn hỏi vị trí của vật tư/hóa chất nào?"
@@ -182,7 +202,7 @@ class ChatbotLogic:
             else:
                 return self._handle_no_results_fallback(user_query, item_name)
 
-        elif intent == "search_item": # Hàm tìm kiếm chung (fallback mặc định)
+        elif intent == "search_item":
             query_text = parsed_query.get("query")
             if not query_text or len(query_text.strip()) < 2:
                 return "Bạn muốn tôi tìm kiếm thông tin gì? Vui lòng nhập từ khóa cụ thể hơn."
