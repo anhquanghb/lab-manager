@@ -1,3 +1,4 @@
+# requirements.txt (Phiên bản đã loại bỏ googletrans)
 altair==5.5.0
 anyio==4.9.0
 attrs==25.3.0
@@ -9,7 +10,6 @@ click==8.2.1
 colorama==0.4.6
 gitdb==4.0.12
 GitPython==3.1.44
-googletrans==4.0.0-rc1
 h11==0.16.0
 h2 # Đã bỏ ràng buộc phiên bản
 hpack==4.1.0
