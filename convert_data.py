@@ -2,7 +2,7 @@ import pandas as pd
 import json
 import os
 
-# Đường dẫn đến file CSV mà bạn đã cung cấp
+# Đường dẫn đến file CSV mới của bạn
 csv_file_path = 'danhmuc.csv'
 # Đường dẫn đến file JSON mà chatbot đang sử dụng
 json_file_path = 'data/inventory.json'
@@ -37,10 +37,14 @@ for index, row in df_csv.iterrows():
     if not item_name:
         item_name = f"Item {index + 1} (Tên không xác định)"
 
-    # 'type': Phân loại 'Hóa chất' nếu có 'Công thức hóa chất', ngược lại là 'Vật tư'
-    item_type = "Vật tư"
-    if pd.notna(row['Công thức hóa chất']) and str(row['Công thức hóa chất']).strip() != '0':
+    # 'type': Lấy trực tiếp từ cột 'Loại' mới (Hóa chất/Vật tư)
+    item_type_raw = str(row['Loại']).strip().lower() if pd.notna(row['Loại']) else ""
+    if item_type_raw == "hóa chất":
         item_type = "Hóa chất"
+    elif item_type_raw == "vật tư":
+        item_type = "Vật tư"
+    else:
+        item_type = "Không xác định" # Giá trị mặc định nếu cột Loại không hợp lệ
 
     # 'quantity' và 'unit': Giữ nguyên giá trị mặc định đã có
     item_quantity = 1 # Giá trị mặc định
