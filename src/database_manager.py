@@ -26,19 +26,15 @@ class DatabaseManager:
     def search_item(self, query):
         """
         Tìm kiếm vật tư/hóa chất theo bất kỳ thông tin liên quan nào
-        bao gồm: id, name, type, location, và description.
+        bao gồm: id, name, type, location, và description. (Tìm kiếm chung)
         """
         if self.inventory_data.empty:
             return pd.DataFrame()
 
         query_lower = query.lower()
 
-        # Tạo một DataFrame chỉ chứa các cột cần tìm kiếm
-        # và chuyển đổi tất cả sang dạng chuỗi và chữ thường để tìm kiếm
         searchable_df = self.inventory_data[['id', 'name', 'type', 'location', 'description']].astype(str).apply(lambda x: x.str.lower())
 
-        # Tìm kiếm trong tất cả các cột đã chọn
-        # Sử dụng .any(axis=1) để kiểm tra nếu query_lower xuất hiện trong BẤT KỲ cột nào của hàng đó
         mask = searchable_df.apply(lambda col: col.str.contains(query_lower, na=False)).any(axis=1)
 
         results = self.inventory_data[mask]
@@ -67,3 +63,79 @@ class DatabaseManager:
         if not found_item.empty:
             return found_item.iloc[0]['location']
         return None
+
+    # --- CÁC HÀM TÌM KIẾM MỚI ---
+
+    def get_by_id(self, item_id):
+        """Tìm kiếm vật tư/hóa chất theo ID chính xác."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
+
+        results = self.inventory_data[self.inventory_data['id'].str.lower() == item_id.lower()]
+        return results
+
+    def list_by_location(self, location_query):
+        """Liệt kê vật tư/hóa chất theo vị trí."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
+
+        results = self.inventory_data[self.inventory_data['location'].str.lower().str.contains(location_query.lower(), na=False)]
+        return results
+
+    def list_by_type(self, item_type):
+        """Liệt kê vật tư/hóa chất theo loại."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
+
+        results = self.inventory_data[self.inventory_data['type'].str.lower() == item_type.lower()]
+        return results
+
+    def list_by_status(self, status_query):
+        """Liệt kê vật tư/hóa chất theo tình trạng trong mô tả."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
+
+        results = self.inventory_data[self.inventory_data['description'].str.lower().str.contains(status_query.lower(), na=False)]
+        return results
+
+    def list_by_location_and_status(self, location_query, status_query):
+        """Liệt kê vật tư/hóa chất theo vị trí VÀ tình trạng."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
+
+        mask_location = self.inventory_data['location'].str.lower().str.contains(location_query.lower(), na=False)
+        mask_status = self.inventory_data['description'].str.lower().str.contains(status_query.lower(), na=False)
+
+        results = self.inventory_data[mask_location & mask_status] # Kết hợp hai điều kiện
+        return results
+
+    def list_by_type_and_status(self, item_type, status_query):
+        """Liệt kê vật tư/hóa chất theo loại VÀ tình trạng."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
+
+        mask_type = self.inventory_data['type'].str.lower() == item_type.lower()
+        mask_status = self.inventory_data['description'].str.lower().str.contains(status_query.lower(), na=False)
+
+        results = self.inventory_data[mask_type & mask_status] # Kết hợp hai điều kiện
+        return results
+
+    def list_by_type_and_location(self, item_type, location_query):
+        """Liệt kê vật tư/hóa chất theo loại VÀ vị trí."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
+
+        mask_type = self.inventory_data['type'].str.lower() == item_type.lower()
+        mask_location = self.inventory_data['location'].str.lower().str.contains(location_query.lower(), na=False)
+
+        results = self.inventory_data[mask_type & mask_location] # Kết hợp hai điều kiện
+        return results
+
+    def search_by_cas(self, cas_number):
+        """Tìm kiếm vật tư/hóa chất theo số CAS."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
+
+        # CAS number thường ở trong description, nên tìm trong description
+        results = self.inventory_data[self.inventory_data['description'].str.lower().str.contains(f"cas: {cas_number.lower()}", na=False)]
+        return results

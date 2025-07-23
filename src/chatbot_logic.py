@@ -27,7 +27,55 @@ class ChatbotLogic:
 
         # --- Xử lý các ý định cụ thể ---
 
-        if intent == "search_by_id":
+        if intent == "list_by_type_location": # Ý định MỚI
+            item_type = parsed_query.get("type")
+            location = parsed_query.get("location")
+            if not item_type or not location:
+                return "Bạn muốn tìm hóa chất/vật tư loại gì và ở vị trí nào?"
+            results = self.db_manager.list_by_type_and_location(item_type, location)
+            return format_results(results, f"loại '{item_type}' trong vị trí '{location}'")
+
+        elif intent == "list_by_location_status": # Ý định ĐÃ CÓ
+            location = parsed_query.get("location")
+            status = parsed_query.get("status")
+
+            if not location and not status:
+                return "Bạn muốn liệt kê vật tư/hóa chất theo vị trí và tình trạng nào?"
+
+            if location and status:
+                results = self.db_manager.list_by_location_and_status(location, status)
+                return format_results(results, f"vị trí '{location}' và tình trạng '{status}'")
+            elif location: # Chỉ có vị trí (dùng hàm đơn lẻ nếu thiếu status)
+                results = self.db_manager.list_by_location(location)
+                return format_results(results, f"vị trí '{location}'")
+            elif status: # Chỉ có tình trạng (tìm trên toàn bộ CSDL nếu thiếu vị trí)
+                results = self.db_manager.list_by_status(status)
+                return format_results(results, f"tình trạng '{status}'")
+
+            return "Tôi không hiểu yêu cầu liệt kê theo vị trí và tình trạng này."
+
+        elif intent == "list_by_type_status": # Ý định ĐÃ CÓ (khi có cả type và status)
+            item_type = parsed_query.get("type")
+            status = parsed_query.get("status")
+
+            if not item_type and not status:
+                return "Bạn muốn liệt kê hóa chất/vật tư theo loại và tình trạng nào?"
+
+            if item_type and status:
+                results = self.db_manager.list_by_type_and_status(item_type, status)
+                return format_results(results, f"loại '{item_type}' và tình trạng '{status}'")
+            # Nếu chỉ có loại hoặc chỉ có tình trạng, sẽ được xử lý bởi các intent đơn lẻ
+
+            return "Tôi không hiểu yêu cầu liệt kê theo loại và tình trạng này."
+
+        elif intent == "list_by_type": # Ý định MỚI (chỉ loại, không trạng thái)
+            item_type = parsed_query.get("type")
+            if not item_type:
+                return "Bạn muốn liệt kê vật tư/hóa chất theo loại nào?"
+            results = self.db_manager.list_by_type(item_type)
+            return format_results(results, f"loại '{item_type}'")
+
+        elif intent == "search_by_id": # Ý định ĐÃ CÓ
             item_id = parsed_query.get("id")
             if not item_id:
                 return "Bạn muốn tìm vật tư/hóa chất theo mã ID nào?"
@@ -35,7 +83,7 @@ class ChatbotLogic:
             results = self.db_manager.get_by_id(item_id)
             return format_results(results, item_id)
 
-        elif intent == "search_by_cas":
+        elif intent == "search_by_cas": # Ý định ĐÃ CÓ
             cas_number = parsed_query.get("cas")
             if not cas_number:
                 return "Bạn muốn tìm hóa chất theo số CAS nào?"
@@ -43,7 +91,7 @@ class ChatbotLogic:
             results = self.db_manager.search_by_cas(cas_number)
             return format_results(results, f"CAS {cas_number}")
 
-        elif intent == "list_by_location":
+        elif intent == "list_by_location": # Ý định ĐÃ CÓ
             location = parsed_query.get("location")
             if not location:
                 return "Bạn muốn liệt kê vật tư/hóa chất ở vị trí nào?"
@@ -51,49 +99,9 @@ class ChatbotLogic:
             results = self.db_manager.list_by_location(location)
             return format_results(results, f"vị trí '{location}'")
 
-        elif intent == "list_by_type_status":
-            item_type = parsed_query.get("type")
-            status = parsed_query.get("status")
-
-            if not item_type and not status:
-                return "Bạn muốn liệt kê hóa chất/vật tư theo loại hoặc tình trạng nào?"
-
-            results = pd.DataFrame() # Khởi tạo rỗng
-            if item_type and status:
-                results = self.db_manager.list_by_type_and_status(item_type, status)
-                return format_results(results, f"loại '{item_type}' và tình trạng '{status}'")
-            elif item_type:
-                results = self.db_manager.list_by_type(item_type)
-                return format_results(results, f"loại '{item_type}'")
-            elif status: # Chỉ có tình trạng, tìm trong tất cả các mục
-                results = self.db_manager.list_by_status(status)
-                return format_results(results, f"tình trạng '{status}'")
-
-            return "Tôi không hiểu yêu cầu liệt kê theo loại/tình trạng này."
-
-        elif intent == "list_by_location_status":
-            location = parsed_query.get("location")
-            status = parsed_query.get("status")
-
-            if not location and not status:
-                return "Bạn muốn liệt kê vật tư/hóa chất theo vị trí và tình trạng nào?"
-
-            # Hàm này yêu cầu cả location và status, nếu thiếu 1 trong 2 thì sẽ xử lý riêng
-            if location and status:
-                results = self.db_manager.list_by_location_and_status(location, status)
-                return format_results(results, f"vị trí '{location}' và tình trạng '{status}'")
-            elif location: # Chỉ có vị trí
-                results = self.db_manager.list_by_location(location)
-                return format_results(results, f"vị trí '{location}'")
-            elif status: # Chỉ có tình trạng (tìm trên toàn bộ CSDL)
-                results = self.db_manager.list_by_status(status)
-                return format_results(results, f"tình trạng '{status}'")
-
-            return "Tôi không hiểu yêu cầu liệt kê theo vị trí và tình trạng này."
-
         # --- Xử lý các ý định chung (fallback) ---
 
-        elif intent == "get_quantity": # Hàm cũ
+        elif intent == "get_quantity": # Hàm cũ (tìm số lượng theo tên)
             item_name = parsed_query.get("item_name")
             if not item_name:
                 return "Bạn muốn hỏi số lượng của vật tư/hóa chất nào?"
@@ -106,7 +114,7 @@ class ChatbotLogic:
                     return f"Tôi không tìm thấy số lượng chính xác cho '{item_name}'. Bạn có thể đang muốn hỏi về **{search_results.iloc[0]['name']}**?"
                 return f"Không tìm thấy thông tin số lượng cho '**{item_name}**'. Vui lòng kiểm tra lại tên."
 
-        elif intent == "get_location": # Hàm cũ
+        elif intent == "get_location": # Hàm cũ (tìm vị trí theo tên)
             item_name = parsed_query.get("item_name")
             if not item_name:
                 return "Bạn muốn hỏi vị trí của vật tư/hóa chất nào?"
@@ -128,4 +136,4 @@ class ChatbotLogic:
             return format_results(results, query_text)
 
         else:
-            return "Tôi không hiểu yêu cầu của bạn. Bạn có thể hỏi về số lượng, vị trí, tìm kiếm một vật tư/hóa chất cụ thể, hoặc liệt kê theo mã, CAS, vị trí, loại, hoặc tình trạng."
+            return "Tôi không hiểu yêu cầu của bạn. Bạn có thể hỏi về số lượng, vị trí, tìm kiếm một vật tư/hóa chất cụ thể (theo tên, ID, CAS), hoặc liệt kê theo vị trí, loại, tình trạng hoặc kết hợp chúng."

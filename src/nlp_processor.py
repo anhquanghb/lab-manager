@@ -24,52 +24,33 @@ class NLPProcessor:
         """
         query_lower = query.lower().strip()
 
-        # --- Nhận diện các ý định cụ thể hơn ---
+        # --- Nhận diện các ý định cụ thể hơn (Ưu tiên các ý định kết hợp trước) ---
 
-        # Ý định: Search by ID (Tìm mã A001A, tìm code XYZ)
-        # Regex tìm kiếm các cụm từ như "mã", "code" theo sau là một chuỗi ký tự (ID)
-        match_id = re.search(r'(mã|code)\s+([a-zA-Z0-9-]+)', query_lower)
-        if match_id:
-            return {"intent": "search_by_id", "id": match_id.group(2).upper()}
+        # Ý định: List by Type and Location AND/OR Status (Phức tạp nhất)
+        # Ví dụ: "Liệt kê hóa chất đã mở từ tủ 3C" (Type + Status + Location)
+        #          "Tìm hóa chất trong tủ 3C" (Type + Location)
+        #          "Liệt kê đã mở từ tủ 3C" (Status + Location) -> đã có list_by_location_status
 
-        # Ý định: Search by CAS (Tìm CAS 511-89-8, CAS 77-88-9)
-        # Regex tìm kiếm "cas" theo sau là một chuỗi số và dấu gạch ngang
-        match_cas = re.search(r'(cas|số cas)\s+([0-9-]+)', query_lower)
-        if match_cas:
-            return {"intent": "search_by_cas", "cas": match_cas.group(2)}
+        # Pattern cho Type + Location (ví dụ: "hóa chất trong tủ 3c")
+        # Cần đảm bảo rằng các regex không xung đột quá nhiều
 
-        # Ý định: List by Location (Liệt kê tủ 3C, tìm trong kệ A1)
-        # Regex tìm kiếm "liệt kê" hoặc "tìm" theo sau là "trong" hoặc "từ" và "tủ" hoặc "kệ" và tên vị trí
-        match_location = re.search(r'(liệt\s+kê|tìm|có)\s+(trong|từ)\s+(tủ|kệ)\s+([a-zA-Z0-9\s]+)', query_lower)
-        if match_location:
-            return {"intent": "list_by_location", "location": match_location.group(4).strip().upper()}
+        # --- CÁC Ý ĐỊNH KẾT HỢP (ưu tiên cao hơn) ---
 
-        # Ý định: List by Type and/or Status (Liệt kê Hóa chất đã mở, tìm vật tư còn nguyên)
-        # Regex tìm kiếm "liệt kê" hoặc "tìm" theo sau là loại (hóa chất/vật tư) và có thể là tình trạng
-        match_type_status = re.search(r'(liệt\s+kê|tìm)\s+(hóa\s+chất|vật\s+tư|chất)(?:\s+(.+))?', query_lower)
-        if match_type_status:
-            item_type_raw = match_type_status.group(2)
-            status_phrase = match_type_status.group(3) if match_type_status.group(3) else ""
+        # Ý định: List by Type AND Location (MỚI: "Tìm hóa chất trong tủ 3C", "liệt kê vật tư ở kệ A1")
+        match_type_location = re.search(r'(liệt\s+kê|tìm|có)\s+(hóa\s+chất|vật\s+tư|chất)\s+(trong|từ|ở)\s+(tủ|kệ)\s+([a-zA-Z0-9\s]+)', query_lower)
+        if match_type_location:
+            item_type_raw = match_type_location.group(2)
+            location = match_type_location.group(6).strip().upper() # Group 6 là tên vị trí
 
-            # Chuẩn hóa loại vật tư
             item_type = ""
             if "hóa chất" in item_type_raw or "chất" in item_type_raw:
                 item_type = "Hóa chất"
             elif "vật tư" in item_type_raw:
                 item_type = "Vật tư"
 
-            # Trích xuất tình trạng từ cụm từ (có thể cần regex phức tạp hơn cho nhiều trạng thái)
-            status = None
-            if "đã mở" in status_phrase:
-                status = "Đã mở"
-            elif "còn nguyên" in status_phrase:
-                status = "Còn nguyên"
-            # Thêm các trạng thái khác nếu có trong dữ liệu của bạn
+            return {"intent": "list_by_type_location", "type": item_type, "location": location}
 
-            return {"intent": "list_by_type_status", "type": item_type, "status": status}
-
-        # Ý định: List by Location and Status (Liệt kê đã mở từ tủ 3C, tìm còn nguyên ở kệ A1)
-        # Regex tìm kiếm "liệt kê" hoặc "tìm" theo sau là tình trạng, rồi "trong/từ", "tủ/kệ", và tên vị trí
+        # Ý định: List by Location AND Status (Đã có: "Liệt kê đã mở từ tủ 3C")
         match_loc_status = re.search(r'(liệt\s+kê|tìm|có)\s+(.+)\s+(trong|từ)\s+(tủ|kệ)\s+([a-zA-Z0-9\s]+)', query_lower)
         if match_loc_status:
             status_phrase_full = match_loc_status.group(2).strip()
@@ -84,10 +65,51 @@ class NLPProcessor:
 
             return {"intent": "list_by_location_status", "location": location, "status": status}
 
+        # Ý định: List by Type AND Status (Đã có: "Liệt kê Hóa chất đã mở", "tìm vật tư còn nguyên")
+        match_type_status = re.search(r'(liệt\s+kê|tìm)\s+(hóa\s+chất|vật\s+tư|chất)(?:\s+(.+))?', query_lower)
+        if match_type_status:
+            item_type_raw = match_type_status.group(2)
+            status_phrase = match_type_status.group(3) if match_type_status.group(3) else ""
+
+            item_type = ""
+            if "hóa chất" in item_type_raw or "chất" in item_type_raw:
+                item_type = "Hóa chất"
+            elif "vật tư" in item_type_raw:
+                item_type = "Vật tư"
+
+            status = None
+            if "đã mở" in status_phrase:
+                status = "Đã mở"
+            elif "còn nguyên" in status_phrase:
+                status = "Còn nguyên"
+
+            # Chỉ trả về list_by_type_status nếu CÓ status được tìm thấy, nếu không, nó sẽ rơi vào list_by_type đơn thuần hoặc tìm kiếm chung
+            if status:
+                return {"intent": "list_by_type_status", "type": item_type, "status": status}
+            elif item_type: # Nếu chỉ có loại mà không có trạng thái cụ thể
+                return {"intent": "list_by_type", "type": item_type} # Ý định mới: chỉ lọc theo loại
+
+
+        # --- CÁC Ý ĐỊNH ĐƠN LẺ (ưu tiên thấp hơn các ý định kết hợp) ---
+
+        # Ý định: Search by ID (Tìm mã A001A, tìm code XYZ)
+        match_id = re.search(r'(mã|code)\s+([a-zA-Z0-9-]+)', query_lower)
+        if match_id:
+            return {"intent": "search_by_id", "id": match_id.group(2).upper()}
+
+        # Ý định: Search by CAS (Tìm CAS 553-24-2, CAS 77-88-9)
+        match_cas = re.search(r'(cas|số cas)\s+([0-9-]+)', query_lower)
+        if match_cas:
+            return {"intent": "search_by_cas", "cas": match_cas.group(2)}
+
+        # Ý định: List by Location (Đơn thuần: "Liệt kê tủ 3C", "tìm trong kệ A1")
+        match_location_simple = re.search(r'(liệt\s+kê|tìm|có)\s*(trong|từ|ở)?\s*(tủ|kệ)\s+([a-zA-Z0-9\s]+)', query_lower)
+        if match_location_simple:
+            return {"intent": "list_by_location", "location": match_location_simple.group(4).strip().upper()}
+
 
         # --- Ý định chung ---
         # Fallback: General Search (Nếu không khớp với các ý định cụ thể, coi là tìm kiếm chung)
-        # Điều này sẽ bắt các câu hỏi như "Tìm NaCl" hoặc "Tìm NEUTRAL RED"
         return {"intent": "search_item", "query": query_lower}
 
     def _extract_item_name(self, query_lower, keywords_to_remove):
