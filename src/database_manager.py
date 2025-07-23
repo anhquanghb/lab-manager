@@ -35,7 +35,6 @@ class DatabaseManager:
 
         # Tạo một DataFrame chỉ chứa các cột cần tìm kiếm
         # và chuyển đổi tất cả sang dạng chuỗi và chữ thường để tìm kiếm
-        # Đã thêm 'type' vào danh sách các cột tìm kiếm
         searchable_df = self.inventory_data[['id', 'name', 'type', 'location', 'description']].astype(str).apply(lambda x: x.str.lower())
 
         # Tìm kiếm trong tất cả các cột đã chọn
