@@ -68,7 +68,7 @@ class NLPProcessor:
         match_type_location = re.search(r'(liệt\s+kê|tìm|có)\s+(hóa\s+chất|vật\s+tư|chất)\s+(trong|từ|ở)\s+(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', query_lower)
         if match_type_location:
             item_type_raw = match_type_location.group(2)
-            location = match_type_location.group(6).strip().upper()
+            location = match_type_location.group(5).strip().upper()
 
             item_type = ""
             if "hóa chất" in item_type_raw or "chất" in item_type_raw:
