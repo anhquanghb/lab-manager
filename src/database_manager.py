@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 import os
+import unicodedata # Thêm import này
 
 class DatabaseManager:
     def __init__(self, data_path='data/inventory.json'):
@@ -23,6 +24,14 @@ class DatabaseManager:
             print(f"Lỗi khi tải dữ liệu: {e}")
             return pd.DataFrame()
 
+    def _remove_accents(self, input_str):
+        """Hàm trợ giúp để loại bỏ dấu tiếng Việt và chuẩn hóa chuỗi."""
+        if not isinstance(input_str, str):
+            return str(input_str) # Chuyển đổi sang chuỗi nếu không phải
+        nfkd_form = unicodedata.normalize('NFKD', input_str)
+        only_ascii = nfkd_form.encode('ascii', 'ignore').decode('utf-8')
+        return only_ascii
+
     def search_item(self, query):
         """
         Tìm kiếm vật tư/hóa chất theo bất kỳ thông tin liên quan nào
@@ -31,11 +40,14 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        query_lower = query.lower()
+        # Chuẩn hóa query: chuyển lower và bỏ dấu
+        query_normalized = self._remove_accents(query.lower())
 
-        searchable_df = self.inventory_data[['id', 'name', 'type', 'location', 'description']].astype(str).apply(lambda x: x.str.lower())
+        # Chuẩn bị DataFrame tìm kiếm: chuyển lower và bỏ dấu cho các cột
+        searchable_df = self.inventory_data[['id', 'name', 'type', 'location', 'description']].astype(str)
+        searchable_df = searchable_df.applymap(self._remove_accents).apply(lambda x: x.str.lower())
 
-        mask = searchable_df.apply(lambda col: col.str.contains(query_lower, na=False)).any(axis=1)
+        mask = searchable_df.apply(lambda col: col.str.contains(query_normalized, na=False)).any(axis=1)
 
         results = self.inventory_data[mask]
         return results
@@ -45,8 +57,12 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return None, None
 
-        item_name_lower = item_name.lower()
-        found_item = self.inventory_data[self.inventory_data['name'].str.lower() == item_name_lower]
+        # Chuẩn hóa item_name và cột name
+        item_name_normalized = self._remove_accents(item_name.lower())
+
+        # Áp dụng remove_accents cho cột 'name' của DataFrame trước khi so sánh
+        # Dùng applymap trên toàn bộ cột để tạo Series mới, sau đó so sánh
+        found_item = self.inventory_data[self.inventory_data['name'].apply(self._remove_accents).str.lower() == item_name_normalized]
 
         if not found_item.empty:
             return found_item.iloc[0]['quantity'], found_item.iloc[0]['unit']
@@ -57,21 +73,25 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return None
 
-        item_name_lower = item_name.lower()
-        found_item = self.inventory_data[self.inventory_data['name'].str.lower() == item_name_lower]
+        # Chuẩn hóa item_name và cột name
+        item_name_normalized = self._remove_accents(item_name.lower())
+        found_item = self.inventory_data[self.inventory_data['name'].apply(self._remove_accents).str.lower() == item_name_normalized]
 
         if not found_item.empty:
             return found_item.iloc[0]['location']
         return None
 
-    # --- CÁC HÀM TÌM KIẾM CỤ THỂ ---
+    # --- CÁC HÀM TÌM KIẾM MỚI ---
+    # Áp dụng chuẩn hóa cho query và các cột liên quan
 
     def get_by_id(self, item_id):
         """Tìm kiếm vật tư/hóa chất theo ID chính xác."""
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        results = self.inventory_data[self.inventory_data['id'].str.lower() == item_id.lower()]
+        # ID thường là ký tự La-tinh không dấu, nhưng vẫn chuẩn hóa để nhất quán
+        item_id_normalized = self._remove_accents(item_id.lower())
+        results = self.inventory_data[self.inventory_data['id'].apply(self._remove_accents).str.lower() == item_id_normalized]
         return results
 
     def list_by_location(self, location_query):
@@ -79,7 +99,8 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        results = self.inventory_data[self.inventory_data['location'].str.lower().str.contains(location_query.lower(), na=False)]
+        location_query_normalized = self._remove_accents(location_query.lower())
+        results = self.inventory_data[self.inventory_data['location'].apply(self._remove_accents).str.lower().str.contains(location_query_normalized, na=False)]
         return results
 
     def list_by_type(self, item_type):
@@ -87,7 +108,8 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        results = self.inventory_data[self.inventory_data['type'].str.lower() == item_type.lower()]
+        item_type_normalized = self._remove_accents(item_type.lower())
+        results = self.inventory_data[self.inventory_data['type'].apply(self._remove_accents).str.lower() == item_type_normalized]
         return results
 
     def list_by_status(self, status_query):
@@ -95,7 +117,8 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        results = self.inventory_data[self.inventory_data['description'].str.lower().str.contains(status_query.lower(), na=False)]
+        status_query_normalized = self._remove_accents(status_query.lower())
+        results = self.inventory_data[self.inventory_data['description'].apply(self._remove_accents).str.lower().str.contains(status_query_normalized, na=False)]
         return results
 
     def list_by_location_and_status(self, location_query, status_query):
@@ -103,8 +126,14 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        mask_location = self.inventory_data['location'].str.lower().str.contains(location_query.lower(), na=False)
-        mask_status = self.inventory_data['description'].str.lower().str.contains(status_query.lower(), na=False)
+        location_query_normalized = self._remove_accents(location_query.lower())
+        status_query_normalized = self._remove_accents(status_query.lower())
+
+        normalized_location_col = self.inventory_data['location'].apply(self._remove_accents).str.lower()
+        normalized_description_col = self.inventory_data['description'].apply(self._remove_accents).str.lower()
+
+        mask_location = normalized_location_col.str.contains(location_query_normalized, na=False)
+        mask_status = normalized_description_col.str.contains(status_query_normalized, na=False)
 
         results = self.inventory_data[mask_location & mask_status]
         return results
@@ -114,8 +143,14 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        mask_type = self.inventory_data['type'].str.lower() == item_type.lower()
-        mask_status = self.inventory_data['description'].str.lower().str.contains(status_query.lower(), na=False)
+        item_type_normalized = self._remove_accents(item_type.lower())
+        status_query_normalized = self._remove_accents(status_query.lower())
+
+        normalized_type_col = self.inventory_data['type'].apply(self._remove_accents).str.lower()
+        normalized_description_col = self.inventory_data['description'].apply(self._remove_accents).str.lower()
+
+        mask_type = normalized_type_col == item_type_normalized
+        mask_status = normalized_description_col.str.contains(status_query_normalized, na=False)
 
         results = self.inventory_data[mask_type & mask_status]
         return results
@@ -125,8 +160,14 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        mask_type = self.inventory_data['type'].str.lower() == item_type.lower()
-        mask_location = self.inventory_data['location'].str.lower().str.contains(location_query.lower(), na=False)
+        item_type_normalized = self._remove_accents(item_type.lower())
+        location_query_normalized = self._remove_accents(location_query.lower())
+
+        normalized_type_col = self.inventory_data['type'].apply(self._remove_accents).str.lower()
+        normalized_location_col = self.inventory_data['location'].apply(self._remove_accents).str.lower()
+
+        mask_type = normalized_type_col == item_type_normalized
+        mask_location = normalized_location_col.str.contains(location_query_normalized, na=False)
 
         results = self.inventory_data[mask_type & mask_location]
         return results
@@ -136,23 +177,6 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        results = self.inventory_data[self.inventory_data['description'].str.lower().str.contains(f"cas: {cas_number.lower()}", na=False)]
-        return results
-
-    def get_item_details_for_summary(self, item_name):
-        """
-        Tìm kiếm tất cả các mục khớp với tên (hoặc mô tả nếu cần) và trả về DataFrame đầy đủ.
-        Dùng cho chức năng thống kê số lượng và liệt kê chi tiết.
-        """
-        if self.inventory_data.empty:
-            return pd.DataFrame()
-
-        item_name_lower = item_name.lower()
-
-        # Tìm kiếm trong cột 'name' hoặc 'description'
-        # Sử dụng str.contains để tìm kiếm linh hoạt hơn
-        results = self.inventory_data[
-            self.inventory_data['name'].str.lower().str.contains(item_name_lower, na=False) |
-            self.inventory_data['description'].str.lower().str.contains(item_name_lower, na=False)
-        ]
+        cas_number_normalized = self._remove_accents(cas_number.lower())
+        results = self.inventory_data[self.inventory_data['description'].apply(self._remove_accents).str.lower().str.contains(f"cas: {cas_number_normalized}", na=False)]
         return results
