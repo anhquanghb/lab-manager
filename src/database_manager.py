@@ -64,7 +64,7 @@ class DatabaseManager:
             return found_item.iloc[0]['location']
         return None
 
-    # --- CÁC HÀM TÌM KIẾM MỚI ---
+    # --- CÁC HÀM TÌM KIẾM CỤ THỂ ---
 
     def get_by_id(self, item_id):
         """Tìm kiếm vật tư/hóa chất theo ID chính xác."""
@@ -106,7 +106,7 @@ class DatabaseManager:
         mask_location = self.inventory_data['location'].str.lower().str.contains(location_query.lower(), na=False)
         mask_status = self.inventory_data['description'].str.lower().str.contains(status_query.lower(), na=False)
 
-        results = self.inventory_data[mask_location & mask_status] # Kết hợp hai điều kiện
+        results = self.inventory_data[mask_location & mask_status]
         return results
 
     def list_by_type_and_status(self, item_type, status_query):
@@ -117,7 +117,7 @@ class DatabaseManager:
         mask_type = self.inventory_data['type'].str.lower() == item_type.lower()
         mask_status = self.inventory_data['description'].str.lower().str.contains(status_query.lower(), na=False)
 
-        results = self.inventory_data[mask_type & mask_status] # Kết hợp hai điều kiện
+        results = self.inventory_data[mask_type & mask_status]
         return results
 
     def list_by_type_and_location(self, item_type, location_query):
@@ -128,7 +128,7 @@ class DatabaseManager:
         mask_type = self.inventory_data['type'].str.lower() == item_type.lower()
         mask_location = self.inventory_data['location'].str.lower().str.contains(location_query.lower(), na=False)
 
-        results = self.inventory_data[mask_type & mask_location] # Kết hợp hai điều kiện
+        results = self.inventory_data[mask_type & mask_location]
         return results
 
     def search_by_cas(self, cas_number):
@@ -136,6 +136,5 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        # CAS number thường ở trong description, nên tìm trong description
         results = self.inventory_data[self.inventory_data['description'].str.lower().str.contains(f"cas: {cas_number.lower()}", na=False)]
         return results
