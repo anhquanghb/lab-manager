@@ -429,7 +429,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3C",
-    "description": "Công thức: C14H12O2, CAS: 548-62-9, Trạng thái/Nồng độ: LỎNG, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Dầu soi kính hiển vi, Công thức: C14H12O2, CAS: 548-62-9, Trạng thái/Nồng độ: LỎNG, Tình trạng: Còn nguyên"
   },
   {
     "id": "A012B",
@@ -438,7 +438,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3C",
-    "description": "Công thức: C14H12O2, CAS: 548-62-9, Trạng thái/Nồng độ: LỎNG, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Dầu soi kính hiển vi, Công thức: C14H12O2, CAS: 548-62-9, Trạng thái/Nồng độ: LỎNG, Tình trạng: Còn nguyên"
   },
   {
     "id": "A013",
@@ -456,7 +456,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3C",
-    "description": "Công thức: C4H6O4Zn .2H2O, CAS: 5970-45-6, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: DIHYDRAT, Công thức: C4H6O4Zn .2H2O, CAS: 5970-45-6, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "A015A",
@@ -1023,7 +1023,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3A",
-    "description": "Công thức: MgO, CAS: 1309-48-4, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Magie oxit, Công thức: MgO, CAS: 1309-48-4, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A045B",
@@ -1032,7 +1032,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3A",
-    "description": "Công thức: MgO, CAS: 1309-48-4, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Magie oxit, Công thức: MgO, CAS: 1309-48-4, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A046A",
@@ -1221,7 +1221,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: K2Cr2O7, CAS: 7778-50-9, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali dichromat, Công thức: K2Cr2O7, CAS: 7778-50-9, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A053B",
@@ -1230,7 +1230,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: K2Cr2O7, CAS: 7778-50-9, Trạng thái/Nồng độ: rắn, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Kali dichromat, Công thức: K2Cr2O7, CAS: 7778-50-9, Trạng thái/Nồng độ: rắn, Tình trạng: Đã mở"
   },
   {
     "id": "A053C",
@@ -1239,7 +1239,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: K2Cr2O7, CAS: 7778-50-9, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali dichromat, Công thức: K2Cr2O7, CAS: 7778-50-9, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A054A",
@@ -1248,7 +1248,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: K2CrO4, CAS: 7789-00-6, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali chromat, Công thức: K2CrO4, CAS: 7789-00-6, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A054B",
@@ -1257,7 +1257,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: K2CrO4, CAS: 7789-00-6, Trạng thái/Nồng độ: rắn, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Kali chromat, Công thức: K2CrO4, CAS: 7789-00-6, Trạng thái/Nồng độ: rắn, Tình trạng: Đã mở"
   },
   {
     "id": "A055A",
@@ -1320,7 +1320,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: KBrO3, CAS: 7758-01-2, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali bromat, Công thức: KBrO3, CAS: 7758-01-2, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A057A",
@@ -1347,7 +1347,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: KNO3, CAS: 7757-79-1, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Kali nitrat, Công thức: KNO3, CAS: 7757-79-1, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "A058A",
@@ -1401,7 +1401,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: K2O8S2, CAS: 7727-21-1, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali persulfat, Công thức: K2O8S2, CAS: 7727-21-1, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A060C",
@@ -1410,7 +1410,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: K2O8S2, CAS: 7727-21-1, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali persulfat, Công thức: K2O8S2, CAS: 7727-21-1, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A060D",
@@ -1419,7 +1419,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: K2O8S2, CAS: 7727-21-1, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali persulfat, Công thức: K2O8S2, CAS: 7727-21-1, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A061A",
@@ -1428,7 +1428,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: KMnO4, CAS: 7722-64-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở, Theo dõi: Đã mở"
+    "description": "Tên Tiếng Việt: Kali pemanganat, Công thức: KMnO4, CAS: 7722-64-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở, Theo dõi: Đã mở"
   },
   {
     "id": "A061B",
@@ -1437,7 +1437,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: KMnO4, CAS: 7722-64-7, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali pemanganat, Công thức: KMnO4, CAS: 7722-64-7, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A061C",
@@ -1446,7 +1446,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: KMnO4, CAS: 7722-64-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Kali pemanganat, Công thức: KMnO4, CAS: 7722-64-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "A061D",
@@ -1455,7 +1455,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: KMnO4, CAS: 7722-64-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Kali pemanganat, Công thức: KMnO4, CAS: 7722-64-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "A062",
@@ -1743,7 +1743,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali Hydroxit, Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A072B",
@@ -1752,7 +1752,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali Hydroxit, Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A072C",
@@ -1761,7 +1761,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali Hydroxit, Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A072D",
@@ -1770,7 +1770,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali Hydroxit, Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A072E",
@@ -1779,7 +1779,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở, Theo dõi: Đang mượn"
+    "description": "Tên Tiếng Việt: Kali Hydroxit, Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở, Theo dõi: Đang mượn"
   },
   {
     "id": "A072F",
@@ -1788,7 +1788,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali Hydroxit, Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A073",
@@ -1896,7 +1896,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1D",
-    "description": "Công thức: CH3COOH, Trạng thái/Nồng độ: LỎNG, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: AXIT AXETIC, Công thức: CH3COOH, Trạng thái/Nồng độ: LỎNG, Tình trạng: Đã mở"
   },
   {
     "id": "A077A",
@@ -1905,7 +1905,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2C",
-    "description": "Công thức: H3BO3, CAS: 10043-35-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Axit Boric, Công thức: H3BO3, CAS: 10043-35-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A077B",
@@ -1914,7 +1914,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2C",
-    "description": "Công thức: H3BO3, CAS: 10043-35-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Axit Boric, Công thức: H3BO3, CAS: 10043-35-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A077C",
@@ -2643,7 +2643,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2D",
-    "description": "Công thức: Zn, Trạng thái/Nồng độ: rắn, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Kẽm, Công thức: Zn, Trạng thái/Nồng độ: rắn, Tình trạng: Đã mở"
   },
   {
     "id": "A106",
@@ -2661,7 +2661,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na2S.9H2O, CAS: 1313-84-4, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri sulfua, Công thức: Na2S.9H2O, CAS: 1313-84-4, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A108",
@@ -2670,7 +2670,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na2S2O3.5H2O, CAS: 10102-17-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri Thiosunfat, Công thức: Na2S2O3.5H2O, CAS: 10102-17-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A108B",
@@ -2688,7 +2688,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Natri bicacbonat, Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "A109A",
@@ -2697,7 +2697,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri bicacbonat, Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A109B",
@@ -2706,7 +2706,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri bicacbonat, Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A109C",
@@ -2715,7 +2715,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Natri bicacbonat, Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "A109D",
@@ -2724,7 +2724,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri bicacbonat, Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A109F",
@@ -2733,7 +2733,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri bicacbonat, Công thức: NaHCO3, CAS: 144-55-8, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A110A",
@@ -2778,7 +2778,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: C4H4O6KNa.4H20, CAS: 6381-59-5, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Muối seignette, Công thức: C4H4O6KNa.4H20, CAS: 6381-59-5, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "A111D",
@@ -2850,7 +2850,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na2SO3, CAS: 7757-83-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri sunfit, Công thức: Na2SO3, CAS: 7757-83-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A113B",
@@ -2895,7 +2895,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na2MoO4.2H2O, CAS: 7631-95-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri molybdat, Công thức: Na2MoO4.2H2O, CAS: 7631-95-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A115C",
@@ -2904,7 +2904,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na2MoO4.2H2O, CAS: 7631-95-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri molybdat, Công thức: Na2MoO4.2H2O, CAS: 7631-95-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A116A",
@@ -2922,7 +2922,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na3PO4.12H2O, CAS: 10101-89-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: natri photphat, Công thức: Na3PO4.12H2O, CAS: 10101-89-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A117A",
@@ -2931,7 +2931,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: C6H5Na3O7.2H2O, CAS: 6132-04-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: natri citrat, Công thức: C6H5Na3O7.2H2O, CAS: 6132-04-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A117B",
@@ -2940,7 +2940,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: C6H5Na3O7.2H2O, CAS: 6132-04-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: natri citrat, Công thức: C6H5Na3O7.2H2O, CAS: 6132-04-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A118A",
@@ -2976,7 +2976,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NaCl, CAS: 7647-14-5, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: natri clorua, Công thức: NaCl, CAS: 7647-14-5, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "A118E",
@@ -3120,7 +3120,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NaH2PO4.2H2O, CAS: 13472-35-0, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri dibiphosphat, Công thức: NaH2PO4.2H2O, CAS: 13472-35-0, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A125A",
@@ -3129,7 +3129,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: (C6H7NaO6)n, CAS: 9005-38-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri alginate, Công thức: (C6H7NaO6)n, CAS: 9005-38-3, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A125B",
@@ -3138,7 +3138,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: (C6H7NaO6)n, CAS: 9005-38-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri alginate, Công thức: (C6H7NaO6)n, CAS: 9005-38-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A126",
@@ -3372,7 +3372,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: K3[Fe(CN)6], CAS: 13746-66-2, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên, Theo dõi: Đã mở"
+    "description": "Tên Tiếng Việt: Kali ferricyanide, Công thức: K3[Fe(CN)6], CAS: 13746-66-2, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên, Theo dõi: Đã mở"
   },
   {
     "id": "A131B",
@@ -3390,7 +3390,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: K3[Fe(CN)6], CAS: 13746-66-2, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: kali hexacyanoferrat(II), Công thức: K3[Fe(CN)6], CAS: 13746-66-2, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A132A",
@@ -3399,7 +3399,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: K4Fe(CN)6.3H2O, CAS: 14459-95-1, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: kali hexacyanoferrat(II), Công thức: K4Fe(CN)6.3H2O, CAS: 14459-95-1, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A132B",
@@ -3408,7 +3408,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: K4Fe(CN)6.3H2O, CAS: 14459-95-1, Trạng thái/Nồng độ: rắn, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Kali Hexacyanoferrat(II), Công thức: K4Fe(CN)6.3H2O, CAS: 14459-95-1, Trạng thái/Nồng độ: rắn, Tình trạng: Đã mở"
   },
   {
     "id": "A132C",
@@ -3426,7 +3426,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: KH2PO4, CAS: 7778-77-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên, Theo dõi: Đã mở"
+    "description": "Tên Tiếng Việt: Kali dibiphosphat, Công thức: KH2PO4, CAS: 7778-77-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên, Theo dõi: Đã mở"
   },
   {
     "id": "A133B",
@@ -3435,7 +3435,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: KH2PO4, CAS: 7778-77-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali dibiphosphat, Công thức: KH2PO4, CAS: 7778-77-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A133C",
@@ -3444,7 +3444,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: KH2PO4, CAS: 7778-77-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali dibiphosphat, Công thức: KH2PO4, CAS: 7778-77-0, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A134A",
@@ -3453,7 +3453,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: C8H5KO4, CAS: 877-24-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali hydro phthalate, Công thức: C8H5KO4, CAS: 877-24-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A134B",
@@ -3462,7 +3462,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: C8H5KO4, CAS: 877-24-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali hydro phthalate, Công thức: C8H5KO4, CAS: 877-24-7, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A135A",
@@ -3516,7 +3516,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: K2C2O4.H2O, CAS: 6487-48-5, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali oxalat monohydrat, Công thức: K2C2O4.H2O, CAS: 6487-48-5, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A137A",
@@ -3579,7 +3579,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: KBr, CAS: 7758-02-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali bromua, Công thức: KBr, CAS: 7758-02-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A140A",
@@ -3588,7 +3588,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: K2SO4, CAS: 7778-80-5, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên, Theo dõi: Đang mượn"
+    "description": "Tên Tiếng Việt: Kali sunfat, Công thức: K2SO4, CAS: 7778-80-5, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên, Theo dõi: Đang mượn"
   },
   {
     "id": "A140B",
@@ -3597,7 +3597,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: K2SO4, CAS: 7778-80-5, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali sunfat, Công thức: K2SO4, CAS: 7778-80-5, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A140C",
@@ -3606,7 +3606,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: K2SO4, CAS: 7778-80-5, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali sunfat, Công thức: K2SO4, CAS: 7778-80-5, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A140D",
@@ -3615,7 +3615,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: K2SO4, CAS: 7778-80-5, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Kali sunfat, Công thức: K2SO4, CAS: 7778-80-5, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "A141",
@@ -3660,7 +3660,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3D",
-    "description": "Công thức: NaBH4, CAS: 16940-66-2, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: natri bohydride, Công thức: NaBH4, CAS: 16940-66-2, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A144",
@@ -4029,7 +4029,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "4B",
-    "description": "Trạng thái/Nồng độ: lỏng, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: bộ nhuộm gram, Trạng thái/Nồng độ: lỏng, Tình trạng: Còn nguyên"
   },
   {
     "id": "A160A",
@@ -4533,7 +4533,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3C",
-    "description": "Công thức: KHÔNG, CAS: KHÔNG, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: thuốc thử Feulgen, thuốc thử Schiff, Công thức: KHÔNG, CAS: KHÔNG, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A170B",
@@ -4542,7 +4542,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3C",
-    "description": "Công thức: KHÔNG, CAS: KHÔNG, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: thuốc thử Feulgen, thuốc thử Schiff, Công thức: KHÔNG, CAS: KHÔNG, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A170C",
@@ -4551,7 +4551,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3C",
-    "description": "Công thức: KHÔNG, CAS: KHÔNG, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: thuốc thử Feulgen, thuốc thử Schiff, Công thức: KHÔNG, CAS: KHÔNG, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A171",
@@ -4605,7 +4605,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "4C",
-    "description": "Công thức: KHÔNG, CAS: 9004-32-4, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: CMC, Công thức: KHÔNG, CAS: 9004-32-4, Trạng thái/Nồng độ: RẮN, Tình trạng: Còn nguyên"
   },
   {
     "id": "A174A",
@@ -4731,7 +4731,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "tủ L",
-    "description": "Công thức: C2H5OH, CAS: 64-17-5, Trạng thái/Nồng độ: LỎNG, Tình trạng: Đã mở, Theo dõi: Đang mượn"
+    "description": "Tên Tiếng Việt: CỒN 98°, Công thức: C2H5OH, CAS: 64-17-5, Trạng thái/Nồng độ: LỎNG, Tình trạng: Đã mở, Theo dõi: Đang mượn"
   },
   {
     "id": "A183B",
@@ -4740,7 +4740,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "tủ L",
-    "description": "Công thức: C2H5OH, CAS: 64-17-5, Trạng thái/Nồng độ: LỎNG, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: CỒN 98°, Công thức: C2H5OH, CAS: 64-17-5, Trạng thái/Nồng độ: LỎNG, Tình trạng: Đã mở"
   },
   {
     "id": "A183C",
@@ -4749,7 +4749,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "tủ L",
-    "description": "Công thức: C2H5OH, CAS: 64-17-5, Trạng thái/Nồng độ: LỎNG, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: CỒN 98°, Công thức: C2H5OH, CAS: 64-17-5, Trạng thái/Nồng độ: LỎNG, Tình trạng: Đã mở"
   },
   {
     "id": "A184",
@@ -5658,7 +5658,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "Không rõ",
-    "description": "Công thức: C12H25NaO4S, CAS: 151-21-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri dodecyl sulfat, Công thức: C12H25NaO4S, CAS: 151-21-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "ITEM_630",
@@ -5667,7 +5667,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "Không rõ",
-    "description": "Công thức: C12H25NaO4S, CAS: 151-21-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
+    "description": "Tên Tiếng Việt: Natri dodecyl sulfat, Công thức: C12H25NaO4S, CAS: 151-21-3, Trạng thái/Nồng độ: rắn, Tình trạng: Còn nguyên"
   },
   {
     "id": "ITEM_631",
@@ -5901,7 +5901,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "Không rõ",
-    "description": "Công thức: NaCl, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
+    "description": "Tên Tiếng Việt: Natri Clorua, Công thức: NaCl, Trạng thái/Nồng độ: RẮN, Tình trạng: Đã mở"
   },
   {
     "id": "ITEM_657",

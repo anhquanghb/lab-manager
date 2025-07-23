@@ -2,7 +2,7 @@ import pandas as pd
 import json
 import os
 
-# Đường dẫn đến file CSV mới của bạn
+# Đường dẫn đến file CSV mà bạn đã cung cấp
 csv_file_path = 'danhmuc.csv'
 # Đường dẫn đến file JSON mà chatbot đang sử dụng
 json_file_path = 'data/inventory.json'
@@ -29,12 +29,12 @@ for index, row in df_csv.iterrows():
 
     # 'name': Ưu tiên 'Tên hóa chất (IUPAC)', nếu trống thì dùng 'Tên hóa chất (Tiếng Việt)'
     # Nếu cả hai đều trống hoặc là 'KHÔNG'/'0', sử dụng một tên mặc định
-    item_name = ""
-    if pd.notna(row['Tên hóa chất (IUPAC)']) and str(row['Tên hóa chất (IUPAC)']).strip() != '0':
-        item_name = str(row['Tên hóa chất (IUPAC)']).strip()
-    elif pd.notna(row['Tên hóa chất (Tiếng Việt)']) and str(row['Tên hóa chất (Tiếng Việt)']).strip().lower() != 'không':
-        item_name = str(row['Tên hóa chất (Tiếng Việt)']).strip()
-    else:
+    item_name_iupac = str(row['Tên hóa chất (IUPAC)']).strip() if pd.notna(row['Tên hóa chất (IUPAC)']) and str(row['Tên hóa chất (IUPAC)']).strip() != '0' else ''
+    item_name_vn = str(row['Tên hóa chất (Tiếng Việt)']).strip() if pd.notna(row['Tên hóa chất (Tiếng Việt)']) and str(row['Tên hóa chất (Tiếng Việt)']).strip().lower() != 'không' else ''
+
+    # Tên hiển thị chính: Ưu tiên IUPAC, sau đó là Tiếng Việt, nếu không thì dùng tên mặc định
+    item_name = item_name_iupac if item_name_iupac else item_name_vn
+    if not item_name:
         item_name = f"Item {index + 1} (Tên không xác định)"
 
     # 'type': Phân loại 'Hóa chất' nếu có 'Công thức hóa chất', ngược lại là 'Vật tư'
@@ -42,8 +42,7 @@ for index, row in df_csv.iterrows():
     if pd.notna(row['Công thức hóa chất']) and str(row['Công thức hóa chất']).strip() != '0':
         item_type = "Hóa chất"
 
-    # 'quantity' và 'unit': 'Nồng độ' trong CSV của bạn chủ yếu là mô tả (rắn, lỏng),
-    # nên chúng ta sẽ dùng giá trị mặc định cho số lượng và đơn vị.
+    # 'quantity' và 'unit': Giữ nguyên giá trị mặc định đã có
     item_quantity = 1 # Giá trị mặc định
     item_unit = "đơn vị" # Đơn vị mặc định
 
@@ -51,7 +50,13 @@ for index, row in df_csv.iterrows():
     item_location = str(row['Vị trí lưu trữ']) if pd.notna(row['Vị trí lưu trữ']) else "Không rõ"
 
     # 'description': Kết hợp các trường liên quan để tạo mô tả chi tiết
+    # Bổ sung cả tên tiếng Việt và IUPAC vào description để tìm kiếm
     description_parts = []
+    if item_name_iupac and item_name_iupac != item_name: # Nếu IUPAC khác tên hiển thị chính
+         description_parts.append(f"Tên IUPAC: {item_name_iupac}")
+    if item_name_vn and item_name_vn != item_name: # Nếu Tiếng Việt khác tên hiển thị chính
+         description_parts.append(f"Tên Tiếng Việt: {item_name_vn}")
+
     if pd.notna(row['Công thức hóa chất']) and str(row['Công thức hóa chất']).strip() != '0':
         description_parts.append(f"Công thức: {str(row['Công thức hóa chất']).strip()}")
     if pd.notna(row['CAS']) and str(row['CAS']).strip() != '0':
