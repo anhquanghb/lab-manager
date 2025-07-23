@@ -1,13 +1,14 @@
 import pandas as pd
 from src.database_manager import DatabaseManager
 from src.nlp_processor import NLPProcessor
-from googletrans import Translator # Thêm dòng này để import Translator
+from googletrans import Translator
+import re # Thêm dòng này để sử dụng regex trong _translate_query
 
 class ChatbotLogic:
     def __init__(self):
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
-        self.translator = Translator() # Khởi tạo Translator
+        self.translator = Translator()
 
     # Hàm trợ giúp để định dạng kết quả tìm kiếm (hiển thị nhiều mục)
     def _format_results(self, results, query_context=""):
@@ -80,7 +81,38 @@ class ChatbotLogic:
 
         # --- Xử lý các ý định cụ thể ---
 
-        if intent == "list_by_type_location":
+        if intent == "get_quantity_status": # Xử lý ý định mới: Số lượng VÀ Tình trạng
+            item_name = parsed_query.get("item_name")
+            status = parsed_query.get("status")
+
+            if not item_name or not status:
+                return "Bạn muốn hỏi số lượng của vật tư/hóa chất nào với tình trạng ra sao?"
+
+            # Lấy tất cả các mục liên quan đến tên
+            matching_items = self.db_manager.get_item_details_for_summary(item_name)
+
+            if not matching_items.empty:
+                # Lọc thêm theo tình trạng trong mô tả
+                filtered_items = matching_items[matching_items['description'].str.lower().str.contains(status.lower(), na=False)]
+
+                if not filtered_items.empty:
+                    total_quantity = filtered_items['quantity'].sum()
+
+                    response = f"Tôi tìm thấy **{len(filtered_items)}** mục **{item_name.capitalize()}** với tình trạng **{status.capitalize()}**.\n"
+                    response += f"Tổng số lượng hiện có là **{total_quantity} đơn vị**.\n\n"
+                    response += "Chi tiết từng mục:\n"
+
+                    for index, row in filtered_items.iterrows():
+                        response += (f"- **{row['name']}** (ID: {row['id']}, Loại: {row['type']})\n"
+                                     f"  Số lượng: {row['quantity']} {row['unit']}, Vị trí: {row['location']}.\n"
+                                     f"  Mô tả: {row['description']}\n\n")
+                    return response.strip()
+                else:
+                    return self._handle_no_results_fallback(user_query, f"{item_name} {status}")
+            else:
+                return self._handle_no_results_fallback(user_query, item_name) # Nếu không tìm thấy tên ban đầu
+
+        elif intent == "list_by_type_location":
             item_type = parsed_query.get("type")
             location = parsed_query.get("location")
             if not item_type or not location:
@@ -174,7 +206,6 @@ class ChatbotLogic:
             if not item_name:
                 return "Bạn muốn hỏi số lượng của vật tư/hóa chất nào?"
 
-            # Gọi hàm để lấy tất cả chi tiết các mục liên quan
             matching_items = self.db_manager.get_item_details_for_summary(item_name)
 
             if not matching_items.empty:
