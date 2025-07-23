@@ -1,3 +1,4 @@
+import pandas as pd # Cần import pandas vì bây giờ dùng pd.DataFrame() trực tiếp
 from src.database_manager import DatabaseManager
 from src.nlp_processor import NLPProcessor
 
@@ -7,9 +8,10 @@ class ChatbotLogic:
         self.nlp_processor = NLPProcessor()
 
     # Hàm trợ giúp để định dạng kết quả tìm kiếm (hiển thị nhiều mục)
-    def _format_results(self, results, query_context=""):
+    # Đây là một phương thức của lớp ChatbotLogic, nên có thể gọi bằng self._format_results
+    def _format_results(self, results, query_text=""):
         if results.empty:
-            return f"Xin lỗi, tôi không tìm thấy vật tư/hóa chất nào liên quan đến '*{query_context}*'." if query_context else "Xin lỗi, tôi không tìm thấy kết quả nào phù hợp."
+            return f"Xin lỗi, tôi không tìm thấy vật tư/hóa chất nào liên quan đến '*{query_text}*'." if query_text else "Xin lỗi, tôi không tìm thấy kết quả nào phù hợp."
 
         response = f"Tôi tìm thấy **{len(results)}** kết quả:\n\n"
         for index, row in results.iterrows():
@@ -18,132 +20,87 @@ class ChatbotLogic:
                          f"  Mô tả: {row['description']}\n\n")
         return response.strip() # Loại bỏ dòng trống cuối cùng
 
-    def _handle_no_results_fallback(self, original_user_query, specific_intent_query_text):
-        """
-        Xử lý các trường hợp không có kết quả từ tìm kiếm cụ thể bằng cách thử tìm kiếm dự phòng.
-        Giai đoạn 1: Thử tìm kiếm chung.
-        Giai đoạn 2: Dịch thuật (sẽ thêm sau).
-        Giai đoạn 3: Sửa lỗi chính tả (sẽ thêm sau).
-        """
-        fallback_response = ""
-
-        # Thử tìm kiếm chung trên toàn bộ các trường
-        general_search_results = self.db_manager.search_item(specific_intent_query_text)
-        if not general_search_results.empty:
-            fallback_response += f"Tôi không tìm thấy kết quả chính xác cho yêu cầu ban đầu của bạn, nhưng tôi tìm thấy các mục sau khi tìm kiếm chung với từ khóa '*{specific_intent_query_text}*':\n\n"
-            fallback_response += self._format_results(general_search_results)
-            return fallback_response
-
-        # --- Các Giai đoạn Fallback tiếp theo sẽ được thêm vào đây sau ---
-        # Ví dụ:
-        # translated_query = self._translate_query(original_user_query)
-        # if translated_query:
-        #    translated_results = self.db_manager.search_item(translated_query)
-        #    if not translated_results.empty:
-        #        return f"Tôi không tìm thấy bằng tiếng Việt, nhưng tôi tìm thấy bằng tiếng Anh ('{translated_query}'):\n\n" + self._format_results(translated_results)
-
-        # spelling_corrected_query = self._correct_spelling(original_user_query)
-        # if spelling_corrected_query != original_user_query:
-        #    corrected_results = self.db_manager.search_item(spelling_corrected_query)
-        #    if not corrected_results.empty:
-        #        return f"Tôi không tìm thấy, có thể bạn muốn hỏi về '{spelling_corrected_query}'? Tôi tìm thấy:\n\n" + self._format_results(corrected_results)
-
-        return self._format_results(pd.DataFrame(), specific_intent_query_text) # Vẫn không tìm thấy
-
     def get_response(self, user_query):
+        """
+        Nhận câu hỏi từ người dùng và trả về phản hồi của chatbot dựa trên ý định.
+        """
         parsed_query = self.nlp_processor.process_query(user_query)
         intent = parsed_query.get("intent")
 
         # --- Xử lý các ý định cụ thể ---
 
-        if intent == "list_by_type_location":
+        if intent == "list_by_type_location": # Ý định MỚI
             item_type = parsed_query.get("type")
             location = parsed_query.get("location")
             if not item_type or not location:
                 return "Bạn muốn tìm hóa chất/vật tư loại gì và ở vị trí nào?"
             results = self.db_manager.list_by_type_and_location(item_type, location)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, f"{item_type} {location}")
             return self._format_results(results, f"loại '{item_type}' trong vị trí '{location}'")
 
-        elif intent == "list_by_location_status":
+        elif intent == "list_by_location_status": # Ý định ĐÃ CÓ
             location = parsed_query.get("location")
             status = parsed_query.get("status")
 
             if not location and not status:
                 return "Bạn muốn liệt kê vật tư/hóa chất theo vị trí và tình trạng nào?"
 
-            results = pd.DataFrame()
-            query_context_text = ""
             if location and status:
                 results = self.db_manager.list_by_location_and_status(location, status)
-                query_context_text = f"vị trí '{location}' và tình trạng '{status}'"
-            elif location:
+                return self._format_results(results, f"vị trí '{location}' và tình trạng '{status}'")
+            elif location: # Chỉ có vị trí (dùng hàm đơn lẻ nếu thiếu status)
                 results = self.db_manager.list_by_location(location)
-                query_context_text = f"vị trí '{location}'"
-            elif status:
+                return self._format_results(results, f"vị trí '{location}'")
+            elif status: # Chỉ có tình trạng (tìm trên toàn bộ CSDL nếu thiếu vị trí)
                 results = self.db_manager.list_by_status(status)
-                query_context_text = f"tình trạng '{status}'"
+                return self._format_results(results, f"tình trạng '{status}'")
 
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, query_context_text)
-            return self._format_results(results, query_context_text)
+            return "Tôi không hiểu yêu cầu liệt kê theo vị trí và tình trạng này."
 
-        elif intent == "list_by_type_status":
+        elif intent == "list_by_type_status": # Ý định ĐÃ CÓ (khi có cả type và status)
             item_type = parsed_query.get("type")
             status = parsed_query.get("status")
 
             if not item_type and not status:
                 return "Bạn muốn liệt kê hóa chất/vật tư theo loại và tình trạng nào?"
 
-            results = pd.DataFrame()
-            query_context_text = ""
             if item_type and status:
                 results = self.db_manager.list_by_type_and_status(item_type, status)
-                query_context_text = f"loại '{item_type}' và tình trạng '{status}'"
+                return self._format_results(results, f"loại '{item_type}' và tình trạng '{status}'")
 
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, query_context_text)
-            return self._format_results(results, query_context_text)
+            return "Tôi không hiểu yêu cầu liệt kê theo loại và tình trạng này."
 
-        elif intent == "list_by_type":
+        elif intent == "list_by_type": # Ý định MỚI (chỉ loại, không trạng thái)
             item_type = parsed_query.get("type")
             if not item_type:
                 return "Bạn muốn liệt kê vật tư/hóa chất theo loại nào?"
             results = self.db_manager.list_by_type(item_type)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, f"loại '{item_type}'")
             return self._format_results(results, f"loại '{item_type}'")
 
-        elif intent == "search_by_id":
+        elif intent == "search_by_id": # Ý định ĐÃ CÓ
             item_id = parsed_query.get("id")
             if not item_id:
                 return "Bạn muốn tìm vật tư/hóa chất theo mã ID nào?"
 
             results = self.db_manager.get_by_id(item_id)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, item_id)
             return self._format_results(results, item_id)
 
-        elif intent == "search_by_cas":
+        elif intent == "search_by_cas": # Ý định ĐÃ CÓ
             cas_number = parsed_query.get("cas")
             if not cas_number:
                 return "Bạn muốn tìm hóa chất theo số CAS nào?"
 
             results = self.db_manager.search_by_cas(cas_number)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, cas_number)
             return self._format_results(results, f"CAS {cas_number}")
 
-        elif intent == "list_by_location":
+        elif intent == "list_by_location": # Ý định ĐÃ CÓ
             location = parsed_query.get("location")
             if not location:
                 return "Bạn muốn liệt kê vật tư/hóa chất ở vị trí nào?"
 
             results = self.db_manager.list_by_location(location)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, location)
             return self._format_results(results, f"vị trí '{location}'")
+
+        # --- Xử lý các ý định chung (fallback) ---
 
         elif intent == "get_quantity": # Hàm cũ (tìm số lượng theo tên)
             item_name = parsed_query.get("item_name")
@@ -153,8 +110,10 @@ class ChatbotLogic:
             if qty is not None:
                 return f"Số lượng **{item_name.capitalize()}** hiện có là **{qty} {unit}**."
             else:
-                # Fallback cho get_quantity: thử tìm kiếm chung
-                return self._handle_no_results_fallback(user_query, item_name)
+                search_results = self.db_manager.search_item(item_name)
+                if not search_results.empty:
+                    return self._format_results(search_results, f"có thể liên quan đến '{item_name}'") # Sử dụng _format_results
+                return f"Không tìm thấy thông tin số lượng cho '**{item_name}**'. Vui lòng kiểm tra lại tên."
 
         elif intent == "get_location": # Hàm cũ (tìm vị trí theo tên)
             item_name = parsed_query.get("item_name")
@@ -164,17 +123,17 @@ class ChatbotLogic:
             if location:
                 return f"**{item_name.capitalize()}** được đặt tại: **{location}**."
             else:
-                # Fallback cho get_location: thử tìm kiếm chung
-                return self._handle_no_results_fallback(user_query, item_name)
+                search_results = self.db_manager.search_item(item_name)
+                if not search_results.empty:
+                    return self._format_results(search_results, f"có thể liên quan đến '{item_name}'") # Sử dụng _format_results
+                return f"Không tìm thấy thông tin vị trí cho '**{item_name}**'. Vui lòng kiểm tra lại tên."
 
-        elif intent == "search_item": # Hàm tìm kiếm chung (fallback mặc định)
+        elif intent == "search_item": # Hàm tìm kiếm chung (fallback)
             query_text = parsed_query.get("query")
             if not query_text or len(query_text.strip()) < 2:
                 return "Bạn muốn tôi tìm kiếm thông tin gì? Vui lòng nhập từ khóa cụ thể hơn."
 
             results = self.db_manager.search_item(query_text)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, query_text) # Nếu tìm kiếm chung cũng không có
             return self._format_results(results, query_text)
 
         else:
