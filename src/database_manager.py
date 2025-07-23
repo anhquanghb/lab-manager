@@ -4,7 +4,6 @@ import os
 
 class DatabaseManager:
     def __init__(self, data_path='data/inventory.json'):
-        # Đảm bảo đường dẫn tương đối đúng từ thư mục gốc của dự án
         self.data_path = os.path.join(os.path.dirname(__file__), '..', data_path)
         self.inventory_data = self._load_data()
 
@@ -12,7 +11,7 @@ class DatabaseManager:
         """Tải dữ liệu từ file JSON."""
         if not os.path.exists(self.data_path):
             print(f"Lỗi: Không tìm thấy file dữ liệu tại {self.data_path}")
-            return pd.DataFrame() # Trả về DataFrame rỗng nếu file không tồn tại
+            return pd.DataFrame()
         try:
             with open(self.data_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
@@ -25,17 +24,24 @@ class DatabaseManager:
             return pd.DataFrame()
 
     def search_item(self, query):
-        """Tìm kiếm vật tư/hóa chất theo tên hoặc mô tả."""
+        """
+        Tìm kiếm vật tư/hóa chất theo bất kỳ thông tin liên quan nào
+        bao gồm: id, name, location, và description.
+        """
         if self.inventory_data.empty:
             return pd.DataFrame()
 
         query_lower = query.lower()
 
-        # Tìm kiếm trong cột 'name' hoặc 'description'
-        results = self.inventory_data[
-            self.inventory_data['name'].str.lower().str.contains(query_lower) |
-            self.inventory_data['description'].str.lower().str.contains(query_lower)
-        ]
+        # Tạo một DataFrame chỉ chứa các cột cần tìm kiếm
+        # và chuyển đổi tất cả sang dạng chuỗi và chữ thường để tìm kiếm
+        searchable_df = self.inventory_data[['id', 'name', 'location', 'description']].astype(str).apply(lambda x: x.str.lower())
+
+        # Tìm kiếm trong tất cả các cột đã chọn
+        # Sử dụng .any(axis=1) để kiểm tra nếu query_lower xuất hiện trong BẤT KỲ cột nào của hàng đó
+        mask = searchable_df.apply(lambda col: col.str.contains(query_lower, na=False)).any(axis=1)
+
+        results = self.inventory_data[mask]
         return results
 
     def get_quantity(self, item_name):
@@ -44,7 +50,6 @@ class DatabaseManager:
             return None, None
 
         item_name_lower = item_name.lower()
-        # Tìm kiếm chính xác tên
         found_item = self.inventory_data[self.inventory_data['name'].str.lower() == item_name_lower]
 
         if not found_item.empty:
@@ -57,7 +62,6 @@ class DatabaseManager:
             return None
 
         item_name_lower = item_name.lower()
-        # Tìm kiếm chính xác tên
         found_item = self.inventory_data[self.inventory_data['name'].str.lower() == item_name_lower]
 
         if not found_item.empty:
