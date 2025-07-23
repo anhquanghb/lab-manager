@@ -9,12 +9,12 @@ click==8.2.1
 colorama==0.4.6
 gitdb==4.0.12
 GitPython==3.1.44
-googletrans-py==4.0.0
+googletrans==4.0.0-rc1
 h11==0.16.0
-h2==4.2.0
+h2 # Đã bỏ ràng buộc phiên bản
 hpack==4.1.0
 httpcore==1.0.9
-httpx==0.28.1
+httpx # Đã bỏ ràng buộc phiên bản
 hyperframe==6.1.0
 idna==3.10
 Jinja2==3.1.6
@@ -50,6 +50,3 @@ typing_extensions==4.14.1
 tzdata==2025.2
 urllib3==2.5.0
 watchdog==6.0.0
-googletrans==4.0.0-rc1
-h2
-httpx
