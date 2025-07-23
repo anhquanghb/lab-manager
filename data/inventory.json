@@ -1,0 +1,56 @@
+[
+  {
+    "id": "VTM001",
+    "name": "Ống nghiệm thủy tinh",
+    "type": "Vật tư",
+    "quantity": 100,
+    "unit": "chiếc",
+    "location": "Kệ A1",
+    "description": "Ống nghiệm 15ml, dùng cho hóa học vô cơ."
+  },
+  {
+    "id": "HC001",
+    "name": "Axeton",
+    "type": "Hóa chất",
+    "quantity": 500,
+    "unit": "ml",
+    "location": "Tủ B2",
+    "description": "Dung môi hữu cơ, dễ bay hơi, dùng làm sạch."
+  },
+  {
+    "id": "VTM002",
+    "name": "Bình tam giác",
+    "type": "Vật tư",
+    "quantity": 20,
+    "unit": "chiếc",
+    "location": "Kệ A2",
+    "description": "Bình tam giác 250ml, cổ hẹp."
+  },
+  {
+    "id": "HC002",
+    "name": "Ethanol 96%",
+    "type": "Hóa chất",
+    "quantity": 1000,
+    "unit": "ml",
+    "location": "Tủ B1",
+    "description": "Cồn y tế, dung môi."
+  },
+  {
+    "id": "VTM003",
+    "name": "Pipet định mức 10ml",
+    "type": "Vật tư",
+    "quantity": 10,
+    "unit": "chiếc",
+    "location": "Kệ C3",
+    "description": "Dùng để đong thể tích chính xác."
+  },
+  {
+    "id": "HC003",
+    "name": "Axit Sunfuric đặc",
+    "type": "Hóa chất",
+    "quantity": 250,
+    "unit": "ml",
+    "location": "Tủ độc D4",
+    "description": "Axit mạnh, ăn mòn, cần cẩn thận khi sử dụng."
+  }
+]
