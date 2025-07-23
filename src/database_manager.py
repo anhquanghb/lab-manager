@@ -26,7 +26,7 @@ class DatabaseManager:
     def search_item(self, query):
         """
         Tìm kiếm vật tư/hóa chất theo bất kỳ thông tin liên quan nào
-        bao gồm: id, name, location, và description.
+        bao gồm: id, name, type, location, và description.
         """
         if self.inventory_data.empty:
             return pd.DataFrame()
@@ -35,7 +35,8 @@ class DatabaseManager:
 
         # Tạo một DataFrame chỉ chứa các cột cần tìm kiếm
         # và chuyển đổi tất cả sang dạng chuỗi và chữ thường để tìm kiếm
-        searchable_df = self.inventory_data[['id', 'name', 'location', 'description']].astype(str).apply(lambda x: x.str.lower())
+        # Đã thêm 'type' vào danh sách các cột tìm kiếm
+        searchable_df = self.inventory_data[['id', 'name', 'type', 'location', 'description']].astype(str).apply(lambda x: x.str.lower())
 
         # Tìm kiếm trong tất cả các cột đã chọn
         # Sử dụng .any(axis=1) để kiểm tra nếu query_lower xuất hiện trong BẤT KỲ cột nào của hàng đó
