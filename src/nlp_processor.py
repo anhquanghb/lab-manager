@@ -36,12 +36,10 @@ class NLPProcessor:
         """
         cleaned_text = text
         for kw in keywords_to_remove:
-            if kw not in self.guidance_keywords and \
-               kw not in self.download_log_keywords and \
-               kw not in self.greeting_keywords and \
-               kw not in self.list_search_verbs.replace(r'\s+', ' ').split('|'):
-                cleaned_text = re.sub(r'\b' + re.escape(kw) + r'\b', '', cleaned_text, flags=re.IGNORECASE).strip()
+            # Loại bỏ từ khóa bằng regex word boundary
+            cleaned_text = re.sub(r'\b' + re.escape(kw) + r'\b', ' ', cleaned_text, flags=re.IGNORECASE).strip()
 
+        # Làm sạch khoảng trắng thừa
         cleaned_text = re.sub(r'^\W+|\W+$', '', cleaned_text).strip()
         cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
 
@@ -75,8 +73,7 @@ class NLPProcessor:
         match_quantity_status = re.search(r'(?:' + '|'.join(self.quantity_phrases) + r')\s+(?:' + '|'.join(self.unit_words) + r')?\s*([a-zA-Z0-9\s.-]+?)\s*(' + '|'.join(self.status_keywords) + r')', query_lower)
         if match_quantity_status:
             raw_item_name = match_quantity_status.group(2).strip()
-            status_found = match_quantity_status.group(3).strip()
-            item_name = self._remove_keywords(raw_item_name, self.unit_words)
+            item_name = self._remove_keywords(raw_item_name, self.unit_words) # Vẫn dùng _remove_keywords để làm sạch tên item
             if item_name and "hóa chất" not in item_name and "vật tư" not in item_name:
                 return {"intent": "get_quantity_status", "item_name": item_name, "status": status_found}
 
@@ -158,12 +155,19 @@ class NLPProcessor:
 
 
         # --- Ý định chung (Fallback cuối cùng) ---
-        all_keywords_to_remove = self.general_stopwords + self.quantity_phrases + self.unit_words + \
-                                 self.status_keywords + self.guidance_keywords + \
-                                 self.download_log_keywords + self.greeting_keywords + \
-                                 self.list_search_verbs.replace(r'\s+', ' ').split('|')
+        # Danh sách các từ khóa lệnh cần loại bỏ trong tìm kiếm chung
+        # Đảm bảo các từ khóa trong self.list_search_verbs cũng được loại bỏ
+        commands_to_remove_in_general_search = [
+            "tìm", "kiếm", "về", "thông tin về", "cho tôi biết về", "hãy tìm", "hỏi về", "tra cứu", "find", "liệt kê", "có", "thống kê", # Từ khóa tìm kiếm chung
+            "có bao nhiêu", "số lượng", "bao nhiêu", # Từ khóa số lượng
+            "chai", "lọ", "thùng", "gói", "hộp", "bình", "cái", "m", "kg", "g", "ml", "l", "đơn vị", "viên", "cuộn", # Từ khóa đơn vị
+            "đã mở", "còn nguyên", # Từ khóa tình trạng
+            "hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không", # Từ khóa hướng dẫn
+            "tải nhật ký", "xuất log", "lịch sử chat", "tải log", # Từ khóa tải log
+            "xin chào", "chào", "hello", "hi", "hey" # Từ khóa chào hỏi
+        ]
 
-        cleaned_query_for_general_search = self._remove_keywords(query_lower, all_keywords_to_remove)
+        cleaned_query_for_general_search = self._remove_keywords(query_lower, commands_to_remove_in_general_search)
 
         if not cleaned_query_for_general_search:
             return {"intent": "search_item", "query": ""} 
@@ -171,7 +175,7 @@ class NLPProcessor:
         return {"intent": "search_item", "query": cleaned_query_for_general_search}
 
     def _extract_item_name(self, query_lower, keywords_to_remove):
-        # Hàm này nên được tích hợp hoàn toàn vào _remove_keywords hoặc xóa nếu không còn dùng.
+        # Hàm này sẽ được tích hợp hoàn toàn vào _remove_keywords hoặc xóa nếu không còn dùng.
         item_name_candidate = query_lower
         for kw in keywords_to_remove:
             item_name_candidate = item_name_candidate.replace(kw, "").strip()
