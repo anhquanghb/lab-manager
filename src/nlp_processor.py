@@ -132,14 +132,10 @@ class NLPProcessor:
         # --- CÁC Ý ĐỊNH ĐƠN LẺ ---
 
         # Ý định: Get Quantity
-        # Đã điều chỉnh regex để bắt bất kỳ ký tự nào (bao gồm số, chữ, dấu gạch ngang) 
-        # sau cụm từ hỏi số lượng cho đến hết chuỗi hoặc đến khi gặp một cụm từ khóa khác
         match_get_quantity = re.search(r'(?:' + '|'.join(self.quantity_phrases) + r')\s+([a-zA-Z0-9\s.-]+)', query_lower)
         if match_get_quantity:
             raw_item_name = match_get_quantity.group(1).strip()
-            # Loại bỏ các từ đơn vị nếu có
             item_name = self._remove_keywords(raw_item_name, self.unit_words)
-            # Đảm bảo không phải là "hóa chất" hay "vật tư" rỗng sau khi làm sạch
             if item_name and "hóa chất" not in item_name and "vật tư" not in item_name:
                 return {"intent": "get_quantity", "item_name": item_name}
 
@@ -158,6 +154,16 @@ class NLPProcessor:
         if match_location_simple:
             return {"intent": "list_by_location", "location": match_location_simple.group(4).strip().upper()}
 
+        # Ý định: Get Location (Đã cải tiến regex để bắt tên vật tư/hóa chất linh hoạt hơn)
+        # Bắt đầu với tên vật tư/hóa chất, sau đó là các cụm từ hỏi vị trí
+        match_get_location = re.search(r'([a-zA-Z0-9\s.-]+?)\s+(?:ở\s+đâu|vị\s+trí\s+của)', query_lower)
+        if match_get_location:
+            item_name = match_get_location.group(1).strip()
+            # Loại bỏ các từ khóa chung nếu chúng vô tình bị bắt vào tên item
+            item_name = self._remove_keywords(item_name, self.general_stopwords + self.quantity_phrases + self.unit_words)
+            if item_name: # Đảm bảo item_name không rỗng sau khi làm sạch
+                return {"intent": "get_location", "item_name": item_name}
+
 
         # --- Ý định chung (Fallback cuối cùng) ---
         # Danh sách các từ khóa lệnh cần loại bỏ trong tìm kiếm chung
@@ -168,7 +174,8 @@ class NLPProcessor:
             "đã mở", "còn nguyên", # Từ khóa tình trạng
             "hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không", # Từ khóa hướng dẫn
             "tải nhật ký", "xuất log", "lịch sử chat", "tải log", # Từ khóa tải log
-            "xin chào", "chào", "hello", "hi", "hey" # Từ khóa chào hỏi
+            "xin chào", "chào", "hello", "hi", "hey", # Từ khóa chào hỏi
+            "ở đâu", "vị trí của" # Từ khóa vị trí
         ]
 
         # Sử dụng một bản sao của query_lower để làm sạch
