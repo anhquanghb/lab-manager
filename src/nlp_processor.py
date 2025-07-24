@@ -132,10 +132,14 @@ class NLPProcessor:
         # --- CÁC Ý ĐỊNH ĐƠN LẺ ---
 
         # Ý định: Get Quantity
-        match_get_quantity = re.search(r'(?:' + '|'.join(self.quantity_phrases) + r')\s+(.+)', query_lower)
+        # Đã điều chỉnh regex để bắt bất kỳ ký tự nào (bao gồm số, chữ, dấu gạch ngang) 
+        # sau cụm từ hỏi số lượng cho đến hết chuỗi hoặc đến khi gặp một cụm từ khóa khác
+        match_get_quantity = re.search(r'(?:' + '|'.join(self.quantity_phrases) + r')\s+([a-zA-Z0-9\s.-]+)', query_lower)
         if match_get_quantity:
             raw_item_name = match_get_quantity.group(1).strip()
+            # Loại bỏ các từ đơn vị nếu có
             item_name = self._remove_keywords(raw_item_name, self.unit_words)
+            # Đảm bảo không phải là "hóa chất" hay "vật tư" rỗng sau khi làm sạch
             if item_name and "hóa chất" not in item_name and "vật tư" not in item_name:
                 return {"intent": "get_quantity", "item_name": item_name}
 
