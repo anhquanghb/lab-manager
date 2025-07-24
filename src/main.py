@@ -3,13 +3,11 @@ import sys
 import os
 
 # Thêm thư mục gốc của dự án vào Python path
-# Điều này giúp các import như 'from src.chatbot_logic' hoạt động khi chạy Streamlit
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
 from src.chatbot_logic import ChatbotLogic
-
 
 # Khởi tạo chatbot logic một lần duy nhất
 @st.cache_resource
@@ -17,9 +15,9 @@ def get_chatbot_logic():
     return ChatbotLogic()
 
 def main():
-    st.set_page_config(page_title="Lab Manager Chatbot", layout="centered")
-    st.title("Trợ Lý Lab Manager AI Chatbot")
-    st.write("Chào bạn! Tôi là trợ lý ảo giúp bạn tra cứu, thống kê vật tư và hóa chất trong phòng thí nghiệm. Bạn muốn hỏi gì?")
+    st.set_page_config(page_title="Lab AI Chatbot - Duy Tan University", layout="centered") # Đã sửa tên trang
+    st.title("🧪 Lab AI Chatbot - Duy Tan University") # Đã sửa tiêu đề
+    st.write("Chào bạn! Tôi là trợ lý ảo giúp bạn tra cứu, thống kê vật tư và hóa chất trong phòng thí nghiệm. Bạn muốn tìm kiếm hóa chất hoặc vật tư? Hãy cho tôi biết! Hoặc nếu bạn muốn tôi hướng dẫn tìm kiếm, hãy gõ Hướng dẫn...") # Đã sửa câu chào mừng
 
     chatbot = get_chatbot_logic()
 
