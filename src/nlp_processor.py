@@ -23,9 +23,10 @@ class NLPProcessor:
 
         self.guidance_keywords = ["hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không"]
         self.download_log_keywords = ["tải nhật ký", "xuất log", "lịch sử chat", "tải log"]
-
-        # Thêm các từ khóa để nhận diện câu chào hỏi
         self.greeting_keywords = ["xin chào", "chào", "hello", "hi", "hey"]
+
+        # Định nghĩa các động từ chung cho lệnh liệt kê/tìm kiếm
+        self.list_search_verbs = r'(liệt\s+kê|tìm|có|thống\s+kê)' # Đã thêm 'thống\s+kê'
 
 
     def _remove_keywords(self, text, keywords_to_remove):
@@ -35,10 +36,10 @@ class NLPProcessor:
         """
         cleaned_text = text
         for kw in keywords_to_remove:
-            # Đảm bảo không loại bỏ các từ khóa hướng dẫn, tải log, hoặc chào hỏi
             if kw not in self.guidance_keywords and \
                kw not in self.download_log_keywords and \
-               kw not in self.greeting_keywords: # Thêm điều kiện này
+               kw not in self.greeting_keywords and \
+               kw not in self.list_search_verbs.replace(r'\s+', ' ').split('|'): # Không loại bỏ các động từ lệnh
                 cleaned_text = re.sub(r'\b' + re.escape(kw) + r'\b', '', cleaned_text, flags=re.IGNORECASE).strip()
 
         cleaned_text = re.sub(r'^\W+|\W+$', '', cleaned_text).strip()
@@ -71,7 +72,7 @@ class NLPProcessor:
         # --- Các ý định cụ thể khác (sau khi kiểm tra hướng dẫn và tải log) ---
 
         # Ý định: Get Quantity AND Status
-        match_quantity_status = re.search(r'(có\s+bao\s+nhiêu|số\s+lượng|bao\s+nhiêu)\s+(?:' + '|'.join(self.unit_words) + r')?\s*([a-zA-Z0-9\s.-]+?)\s*(' + '|'.join(self.status_keywords) + r')', query_lower)
+        match_quantity_status = re.search(r'(?:' + '|'.join(self.quantity_phrases) + r')\s+(?:' + '|'.join(self.unit_words) + r')?\s*([a-zA-Z0-9\s.-]+?)\s*(' + '|'.join(self.status_keywords) + r')', query_lower)
         if match_quantity_status:
             raw_item_name = match_quantity_status.group(2).strip()
             status_found = match_quantity_status.group(3).strip()
@@ -80,7 +81,7 @@ class NLPProcessor:
                 return {"intent": "get_quantity_status", "item_name": item_name, "status": status_found}
 
         # Ý định: List by Type AND Location
-        match_type_location = re.search(r'(liệt\s+kê|tìm|có)\s+(hóa\s+chất|vật\s+tư|chất)\s+(trong|từ|ở)\s+(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', query_lower)
+        match_type_location = re.search(self.list_search_verbs + r'\s+(hóa\s+chất|vật\s+tư|chất)\s+(trong|từ|ở)\s+(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', query_lower) # Dùng self.list_search_verbs
         if match_type_location:
             item_type_raw = match_type_location.group(2)
             location = match_type_location.group(5).strip().upper()
@@ -94,7 +95,7 @@ class NLPProcessor:
             return {"intent": "list_by_type_location", "type": item_type, "location": location}
 
         # Ý định: List by Location AND Status
-        match_loc_status = re.search(r'(liệt\s+kê|tìm|có)\s+(.+)\s+(trong|từ)\s+(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', query_lower)
+        match_loc_status = re.search(self.list_search_verbs + r'\s+(.+)\s+(trong|từ)\s+(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', query_lower) # Dùng self.list_search_verbs
         if match_loc_status:
             status_phrase_full = match_loc_status.group(2).strip()
             location = match_loc_status.group(5).strip().upper()
@@ -107,7 +108,7 @@ class NLPProcessor:
             return {"intent": "list_by_location_status", "location": location, "status": status}
 
         # Ý định: List by Type AND Status
-        match_type_status = re.search(r'(liệt\s+kê|tìm)\s+(hóa\s+chất|vật\s+tư|chất)(?:\s+(.+))?', query_lower)
+        match_type_status = re.search(self.list_search_verbs + r'\s+(hóa\s+chất|vật\s+tư|chất)(?:\s+(.+))?', query_lower) # Dùng self.list_search_verbs
         if match_type_status:
             item_type_raw = match_type_status.group(2)
             status_phrase = match_type_status.group(3) if match_type_status.group(3) else ""
@@ -151,13 +152,17 @@ class NLPProcessor:
             return {"intent": "search_by_cas", "cas": match_cas.group(2)}
 
         # Ý định: List by Location (Đơn thuần)
-        match_location_simple = re.search(r'(liệt\s+kê|tìm|có)\s*(trong|từ|ở)?\s*(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', query_lower)
+        match_location_simple = re.search(self.list_search_verbs + r'\s*(trong|từ|ở)?\s*(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', query_lower) # Dùng self.list_search_verbs
         if match_location_simple:
             return {"intent": "list_by_location", "location": match_location_simple.group(4).strip().upper()}
 
 
         # --- Ý định chung (Fallback cuối cùng) ---
-        all_keywords_to_remove = self.general_stopwords + self.quantity_phrases + self.unit_words + self.status_keywords + self.guidance_keywords + self.download_log_keywords + self.greeting_keywords # Thêm greeting_keywords
+        all_keywords_to_remove = self.general_stopwords + self.quantity_phrases + self.unit_words + \
+                                 self.status_keywords + self.guidance_keywords + \
+                                 self.download_log_keywords + self.greeting_keywords + \
+                                 self.list_search_verbs.replace(r'\s+', ' ').split('|') # Thêm list_search_verbs
+
         cleaned_query_for_general_search = self._remove_keywords(query_lower, all_keywords_to_remove)
 
         if not cleaned_query_for_general_search:
