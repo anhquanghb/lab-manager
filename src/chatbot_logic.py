@@ -4,6 +4,8 @@ from src.nlp_processor import NLPProcessor
 import re
 import os
 import json
+import git # Thêm dòng này
+from datetime import datetime # Thêm dòng này
 
 class ChatbotLogic:
     LOG_FILE = "chat_log.jsonl"
@@ -14,6 +16,10 @@ class ChatbotLogic:
 
         if not os.path.exists('logs'):
             os.makedirs('logs')
+        # Tạo thư mục archive nếu chưa có
+        if not os.path.exists('logs/archive'):
+            os.makedirs('logs/archive')
+
         self.log_filepath = os.path.join('logs', self.LOG_FILE)
 
     GUIDANCE_MESSAGE = """
@@ -95,14 +101,114 @@ class ChatbotLogic:
         except Exception as e:
             print(f"Lỗi khi ghi log: {e}")
 
+    def _upload_log_to_github(self):
+        """
+        Đọc file log hiện tại, tải lên GitHub và làm rỗng file log cục bộ.
+        Sử dụng Personal Access Token (PAT) từ Streamlit secrets.
+        """
+        github_token = os.getenv("GITHUB_TOKEN") or st.secrets.get("GITHUB_TOKEN") # Lấy token từ biến môi trường hoặc secrets.toml
+
+        if not github_token:
+            return "Lỗi: Không tìm thấy GitHub Personal Access Token. Vui lòng cấu hình trong biến môi trường hoặc .streamlit/secrets.toml."
+
+        try:
+            # Đảm bảo PATH được thiết lập để tìm thấy Git
+            # Trên Streamlit Cloud, Git thường có sẵn. Cục bộ có thể cần đảm bảo git.exe nằm trong PATH.
+            repo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+            repo = git.Repo(repo_path)
+
+            # Cấu hình thông tin người dùng Git nếu chưa có
+            with repo.config_writer() as cw:
+                if not cw.has_option('user', 'email') or not cw.get_value('user', 'email'):
+                    cw.set_value('user', 'email', 'chatbot@streamlit.app').release()
+                if not cw.has_option('user', 'name') or not cw.get_value('user', 'name'):
+                    cw.set_value('user', 'name', 'Streamlit Chatbot').release()
+
+            # Đọc nội dung log hiện tại
+            if not os.path.exists(self.log_filepath) or os.stat(self.log_filepath).st_size == 0:
+                return "Không có dữ liệu nhật ký để tải lên."
+
+            with open(self.log_filepath, 'r', encoding='utf-8') as f:
+                log_content = f.read()
+
+            # Tạo tên file log lưu trữ với timestamp
+            timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+            archive_filename = f"chat_log_archive_{timestamp_str}.jsonl"
+            archive_filepath = os.path.join('logs', 'archive', archive_filename)
+
+            # Ghi nội dung vào file log lưu trữ
+            with open(archive_filepath, 'w', encoding='utf-8') as f:
+                f.write(log_content)
+
+            # Thêm file vào Git và commit
+            repo.index.add([archive_filepath])
+            commit_message = f"feat(logs): Archive chat log {archive_filename}"
+            repo.index.commit(commit_message)
+
+            # Đẩy lên GitHub sử dụng PAT
+            # Format URL: https://oauth2:<GITHUB_TOKEN>@github.com/<OWNER>/<REPO_NAME>.git
+            remote_url = repo.remotes.origin.url
+            # Lấy phần owner/repo_name từ remote_url
+            if "@" in remote_url:
+                auth_part, repo_part = remote_url.split("@", 1)
+                repo_url_with_auth = f"https://oauth2:{github_token}@{repo_part}"
+            else: # Fallback cho trường hợp URL không có @ (ví dụ: ssh)
+                # Cố gắng chuyển đổi sang https nếu là ssh
+                if remote_url.startswith("git@github.com:"):
+                    repo_path_no_git = remote_url.replace("git@github.com:", "")
+                    repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{repo_path_no_git}"
+                else: # Nếu không phải ssh và cũng không có @ (hiếm)
+                     return "Lỗi: Không thể xác định URL kho lưu trữ GitHub để tải lên. Vui lòng cấu hình URL từ xa của bạn."
+
+
+            # Đẩy lên nhánh chính (main)
+            # Sử dụng 'force=True' nếu muốn ghi đè lịch sử, nhưng không nên dùng cho log. Chỉ push bình thường.
+            # Sử dụng command line git push
+            # Cần thêm HEAD:main để chỉ định đẩy nhánh hiện tại lên main
+            # Tắt xác minh SSL nếu cần (streamlit cloud thường ok)
+
+            # repo.git.push(repo_url_with_auth, 'HEAD:main') # Cách dùng GitPython
+            # Hoặc dùng subprocess để kiểm soát tốt hơn nếu GitPython phức tạp
+
+            # Lấy tên nhánh hiện tại để push
+            current_branch = repo.active_branch.name
+
+            # Sử dụng subprocess để đảm bảo lệnh push được thực thi đúng cách với PAT
+            import subprocess
+            push_command = [
+                'git', 'push',
+                repo_url_with_auth,
+                f'{current_branch}:{current_branch}' # Đẩy nhánh hiện tại lên cùng tên nhánh trên remote
+            ]
+
+            # Chạy lệnh push, ẩn output nhạy cảm
+            process = subprocess.run(push_command, capture_output=True, text=True, check=True)
+            print(f"Git Push stdout: {process.stdout}")
+            print(f"Git Push stderr: {process.stderr}")
+
+            # Làm rỗng file log cục bộ sau khi tải lên thành công
+            with open(self.log_filepath, 'w', encoding='utf-8') as f:
+                f.truncate(0)
+
+            return f"Đã tải nhật ký '{archive_filename}' lên GitHub thành công và làm rỗng nhật ký cục bộ."
+
+        except git.InvalidGitRepositoryError:
+            return "Lỗi: Thư mục dự án không phải là một kho lưu trữ Git hợp lệ. Vui lòng đảm bảo bạn đã khởi tạo Git."
+        except git.GitCommandError as e:
+            return f"Lỗi Git khi tải nhật ký lên GitHub: {e.stderr or e.stdout}. Vui lòng kiểm tra GitHub PAT và quyền truy cập."
+        except Exception as e:
+            return f"Lỗi không xác định khi tải nhật ký lên GitHub: {e}"
 
     def get_response(self, user_query):
         parsed_query = self.nlp_processor.process_query(user_query)
         intent = parsed_query.get("intent")
 
-        # --- Xử lý ý định CHÀO HỎI (Ưu tiên cao nhất) ---
-        if intent == "greeting":
-            final_response = self.GUIDANCE_MESSAGE # Trả về hướng dẫn khi chào hỏi
+        # --- Xử lý ý định TẢI LOG LÊN GITHUB (Ưu tiên cao nhất) ---
+        if intent == "upload_log_github":
+            final_response = self._upload_log_to_github()
+        # --- Xử lý ý định CHÀO HỎI ---
+        elif intent == "greeting":
+            final_response = self.GUIDANCE_MESSAGE
         # --- Xử lý ý định HƯỚNG DẪN ---
         elif intent == "request_guidance":
             final_response = self.GUIDANCE_MESSAGE
