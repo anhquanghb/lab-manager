@@ -20,11 +20,11 @@ class NLPProcessor:
         self.quantity_phrases_list = ["có bao nhiêu", "số lượng", "bao nhiêu"]
         self.unit_words_list = ["chai", "lọ", "thùng", "gói", "hộp", "bình", "cái", "m", "kg", "g", "ml", "l", "đơn vị", "viên", "cuộn"]
         self.general_stopwords_list = ["tìm", "kiếm", "về", "thông tin về", "cho tôi biết về", "hãy tìm", "hỏi về", "của", "là", "?", "vật tư", "hóa chất", "chất"]
-        self.status_keywords_list = ["đã mở", "còn nguyên"]
+        self.status_keywords_list = ["đã mở", "còn nguyên", "đã sử dụng", "hết hạn", "còn hạn", "còn", "hết", "đang sử dụng", "sử dụng", "còn lại", "còn bao nhiêu", "tình trạng", "trạng thái"]
         self.guidance_keywords_list = ["hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không"]
         self.download_log_keywords_list = ["tải nhật ký", "xuất log", "lịch sử chat", "tải log"]
         self.greeting_keywords_list = ["xin chào", "chào", "hello", "hi", "hey"]
-        self.problem_keywords_list = ["không thấy", "đã hết", "không còn", "hư hỏng", "hỏng", "bị hỏng", "thiếu"]
+        self.problem_keywords_list = ["không thấy", "đã hết", "không còn", "hư hỏng", "hỏng", "bị hỏng", "thiếu", "bị mất", "bị thất lạc", "bị lỗi", "lỗi", "vấn đề", "sự cố"]
         self.location_phrases_list = ["ở đâu", "vị trí của"] # Từ khóa cho vị trí
 
         # Hàm trợ giúp để chuyển danh sách từ/cụm từ sang regex pattern an toàn
