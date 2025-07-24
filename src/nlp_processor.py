@@ -29,9 +29,17 @@ class NLPProcessor:
 
         # Hàm trợ giúp để chuyển danh sách từ/cụm từ sang regex pattern an toàn
         def _list_to_regex_pattern(word_list):
-            # Tạo pattern an toàn cho regex, xử lý khoảng trắng trong cụm từ
-            # Ví dụ: "không thấy" -> "không\s+thấy" (regex khớp khoảng trắng)
-            return r"(?:" + "|".join(r'\s+'.join(re.escape(word) for word in phrase.split()) for phrase in word_list) + r")"
+            # Chuyển một danh sách các cụm từ (ví dụ: ["không thấy", "đã hết"])
+            # thành một pattern regex alternation (ví dụ: "(?:không\s+thấy|đã\s+hết)")
+            pattern_parts = []
+            for phrase in word_list:
+                # Tách cụm từ thành từng từ, escape từng từ, sau đó nối lại bằng "\s+"
+                # Đây là cách đúng để tạo regex từ cụm từ có khoảng trắng
+                regex_phrase = r'\s+'.join(re.escape(word) for word in phrase.split())
+                pattern_parts.append(regex_phrase)
+
+            # Nối tất cả các phần tử đã xử lý bằng '|' và gói trong non-capturing group
+            return r"(?:" + "|".join(pattern_parts) + r")"
 
         # Tạo các regex pattern từ danh sách từ khóa
         self.quantity_phrases_regex = _list_to_regex_pattern(self.quantity_phrases_list)
@@ -51,7 +59,7 @@ class NLPProcessor:
         cleaned_text = text
         for kw in keywords_to_remove_list:
             # Tạo pattern cho từng từ khóa để thay thế
-            # Thay thế khoảng trắng trong từ khóa bằng \s+ để khớp đúng regex
+            # Thay thế khoảng trắng trong từ khóa bằng \s+ để khớp đúng regex, sau đó re.escape toàn bộ
             kw_pattern = r'\b' + r'\s+'.join(re.escape(word) for word in kw.split()) + r'\b'
             cleaned_text = re.sub(kw_pattern, ' ', cleaned_text, flags=re.IGNORECASE).strip()
 
@@ -86,8 +94,8 @@ class NLPProcessor:
         # --- Nhận diện Ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ ---
         print(f"DEBUG NLP: Kiểm tra Report Status (regex: {self.problem_keywords_regex})") # DEBUG
         problem_report_regex_combined = (
-            r'(.+?)\s+' + self.problem_keywords_regex + r'|' + 
-            self.problem_keywords_regex + r'\s+([a-zA-Z0-9\s.-]+)'
+            r'(.+?)\s+' + self.problem_keywords_regex + r'|' + # Mẫu 1: Item Problem
+            self.problem_keywords_regex + r'\s+([a-zA-Z0-9\s.-]+)' # Mẫu 2: Problem Item
         )
         match_problem = re.search(problem_report_regex_combined, query_lower)
         if match_problem:
@@ -130,7 +138,7 @@ class NLPProcessor:
         if match_get_location_direct:
             print(f"DEBUG NLP: MATCHED Get Location (direct). Groups: {match_get_location_direct.groups()}") # DEBUG
             item_name = match_get_location_direct.group(1).strip()
-            item_name = self._remove_keywords(item_name, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list + self.location_phrases_list) # Loại bỏ cả từ khóa vị trí nếu dính vào
+            item_name = self._remove_keywords(item_name, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list + self.location_phrases_list)
             if item_name:
                 print(f"DEBUG NLP: Extracted Location Item (direct): '{item_name}'") # DEBUG
                 return {"intent": "get_location", "item_name": item_name}
