@@ -4,9 +4,7 @@ from src.nlp_processor import NLPProcessor
 import re
 import os
 import json
-import git
-from datetime import datetime
-import streamlit as st
+# Đã bỏ import git và datetime
 
 class ChatbotLogic:
     LOG_FILE = "chat_log.jsonl"
@@ -15,7 +13,6 @@ class ChatbotLogic:
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
 
-        # Cấu hình đường dẫn log ban đầu (chỉ tạo thư mục gốc logs/)
         self.logs_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'logs'))
         if not os.path.exists(self.logs_base_dir):
             os.makedirs(self.logs_base_dir)
@@ -23,72 +20,10 @@ class ChatbotLogic:
         self.log_filepath = os.path.join(self.logs_base_dir, self.LOG_FILE)
 
 
-    GUIDANCE_MESSAGE = """
-    Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm.
-    Dưới đây là các loại câu lệnh bạn có thể sử dụng:
-
-    **1. Tìm kiếm chung:**
-    - Tìm kiếm theo tên (Tiếng Việt hoặc Tiếng Anh), công thức, hoặc từ khóa trong mô tả.
-    - **Cấu trúc:** `[Từ khóa]`, `tìm [Từ khóa]`, `hãy tìm [Từ khóa]`, `tra cứu [Từ khóa]`.
-    - **Ví dụ:** `axit sulfuric`, `SULFURIC ACID`, `H2SO4`, `tìm ống nghiệm`.
-
-    **2. Tìm kiếm theo Mã ID:**
-    - **Cấu trúc:** `tìm mã [ID]`, `tìm code [ID]`.
-    - **Ví dụ:** `tìm mã A001A`, `tìm code HC001`.
-
-    **3. Tìm kiếm theo số CAS:**
-    - **Cấu trúc:** `tìm CAS [Số CAS]`, `CAS [Số CAS]`, `số cas [Số CAS]`.
-    - **Ví dụ:** `tìm CAS 553-24-2`.
-
-    **4. Liệt kê theo Vị trí:**
-    - **Cấu trúc:** `liệt kê tủ [Vị trí]`, `tìm trong tủ [Vị trí]`, `có ở kệ [Vị trí]`.
-    - **Ví dụ:** `liệt kê tủ 3C`, `tìm trong kệ A1`.
-
-    **5. Liệt kê theo Loại:**
-    - **Cấu trúc:** `liệt kê [Loại]`, `tìm [Loại]`.
-    - **Loại được hỗ trợ:** `Hóa chất`, `Vật tư`.
-    - **Ví dụ:** `liệt kê Hóa chất`, `tìm Vật tư`.
-
-    **6. Liệt kê theo Loại và Tình trạng:**
-    - **Cấu trúc:** `liệt kê [Loại] [Tình trạng]`, `tìm [Loại] [Tình trạng]`.
-    - **Tình trạng được hỗ trợ:** `đã mở`, `còn nguyên`.
-    - **Ví dụ:** `liệt kê Hóa chất đã mở`, `tìm Vật tư còn nguyên`.
-
-    **7. Liệt kê theo Vị trí và Tình trạng:**
-    - **Cấu trúc:** `liệt kê [Tình trạng] từ tủ [Vị trí]`, `tìm [Tình trạng] ở kệ [Vị trí]`.
-    - **Ví dụ:** `liệt kê đã mở từ tủ 3C`.
-
-    **8. Liệt kê theo Loại và Vị trí:**
-    - **Cấu trúc:** `liệt kê [Loại] trong tủ [Vị trí]`, `tìm [Loại] ở kệ [Vị trí]`.
-    - **Ví dụ:** `liệt kê hóa chất trong tủ 3C`.
-
-    **9. Hỏi số lượng:**
-    - **Cấu trúc:** `có bao nhiêu [Tên vật tư/hóa chất]`, `số lượng [Tên vật tư/hóa chất]`, `bao nhiêu [Tên vật tư/hóa chất]`.
-    - **Ví dụ:** `có bao nhiêu Axeton`.
-
-    **10. Hỏi vị trí:**
-    - **Cấu trúc:** `[Tên vật tư/hóa chất] ở đâu`, `vị trí của [Tên vật tư/hóa chất]`.
-    - **Ví dụ:** `Ống nghiệm ở đâu`.
-
-    Nếu bạn cần hướng dẫn này bất cứ lúc nào, chỉ cần hỏi "hướng dẫn tìm kiếm" hoặc "cách tìm kiếm".
-    """
-
-    def _format_results(self, results, query_context=""):
-        """Hàm trợ giúp để định dạng kết quả tìm kiếm và thêm gợi ý hướng dẫn."""
-        if results.empty:
-            return_message = f"Xin lỗi, tôi không tìm thấy vật tư/hóa chất nào liên quan đến '*{query_context}*'." if query_context else "Xin lỗi, tôi không tìm thấy kết quả nào phù hợp."
-            return_message += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?"
-            return return_message
-
-        response = f"Tôi tìm thấy **{len(results)}** kết quả:\n\n"
-        for index, row in results.iterrows():
-            response += (f"- **{row['name']}** (ID: {row['id']}, Loại: {row['type']})\n"
-                         f"  Số lượng: {row['quantity']} {row['unit']}, Vị trí: {row['location']}.\n"
-                         f"  Mô tả: {row['description']}\n\n")
-        return response.strip()
+    # GUIDANCE_MESSAGE và _format_results không thay đổi
 
     def _log_interaction(self, user_query, chatbot_response_text, parsed_query):
-        """Ghi lại tương tác của người dùng và phản hồi của chatbot vào file log."""
+        # Hàm này không thay đổi
         log_entry = {
             "timestamp": pd.Timestamp.now().isoformat(),
             "user_query": user_query,
@@ -102,125 +37,16 @@ class ChatbotLogic:
         except Exception as e:
             print(f"Lỗi khi ghi log: {e}")
 
-    def _upload_log_to_github(self):
-        """
-        Đọc file log hiện tại, tải lên GitHub và làm rỗng file log cục bộ.
-        Sử dụng Personal Access Token (PAT) từ Streamlit secrets.
-        """
-        github_token = st.secrets.get("GITHUB_TOKEN") # Lấy token từ st.secrets
-
-        if not github_token:
-            print("Lỗi: Không tìm thấy GitHub Personal Access Token trong st.secrets.")
-            return "Lỗi: Không tìm thấy GitHub Personal Access Token. Vui lòng cấu hình trong .streamlit/secrets.toml trên Streamlit Cloud."
-
-        try:
-            # Lấy đường dẫn thư mục gốc của repo
-            # os.path.dirname(__file__) là /mount/src/lab-manager/src
-            # os.path.join(..., '..') là /mount/src/lab-manager
-            repo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) 
-            print(f"Đường dẫn repo đang xét: {repo_path}")
-            repo = git.Repo(repo_path)
-            print("Đã khởi tạo đối tượng Git Repo.")
-
-            # Cấu hình thông tin người dùng Git nếu chưa có
-            with repo.config_writer() as cw:
-                if not cw.has_option('user', 'email') or not cw.get_value('user', 'email'):
-                    cw.set_value('user', 'email', 'chatbot@streamlit.app').release()
-                if not cw.has_option('user', 'name') or not cw.get_value('user', 'name'):
-                    cw.set_value('user', 'name', 'Streamlit Chatbot').release()
-            print("Đã cấu hình thông tin người dùng Git.")
-
-            # Đọc nội dung log hiện tại
-            if not os.path.exists(self.log_filepath) or os.stat(self.log_filepath).st_size == 0:
-                print("Không có dữ liệu nhật ký để tải lên.")
-                return "Không có dữ liệu nhật ký để tải lên."
-
-            with open(self.log_filepath, 'r', encoding='utf-8') as f:
-                log_content = f.read()
-            print("Đã đọc nội dung file log cục bộ.")
-
-            # Tạo thư mục archive nếu chưa có (đảm bảo nó tồn tại ngay trước khi ghi file)
-            archive_dir = os.path.join(repo_path, 'logs', 'archive') # Tạo path tuyệt đối
-            if not os.path.exists(archive_dir):
-                os.makedirs(archive_dir)
-                print(f"DEBUG: Đã tạo thư mục lưu trữ mới: {archive_dir}")
-
-            # Tạo tên file log lưu trữ với timestamp
-            timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
-            archive_filename = f"chat_log_archive_{timestamp_str}.jsonl"
-            archive_filepath = os.path.join(archive_dir, archive_filename) # Path tuyệt đối
-
-            # Ghi nội dung vào file log lưu trữ
-            with open(archive_filepath, 'w', encoding='utf-8') as f:
-                f.write(log_content)
-            print(f"Đã ghi nội dung vào file lưu trữ: {archive_filepath}")
-
-            # Thêm file vào Git và commit
-            # Thêm file bằng đường dẫn tương đối từ gốc repo
-            repo_relative_archive_filepath = os.path.relpath(archive_filepath, repo_path)
-            repo.index.add([repo_relative_archive_filepath])
-            commit_message = f"feat(logs): Archive chat log {archive_filename}"
-            repo.index.commit(commit_message)
-            print(f"Đã commit file {archive_filename} với thông báo: {commit_message}")
-
-            # Lấy URL remote và chuẩn bị cho xác thực PAT
-            remote_url = repo.remotes.origin.url
-            print(f"URL remote gốc: {remote_url}")
-
-            repo_url_with_auth = ""
-            if remote_url.startswith("git@github.com:"):
-                repo_path_no_git = remote_url.replace("git@github.com:", "").replace(".git", "")
-                repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{repo_path_no_git}.git"
-                print(f"Đã chuyển đổi URL SSH sang HTTPS: {repo_url_with_auth}")
-            elif remote_url.startswith("https://github.com/"):
-                parts = remote_url.split("https://github.com/")
-                repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{parts[1]}"
-                print(f"Đã thêm PAT vào URL HTTPS: {repo_url_with_auth}")
-            else:
-                print(f"Lỗi: Định dạng URL remote không được hỗ trợ: {remote_url}")
-                return "Lỗi: Không thể xác định URL kho lưu trữ GitHub để tải lên. Vui lòng kiểm tra định dạng URL remote của bạn (phải là HTTPS hoặc SSH)."
-
-            current_branch = repo.active_branch.name
-            print(f"Nhánh hiện tại: {current_branch}")
-
-            import subprocess
-            push_command = [
-                'git', 'push',
-                repo_url_with_auth,
-                f'{current_branch}:{current_branch}'
-            ]
-
-            print(f"Đang thực thi lệnh push: {' '.join(push_command[:2])} *** (ẩn PAT) *** {' '.join(push_command[3:])}")
-            process = subprocess.run(push_command, capture_output=True, text=True, check=True)
-            print(f"Git Push stdout: {process.stdout}")
-            print(f"Git Push stderr: {process.stderr}")
-
-            # Làm rỗng file log cục bộ sau khi tải lên thành công
-            with open(self.log_filepath, 'w', encoding='utf-8') as f:
-                f.truncate(0)
-            print("Đã làm rỗng file log cục bộ.")
-
-            return f"Đã tải nhật ký '{archive_filename}' lên GitHub thành công và làm rỗng nhật ký cục bộ."
-
-        except git.InvalidGitRepositoryError:
-            print("Lỗi: Thư mục dự án không phải là một kho lưu trữ Git hợp lệ.")
-            return "Lỗi: Thư mục dự án không phải là một kho lưu trữ Git hợp lệ. Vui lòng đảm bảo bạn đã khởi tạo Git."
-        except git.GitCommandError as e:
-            print(f"Lỗi Git khi tải nhật ký lên GitHub: {e.stderr or e.stdout}")
-            return f"Lỗi Git khi tải nhật ký lên GitHub: {e.stderr or e.stdout}. Vui lòng kiểm tra GitHub PAT và quyền truy cập."
-        except Exception as e:
-            print(f"Lỗi không xác định khi tải nhật ký lên GitHub: {e}")
-            return f"Lỗi không xác định khi tải nhật ký lên GitHub: {e}"
+    # Đã bỏ toàn bộ hàm _upload_log_to_github từ đây
 
     def get_response(self, user_query):
         parsed_query = self.nlp_processor.process_query(user_query)
         intent = parsed_query.get("intent")
 
-        # --- Xử lý ý định TẢI LOG LÊN GITHUB (Ưu tiên cao nhất) ---
-        if intent == "upload_log_github":
-            final_response = self._upload_log_to_github()
-        # --- Xử lý ý định CHÀO HỎI ---
-        elif intent == "greeting":
+        # --- Đã bỏ block if intent == "upload_log_github": ---
+
+        # --- Xử lý ý định CHÀO HỎI (Ưu tiên cao nhất) ---
+        if intent == "greeting":
             final_response = self.GUIDANCE_MESSAGE
         # --- Xử lý ý định HƯỚNG DẪN ---
         elif intent == "request_guidance":

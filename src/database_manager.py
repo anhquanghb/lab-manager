@@ -1,7 +1,10 @@
 import pandas as pd
 import json
 import os
-import unicodedata # Thêm import này
+import unicodedata
+import git # Thêm dòng này
+from datetime import datetime # Thêm dòng này
+import streamlit as st # Thêm dòng này để truy cập st.secrets
 
 class DatabaseManager:
     def __init__(self, data_path='data/inventory.json'):
@@ -27,7 +30,7 @@ class DatabaseManager:
     def _remove_accents(self, input_str):
         """Hàm trợ giúp để loại bỏ dấu tiếng Việt và chuẩn hóa chuỗi."""
         if not isinstance(input_str, str):
-            return str(input_str) # Chuyển đổi sang chuỗi nếu không phải
+            return str(input_str)
         nfkd_form = unicodedata.normalize('NFKD', input_str)
         only_ascii = nfkd_form.encode('ascii', 'ignore').decode('utf-8')
         return only_ascii
@@ -40,10 +43,8 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        # Chuẩn hóa query: chuyển lower và bỏ dấu
         query_normalized = self._remove_accents(query.lower())
 
-        # Chuẩn bị DataFrame tìm kiếm: chuyển lower và bỏ dấu cho các cột
         searchable_df = self.inventory_data[['id', 'name', 'type', 'location', 'description']].astype(str)
         searchable_df = searchable_df.applymap(self._remove_accents).apply(lambda x: x.str.lower())
 
@@ -57,11 +58,8 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return None, None
 
-        # Chuẩn hóa item_name và cột name
         item_name_normalized = self._remove_accents(item_name.lower())
 
-        # Áp dụng remove_accents cho cột 'name' của DataFrame trước khi so sánh
-        # Dùng applymap trên toàn bộ cột để tạo Series mới, sau đó so sánh
         found_item = self.inventory_data[self.inventory_data['name'].apply(self._remove_accents).str.lower() == item_name_normalized]
 
         if not found_item.empty:
@@ -73,7 +71,6 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return None
 
-        # Chuẩn hóa item_name và cột name
         item_name_normalized = self._remove_accents(item_name.lower())
         found_item = self.inventory_data[self.inventory_data['name'].apply(self._remove_accents).str.lower() == item_name_normalized]
 
@@ -81,15 +78,13 @@ class DatabaseManager:
             return found_item.iloc[0]['location']
         return None
 
-    # --- CÁC HÀM TÌM KIẾM MỚI ---
-    # Áp dụng chuẩn hóa cho query và các cột liên quan
+    # --- CÁC HÀM TÌM KIẾM KHÁC ---
 
     def get_by_id(self, item_id):
         """Tìm kiếm vật tư/hóa chất theo ID chính xác."""
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        # ID thường là ký tự La-tinh không dấu, nhưng vẫn chuẩn hóa để nhất quán
         item_id_normalized = self._remove_accents(item_id.lower())
         results = self.inventory_data[self.inventory_data['id'].apply(self._remove_accents).str.lower() == item_id_normalized]
         return results
@@ -180,3 +175,141 @@ class DatabaseManager:
         cas_number_normalized = self._remove_accents(cas_number.lower())
         results = self.inventory_data[self.inventory_data['description'].apply(self._remove_accents).str.lower().str.contains(f"cas: {cas_number_normalized}", na=False)]
         return results
+
+    def upload_logs_to_github_on_startup(self, log_filepath):
+        """
+        Hàm này được gọi khi ứng dụng khởi động.
+        Đọc file log hiện tại, tải lên GitHub và làm rỗng file log cục bộ.
+        Sử dụng Personal Access Token (PAT) từ Streamlit secrets.
+        """
+        github_token = st.secrets.get("GITHUB_TOKEN")
+
+        if not github_token:
+            print("Lỗi: Không tìm thấy GitHub Personal Access Token trong st.secrets. Không thể tải log lên GitHub.")
+            return False # Trả về False nếu không có token
+
+        try:
+            # Lấy đường dẫn thư mục gốc của repo (ví dụ: /mount/src/lab-manager)
+            # Đây là nơi .git nằm
+            repo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) 
+
+            # Khởi tạo đối tượng Git Repo.
+            # Kiểm tra nếu repo đã được khởi tạo để tránh lỗi GitCommandError nếu repo rỗng
+            try:
+                repo = git.Repo(repo_path)
+            except git.InvalidGitRepositoryError:
+                print(f"DEBUG: {repo_path} không phải là kho lưu trữ Git hợp lệ. Bỏ qua tải log.")
+                return False
+
+            print(f"Đường dẫn repo đang xét để tải log: {repo_path}")
+
+            # Cấu hình thông tin người dùng Git nếu chưa có
+            with repo.config_writer() as cw:
+                if not cw.has_option('user', 'email') or not cw.get_value('user', 'email'):
+                    cw.set_value('user', 'email', 'chatbot@streamlit.app').release()
+                if not cw.has_option('user', 'name') or not cw.get_value('user', 'name'):
+                    cw.set_value('user', 'name', 'Streamlit Chatbot').release()
+            print("Đã cấu hình thông tin người dùng Git.")
+
+            # Đọc nội dung log hiện tại
+            if not os.path.exists(log_filepath) or os.stat(log_filepath).st_size == 0:
+                print("Không có dữ liệu nhật ký để tải lên (file log rỗng hoặc không tồn tại).")
+                return True # Không có gì để tải lên, coi như thành công
+
+            with open(log_filepath, 'r', encoding='utf-8') as f:
+                log_content = f.read()
+            print("Đã đọc nội dung file log cục bộ.")
+
+            # Tạo thư mục archive nếu chưa có
+            archive_dir = os.path.join(repo_path, 'logs', 'archive')
+            if not os.path.exists(archive_dir):
+                os.makedirs(archive_dir)
+                print(f"DEBUG: Đã tạo thư mục lưu trữ mới: {archive_dir}")
+
+            # Tạo tên file log lưu trữ với timestamp
+            timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+            archive_filename = f"chat_log_archive_{timestamp_str}.jsonl"
+            archive_filepath = os.path.join(archive_dir, archive_filename) # Path tuyệt đối
+
+            # Ghi nội dung vào file log lưu trữ
+            with open(archive_filepath, 'w', encoding='utf-8') as f:
+                f.write(log_content)
+            print(f"Đã ghi nội dung vào file lưu trữ: {archive_filepath}")
+
+            # Thêm file vào Git và commit
+            repo_relative_archive_filepath = os.path.relpath(archive_filepath, repo_path)
+            repo.index.add([repo_relative_archive_filepath])
+            commit_message = f"feat(logs): Archive chat log {archive_filename}"
+            repo.index.commit(commit_message)
+            print(f"Đã commit file {archive_filename} với thông báo: {commit_message}")
+
+            # Lấy URL remote và chuẩn bị cho xác thực PAT
+            remote_url = repo.remotes.origin.url
+            print(f"URL remote gốc: {remote_url}")
+
+            repo_url_with_auth = ""
+            if remote_url.startswith("git@github.com:"):
+                repo_path_no_git = remote_url.replace("git@github.com:", "").replace(".git", "")
+                repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{repo_path_no_git}.git"
+                print(f"Đã chuyển đổi URL SSH sang HTTPS: {repo_url_with_auth}")
+            elif remote_url.startswith("https://github.com/"):
+                parts = remote_url.split("https://github.com/")
+                repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{parts[1]}"
+                print(f"Đã thêm PAT vào URL HTTPS: {repo_url_with_auth}")
+            else:
+                print(f"Lỗi: Định dạng URL remote không được hỗ trợ: {remote_url}")
+                return False # Trả về False nếu không xác định được URL
+
+            current_branch = repo.active_branch.name
+            print(f"Nhánh hiện tại: {current_branch}")
+
+            import subprocess
+            push_command = [
+                'git', 'push',
+                repo_url_with_auth,
+                f'{current_branch}:{current_branch}'
+            ]
+
+            print(f"Đang thực thi lệnh push: {' '.join(push_command[:2])} *** (ẩn PAT) *** {' '.join(push_command[3:])}")
+            process = subprocess.run(push_command, capture_output=True, text=True, check=True)
+            print(f"Git Push stdout: {process.stdout}")
+            print(f"Git Push stderr: {process.stderr}")
+
+            # Làm rỗng file log cục bộ sau khi tải lên thành công
+            with open(log_filepath, 'w', encoding='utf-8') as f:
+                f.truncate(0)
+            print("Đã làm rỗng file log cục bộ.")
+
+            return True # Trả về True nếu thành công
+
+        except git.InvalidGitRepositoryError:
+            print("Lỗi: Thư mục dự án không phải là một kho lưu trữ Git hợp lệ.")
+            return False
+        except git.GitCommandError as e:
+            print(f"Lỗi Git khi tải nhật ký lên GitHub: {e.stderr or e.stdout}")
+            return False
+        except Exception as e:
+            print(f"Lỗi không xác định khi tải nhật ký lên GitHub: {e}")
+            return False
+
+    def get_response(self, user_query):
+        parsed_query = self.nlp_processor.process_query(user_query)
+        intent = parsed_query.get("intent")
+
+        # --- Xử lý ý định TẢI LOG LÊN GITHUB (Ưu tiên cao nhất) ---
+        if intent == "upload_log_github":
+            # Logic này sẽ bị bỏ đi, nhưng nếu bạn muốn giữ nó tạm thời để thử nghiệm
+            # thì nó sẽ nằm ở đây. Sau khi tự động hóa, ý định này sẽ được loại bỏ.
+            upload_success = self.upload_logs_to_github_on_startup(self.log_filepath)
+            if upload_success:
+                return "Yêu cầu tải nhật ký lên GitHub đã được xử lý. Vui lòng kiểm tra kho lưu trữ của bạn."
+            else:
+                return "Có lỗi xảy ra khi cố gắng tải nhật ký lên GitHub. Vui lòng kiểm tra log ứng dụng."
+        # ... (phần còn lại của hàm get_response không thay đổi) ...
+        else:
+            final_response = "Tôi không hiểu yêu cầu của bạn."
+            final_response += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?"
+
+        # Ghi log sau khi xác định được final_response
+        self._log_interaction(user_query, final_response, parsed_query)
+        return final_response
