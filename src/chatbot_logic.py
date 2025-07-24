@@ -2,11 +2,21 @@ import pandas as pd
 from src.database_manager import DatabaseManager
 from src.nlp_processor import NLPProcessor
 import re
+import os # Thêm dòng này
+import json # Thêm dòng này
 
 class ChatbotLogic:
+    # Tên file log và đường dẫn thư mục log
+    LOG_FILE = "chat_log.jsonl"
+
     def __init__(self):
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
+
+        # Đảm bảo thư mục 'logs' tồn tại
+        if not os.path.exists('logs'):
+            os.makedirs('logs')
+        self.log_filepath = os.path.join('logs', self.LOG_FILE) # Đường dẫn đầy đủ đến file log
 
     # Nội dung hướng dẫn tìm kiếm chi tiết
     GUIDANCE_MESSAGE = """
@@ -73,163 +83,179 @@ class ChatbotLogic:
                          f"  Mô tả: {row['description']}\n\n")
         return response.strip()
 
+    def _log_interaction(self, user_query, chatbot_response_text, parsed_query):
+        """Ghi lại tương tác của người dùng và phản hồi của chatbot vào file log."""
+        log_entry = {
+            "timestamp": pd.Timestamp.now().isoformat(),
+            "user_query": user_query,
+            "chatbot_response": chatbot_response_text,
+            "parsed_intent": parsed_query.get("intent"),
+            "parsed_entities": {k: v for k, v in parsed_query.items() if k != "intent"} # Chỉ lấy các thực thể
+        }
+        try:
+            with open(self.log_filepath, 'a', encoding='utf-8') as f:
+                f.write(json.dumps(log_entry, ensure_ascii=False) + '\n')
+        except Exception as e:
+            print(f"Lỗi khi ghi log: {e}")
+
+
     def get_response(self, user_query):
         parsed_query = self.nlp_processor.process_query(user_query)
         intent = parsed_query.get("intent")
 
         # --- Xử lý ý định HƯỚNG DẪN (Ưu tiên cao nhất) ---
         if intent == "request_guidance":
-            return self.GUIDANCE_MESSAGE
-
+            final_response = self.GUIDANCE_MESSAGE
         # --- Xử lý các ý định cụ thể khác ---
-
         elif intent == "get_quantity_status":
             item_name = parsed_query.get("item_name")
             status = parsed_query.get("status")
 
             if not item_name or not status:
-                return "Bạn muốn hỏi số lượng của vật tư/hóa chất nào với tình trạng ra sao?"
-
-            matching_items = self.db_manager.search_item(item_name) 
-
-            if not matching_items.empty:
-                filtered_items = matching_items[matching_items['description'].str.lower().str.contains(status.lower(), na=False)]
-
-                if not filtered_items.empty:
-                    total_quantity = filtered_items['quantity'].sum()
-
-                    response = f"Tôi tìm thấy **{len(filtered_items)}** mục **{item_name.capitalize()}** với tình trạng **{status.capitalize()}**.\n"
-                    response += f"Tổng số lượng hiện có là **{total_quantity} đơn vị**.\n\n"
-                    response += "Chi tiết từng mục:\n"
-
-                    for index, row in filtered_items.iterrows():
-                        response += (f"- **{row['name']}** (ID: {row['id']}, Loại: {row['type']})\n"
-                                     f"  Số lượng: {row['quantity']} {row['unit']}, Vị trí: {row['location']}.\n"
-                                     f"  Mô tả: {row['description']}\n\n")
-                    return response.strip()
-                else:
-                    return self._format_results(pd.DataFrame(), f"{item_name} {status}") # Truyền rỗng để hiển thị "không tìm thấy" + gợi ý
+                final_response = "Bạn muốn hỏi số lượng của vật tư/hóa chất nào với tình trạng ra sao?"
             else:
-                return self._format_results(pd.DataFrame(), item_name) # Truyền rỗng để hiển thị "không tìm thấy" + gợi ý
+                matching_items = self.db_manager.search_item(item_name) 
+
+                if not matching_items.empty:
+                    filtered_items = matching_items[matching_items['description'].str.lower().str.contains(status.lower(), na=False)]
+
+                    if not filtered_items.empty:
+                        total_quantity = filtered_items['quantity'].sum()
+
+                        response_parts = [f"Tôi tìm thấy **{len(filtered_items)}** mục **{item_name.capitalize()}** với tình trạng **{status.capitalize()}**.",
+                                          f"Tổng số lượng hiện có là **{total_quantity} đơn vị**.\n\n",
+                                          "Chi tiết từng mục:\n"]
+                        for index, row in filtered_items.iterrows():
+                            response_parts.append(f"- **{row['name']}** (ID: {row['id']}, Loại: {row['type']})\n"
+                                                  f"  Số lượng: {row['quantity']} {row['unit']}, Vị trí: {row['location']}.\n"
+                                                  f"  Mô tả: {row['description']}\n\n")
+                        final_response = "".join(response_parts).strip()
+                    else:
+                        final_response = self._format_results(pd.DataFrame(), f"{item_name} {status}")
+                else:
+                    final_response = self._format_results(pd.DataFrame(), item_name)
 
         elif intent == "list_by_type_location":
             item_type = parsed_query.get("type")
             location = parsed_query.get("location")
             if not item_type or not location:
-                return "Bạn muốn tìm hóa chất/vật tư loại gì và ở vị trí nào?"
-            results = self.db_manager.list_by_type_and_location(item_type, location)
-            return self._format_results(results, f"loại '{item_type}' trong vị trí '{location}'")
+                final_response = "Bạn muốn tìm hóa chất/vật tư loại gì và ở vị trí nào?"
+            else:
+                results = self.db_manager.list_by_type_and_location(item_type, location)
+                final_response = self._format_results(results, f"loại '{item_type}' trong vị trí '{location}'")
 
         elif intent == "list_by_location_status":
             location = parsed_query.get("location")
             status = parsed_query.get("status")
 
             if not location and not status:
-                return "Bạn muốn liệt kê vật tư/hóa chất theo vị trí và tình trạng nào?"
+                final_response = "Bạn muốn liệt kê vật tư/hóa chất theo vị trí và tình trạng nào?"
+            else:
+                results = pd.DataFrame()
+                query_context_text = ""
+                if location and status:
+                    results = self.db_manager.list_by_location_and_status(location, status)
+                    query_context_text = f"vị trí '{location}' và tình trạng '{status}'"
+                elif location:
+                    results = self.db_manager.list_by_location(location)
+                    query_context_text = f"vị trí '{location}'"
+                elif status:
+                    results = self.db_manager.list_by_status(status)
+                    query_context_text = f"tình trạng '{status}'"
 
-            results = pd.DataFrame()
-            query_context_text = ""
-            if location and status:
-                results = self.db_manager.list_by_location_and_status(location, status)
-                query_context_text = f"vị trí '{location}' và tình trạng '{status}'"
-            elif location:
-                results = self.db_manager.list_by_location(location)
-                query_context_text = f"vị trí '{location}'"
-            elif status:
-                results = self.db_manager.list_by_status(status)
-                query_context_text = f"tình trạng '{status}'"
-
-            return self._format_results(results, query_context_text)
+                final_response = self._format_results(results, query_context_text)
 
         elif intent == "list_by_type_status":
             item_type = parsed_query.get("type")
             status = parsed_query.get("status")
 
             if not item_type and not status:
-                return "Bạn muốn liệt kê hóa chất/vật tư theo loại và tình trạng nào?"
+                final_response = "Bạn muốn liệt kê hóa chất/vật tư theo loại và tình trạng nào?"
+            else:
+                results = pd.DataFrame()
+                query_context_text = ""
+                if item_type and status:
+                    results = self.db_manager.list_by_type_and_status(item_type, status)
+                    query_context_text = f"loại '{item_type}' và tình trạng '{status}'"
 
-            results = pd.DataFrame()
-            query_context_text = ""
-            if item_type and status:
-                results = self.db_manager.list_by_type_and_status(item_type, status)
-                query_context_text = f"loại '{item_type}' và tình trạng '{status}'"
-
-            return self._format_results(results, query_context_text)
+                final_response = self._format_results(results, query_context_text)
 
         elif intent == "list_by_type":
             item_type = parsed_query.get("type")
             if not item_type:
-                return "Bạn muốn liệt kê vật tư/hóa chất theo loại nào?"
-            results = self.db_manager.list_by_type(item_type)
-            return self._format_results(results, f"loại '{item_type}'")
+                final_response = "Bạn muốn liệt kê vật tư/hóa chất theo loại nào?"
+            else:
+                results = self.db_manager.list_by_type(item_type)
+                final_response = self._format_results(results, f"loại '{item_type}'")
 
         elif intent == "search_by_id":
             item_id = parsed_query.get("id")
             if not item_id:
-                return "Bạn muốn tìm vật tư/hóa chất theo mã ID nào?"
-
-            results = self.db_manager.get_by_id(item_id)
-            return self._format_results(results, item_id)
+                final_response = "Bạn muốn tìm vật tư/hóa chất theo mã ID nào?"
+            else:
+                results = self.db_manager.get_by_id(item_id)
+                final_response = self._format_results(results, item_id)
 
         elif intent == "search_by_cas":
             cas_number = parsed_query.get("cas")
             if not cas_number:
-                return "Bạn muốn tìm hóa chất theo số CAS nào?"
-
-            results = self.db_manager.search_by_cas(cas_number)
-            return self._format_results(results, f"CAS {cas_number}")
+                final_response = "Bạn muốn tìm hóa chất theo số CAS nào?"
+            else:
+                results = self.db_manager.search_by_cas(cas_number)
+                final_response = self._format_results(results, f"CAS {cas_number}")
 
         elif intent == "list_by_location":
             location = parsed_query.get("location")
             if not location:
-                return "Bạn muốn liệt kê vật tư/hóa chất ở vị trí nào?"
-
-            results = self.db_manager.list_by_location(location)
-            return self._format_results(results, f"vị trí '{location}'")
+                final_response = "Bạn muốn liệt kê vật tư/hóa chất ở vị trí nào?"
+            else:
+                results = self.db_manager.list_by_location(location)
+                final_response = self._format_results(results, f"vị trí '{location}'")
 
         elif intent == "get_quantity":
             item_name = parsed_query.get("item_name")
             if not item_name:
-                return "Bạn muốn hỏi số lượng của vật tư/hóa chất nào?"
-
-            matching_items = self.db_manager.search_item(item_name) 
-
-            if not matching_items.empty:
-                total_quantity = matching_items['quantity'].sum()
-
-                response = f"Tôi tìm thấy **{len(matching_items)}** mục liên quan đến **{item_name.capitalize()}**.\n"
-                response += f"Tổng số lượng hiện có là **{total_quantity} đơn vị**.\n\n"
-                response += "Chi tiết từng mục:\n"
-
-                for index, row in matching_items.iterrows():
-                    response += (f"- **{row['name']}** (ID: {row['id']}, Loại: {row['type']})\n"
-                                 f"  Số lượng: {row['quantity']} {row['unit']}, Vị trí: {row['location']}.\n"
-                                 f"  Mô tả: {row['description']}\n\n")
-                return response.strip()
+                final_response = "Bạn muốn hỏi số lượng của vật tư/hóa chất nào?"
             else:
-                return self._format_results(pd.DataFrame(), item_name) # Truyền rỗng để hiển thị "không tìm thấy" + gợi ý
+                matching_items = self.db_manager.search_item(item_name) 
+
+                if not matching_items.empty:
+                    total_quantity = matching_items['quantity'].sum()
+
+                    response_parts = [f"Tôi tìm thấy **{len(matching_items)}** mục liên quan đến **{item_name.capitalize()}**.",
+                                      f"Tổng số lượng hiện có là **{total_quantity} đơn vị**.\n\n",
+                                      "Chi tiết từng mục:\n"]
+                    for index, row in matching_items.iterrows():
+                        response_parts.append(f"- **{row['name']}** (ID: {row['id']}, Loại: {row['type']})\n"
+                                              f"  Số lượng: {row['quantity']} {row['unit']}, Vị trí: {row['location']}.\n"
+                                              f"  Mô tả: {row['description']}\n\n")
+                    final_response = "".join(response_parts).strip()
+                else:
+                    final_response = self._format_results(pd.DataFrame(), item_name)
 
         elif intent == "get_location":
             item_name = parsed_query.get("item_name")
             if not item_name:
-                return "Bạn muốn hỏi vị trí của vật tư/hóa chất nào?"
-            location = self.db_manager.get_location(item_name)
-            if location:
-                return f"**{item_name.capitalize()}** được đặt tại: **{location}**."
+                final_response = "Bạn muốn hỏi vị trí của vật tư/hóa chất nào?"
             else:
-                return self._format_results(pd.DataFrame(), item_name) # Truyền rỗng để hiển thị "không tìm thấy" + gợi ý
+                location = self.db_manager.get_location(item_name)
+                if location:
+                    final_response = f"**{item_name.capitalize()}** được đặt tại: **{location}**."
+                else:
+                    final_response = self._format_results(pd.DataFrame(), item_name)
 
         elif intent == "search_item":
             query_text = parsed_query.get("query")
             if not query_text or len(query_text.strip()) < 2:
-                return_message = "Bạn muốn tôi tìm kiếm thông tin gì? Vui lòng nhập từ khóa cụ thể hơn."
-                return_message += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?" # Gợi ý hướng dẫn
-                return return_message
-
-            results = self.db_manager.search_item(query_text)
-            return self._format_results(results, query_text)
+                final_response = "Bạn muốn tôi tìm kiếm thông tin gì? Vui lòng nhập từ khóa cụ thể hơn."
+            else:
+                results = self.db_manager.search_item(query_text)
+                final_response = self._format_results(results, query_text)
 
         else:
-            return_message = "Tôi không hiểu yêu cầu của bạn."
-            return_message += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?" # Gợi ý hướng dẫn
-            return return_message
+            final_response = "Tôi không hiểu yêu cầu của bạn."
+            final_response += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?"
+
+        # Ghi log sau khi xác định được final_response
+        self._log_interaction(user_query, final_response, parsed_query)
+        return final_response
