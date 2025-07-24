@@ -6,7 +6,7 @@ import os
 import json
 
 class ChatbotLogic:
-    LOG_FILE = "chat_log.jsonl"
+    LOG_FILE = "chat_log.jsonl" # Định nghĩa tên file log
 
     def __init__(self):
         self.db_manager = DatabaseManager()
@@ -19,6 +19,7 @@ class ChatbotLogic:
         self.log_filepath = os.path.join(self.logs_base_dir, self.LOG_FILE)
 
 
+    # Nội dung hướng dẫn tìm kiếm chi tiết
     GUIDANCE_MESSAGE = """
     Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm.
     Dưới đây là các loại câu lệnh bạn có thể sử dụng:
@@ -109,6 +110,22 @@ class ChatbotLogic:
         # --- Xử lý ý định HƯỚNG DẪN ---
         elif intent == "request_guidance":
             final_response = self.GUIDANCE_MESSAGE
+        # --- Xử lý ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ (Đã thêm) ---
+        elif intent == "report_status_or_problem":
+            reported_id = parsed_query.get("reported_id")
+            reported_item_name = parsed_query.get("reported_item_name")
+            reported_location = parsed_query.get("reported_location")
+            problem_description = parsed_query.get("problem_description")
+
+            context_info = ""
+            if reported_id:
+                context_info = f"mã ID '{reported_id}'"
+            elif reported_item_name:
+                context_info = f"vật tư/hóa chất '{reported_item_name}'"
+            elif reported_location:
+                context_info = f"vị trí '{reported_location}'"
+
+            final_response = f"Phản ánh về {context_info} (vấn đề: '{problem_description}') đã được ghi nhận. Cảm ơn bạn đã phản hồi về tình trạng này."
         # --- Xử lý các ý định cụ thể khác ---
         elif intent == "get_quantity_status":
             item_name = parsed_query.get("item_name")

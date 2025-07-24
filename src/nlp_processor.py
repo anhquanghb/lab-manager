@@ -28,6 +28,9 @@ class NLPProcessor:
 
         self.list_search_verbs = r'(liệt\s+kê|tìm|có|thống\s+kê)'
 
+        # Thêm các từ khóa vấn đề/phản ánh tình trạng
+        self.problem_keywords = ["không thấy", "đã hết", "không còn", "hư hỏng", "hỏng", "bị hỏng", "thiếu"] # Thêm các từ khóa khác nếu cần
+
 
     def _remove_keywords(self, text, keywords_to_remove):
         """
@@ -67,8 +70,30 @@ class NLPProcessor:
             if kw in query_lower:
                 return {"intent": "request_guidance"}
 
-        # --- Các ý định cụ thể khác ---
+        # --- Nhận diện Ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ (Ưu tiên cao hơn tìm kiếm chung) ---
+        # Regex để bắt các mẫu như "H2SO4 đã hết", "A247A không còn", "tủ sấy bị hư hỏng"
+        # Mẫu: [tên/id/vị trí] [từ khóa vấn đề]
+        problem_regex_pattern = r'(.+?)\s+(?:' + '|'.join(map(re.escape, self.problem_keywords)) + r')'
+        match_problem = re.search(problem_regex_pattern, query_lower)
+        if match_problem:
+            reported_item_or_location = match_problem.group(1).strip()
+            reported_status = match_problem.group(0)[len(reported_item_or_location):].strip() # Lấy toàn bộ cụm từ vấn đề
 
+            # Cố gắng xác định xem phần đầu là ID, tên hay vị trí
+            is_id = re.fullmatch(r'[a-zA-Z0-9-]+', reported_item_or_location) # Giả định ID chỉ có chữ, số, gạch ngang
+            is_location = re.fullmatch(r'(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', reported_item_or_location) # Giả định vị trí có "tủ/kệ"
+
+            if is_id:
+                return {"intent": "report_status_or_problem", "reported_id": reported_item_or_location.upper(), "problem_description": reported_status}
+            elif is_location:
+                return {"intent": "report_status_or_problem", "reported_location": reported_item_or_location, "problem_description": reported_status}
+            else: # Mặc định là tên vật tư/hóa chất
+                return {"intent": "report_status_or_problem", "reported_item_name": reported_item_or_location, "problem_description": reported_status}
+
+
+        # --- Các ý định cụ thể khác (sau khi kiểm tra báo cáo tình trạng) ---
+
+        # (Các regex nhận diện ý định khác như list_by_type_location, search_by_id, v.v. giữ nguyên)
         # Ý định: Get Quantity AND Status
         match_quantity_status = re.search(r'(?:' + '|'.join(self.quantity_phrases) + r')\s+(?:' + '|'.join(self.unit_words) + r')?\s*([a-zA-Z0-9\s.-]+?)\s*(' + '|'.join(self.status_keywords) + r')', query_lower)
         if match_quantity_status:
@@ -154,36 +179,32 @@ class NLPProcessor:
         if match_location_simple:
             return {"intent": "list_by_location", "location": match_location_simple.group(4).strip().upper()}
 
-        # Ý định: Get Location (Đã cải tiến regex để bắt tên vật tư/hóa chất linh hoạt hơn)
-        # Bắt đầu với tên vật tư/hóa chất, sau đó là các cụm từ hỏi vị trí
+        # Ý định: Get Location
         match_get_location = re.search(r'([a-zA-Z0-9\s.-]+?)\s+(?:ở\s+đâu|vị\s+trí\s+của)', query_lower)
         if match_get_location:
             item_name = match_get_location.group(1).strip()
-            # Loại bỏ các từ khóa chung nếu chúng vô tình bị bắt vào tên item
             item_name = self._remove_keywords(item_name, self.general_stopwords + self.quantity_phrases + self.unit_words)
-            if item_name: # Đảm bảo item_name không rỗng sau khi làm sạch
+            if item_name:
                 return {"intent": "get_location", "item_name": item_name}
 
 
         # --- Ý định chung (Fallback cuối cùng) ---
-        # Danh sách các từ khóa lệnh cần loại bỏ trong tìm kiếm chung
         commands_to_remove_in_general_search = [
-            "tìm", "kiếm", "về", "thông tin về", "cho tôi biết về", "hãy tìm", "hỏi về", "tra cứu", "find", "liệt kê", "có", "thống kê", # Từ khóa tìm kiếm chung
-            "có bao nhiêu", "số lượng", "bao nhiêu", # Từ khóa số lượng
-            "chai", "lọ", "thùng", "gói", "hộp", "bình", "cái", "m", "kg", "g", "ml", "l", "đơn vị", "viên", "cuộn", # Từ khóa đơn vị
-            "đã mở", "còn nguyên", # Từ khóa tình trạng
-            "hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không", # Từ khóa hướng dẫn
-            "tải nhật ký", "xuất log", "lịch sử chat", "tải log", # Từ khóa tải log
-            "xin chào", "chào", "hello", "hi", "hey", # Từ khóa chào hỏi
-            "ở đâu", "vị trí của" # Từ khóa vị trí
+            "tìm", "kiếm", "về", "thông tin về", "cho tôi biết về", "hãy tìm", "hỏi về", "tra cứu", "find", "liệt kê", "có", "thống kê",
+            "có bao nhiêu", "số lượng", "bao nhiêu",
+            "chai", "lọ", "thùng", "gói", "hộp", "bình", "cái", "m", "kg", "g", "ml", "l", "đơn vị", "viên", "cuộn",
+            "đã mở", "còn nguyên",
+            "hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không",
+            "tải nhật ký", "xuất log", "lịch sử chat", "tải log",
+            "xin chào", "chào", "hello", "hi", "hey",
+            "ở đâu", "vị trí của"
         ]
 
-        # Sử dụng một bản sao của query_lower để làm sạch
         cleaned_query_for_general_search = query_lower
         for kw in commands_to_remove_in_general_search:
             cleaned_query_for_general_search = re.sub(r'\b' + re.escape(kw) + r'\b', ' ', cleaned_query_for_general_search, flags=re.IGNORECASE).strip()
 
-        cleaned_query_for_general_search = re.sub(r'\s+', ' ', cleaned_query_for_general_search).strip() # Làm sạch khoảng trắng thừa
+        cleaned_query_for_general_search = re.sub(r'\s+', ' ', cleaned_query_for_general_search).strip()
 
         if not cleaned_query_for_general_search:
             return {"intent": "search_item", "query": ""} 
