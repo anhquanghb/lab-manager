@@ -16,7 +16,7 @@ except LookupError:
 
 class NLPProcessor:
     def __init__(self):
-        # Định nghĩa các từ khóa dưới dạng danh sách chuỗi, sau đó chuyển thành regex pattern
+        # Các từ khóa và regex patterns
         self.quantity_phrases_list = ["có bao nhiêu", "số lượng", "bao nhiêu"]
         self.unit_words_list = ["chai", "lọ", "thùng", "gói", "hộp", "bình", "cái", "m", "kg", "g", "ml", "l", "đơn vị", "viên", "cuộn"]
         self.general_stopwords_list = ["tìm", "kiếm", "về", "thông tin về", "cho tôi biết về", "hãy tìm", "hỏi về", "của", "là", "?", "vật tư", "hóa chất", "chất"]
@@ -28,20 +28,14 @@ class NLPProcessor:
         self.location_phrases_list = ["ở đâu", "vị trí của"]
 
         # Hàm trợ giúp để chuyển danh sách từ/cụm từ sang regex pattern an toàn
+        # Giữ lại hàm này vì nó vẫn được dùng trong các regex khác
         def _list_to_regex_pattern(word_list):
-            # Chuyển một danh sách các cụm từ (ví dụ: ["không thấy", "đã hết"])
-            # thành một pattern regex alternation (ví dụ: "(?:không\s+thấy|đã\s+hết)")
             pattern_parts = []
             for phrase in word_list:
-                # Tách cụm từ thành từng từ, escape từng từ, sau đó nối lại bằng "\s+"
-                # Đây là cách đúng để tạo regex từ cụm từ có khoảng trắng
                 regex_phrase = r'\s+'.join(re.escape(word) for word in phrase.split())
                 pattern_parts.append(regex_phrase)
-
-            # Nối tất cả các phần tử đã xử lý bằng '|' và gói trong non-capturing group
             return r"(?:" + "|".join(pattern_parts) + r")"
 
-        # Tạo các regex pattern từ danh sách từ khóa
         self.quantity_phrases_regex = _list_to_regex_pattern(self.quantity_phrases_list)
         self.unit_words_regex = _list_to_regex_pattern(self.unit_words_list)
         self.status_keywords_regex = _list_to_regex_pattern(self.status_keywords_list)
@@ -63,7 +57,6 @@ class NLPProcessor:
             kw_pattern = r'\b' + r'\s+'.join(re.escape(word) for word in kw.split()) + r'\b'
             cleaned_text = re.sub(kw_pattern, ' ', cleaned_text, flags=re.IGNORECASE).strip()
 
-        # Làm sạch khoảng trắng thừa
         cleaned_text = re.sub(r'^\W+|\W+$', '', cleaned_text).strip()
         cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
 
@@ -71,55 +64,52 @@ class NLPProcessor:
 
     def process_query(self, query):
         query_lower = query.lower().strip()
-        print(f"DEBUG NLP: Xử lý truy vấn: '{query_lower}'") # DEBUG
+        print(f"DEBUG NLP: Xử lý truy vấn: '{query_lower}'")
 
         # --- Nhận diện Ý định CHÀO HỎI (Ưu tiên cao nhất) ---
         for kw in self.greeting_keywords_list:
             if kw in query_lower:
-                print(f"DEBUG NLP: MATCHED Greeting: '{kw}'") # DEBUG
+                print(f"DEBUG NLP: MATCHED Greeting: '{kw}'")
                 return {"intent": "greeting"}
 
         # --- Nhận diện Ý định TẢI LOG CỤC BỘ ---
         for kw in self.download_log_keywords_list:
             if kw in query_lower:
-                print(f"DEBUG NLP: MATCHED Download Log: '{kw}'") # DEBUG
+                print(f"DEBUG NLP: MATCHED Download Log: '{kw}'")
                 return {"intent": "download_logs"} 
 
         # --- Nhận diện Ý định HƯỚNG DẪN ---
         for kw in self.guidance_keywords_list:
             if kw in query_lower:
-                print(f"DEBUG NLP: MATCHED Guidance: '{kw}'") # DEBUG
+                print(f"DEBUG NLP: MATCHED Guidance: '{kw}'")
                 return {"intent": "request_guidance"}
 
-        # --- Nhận diện Ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ ---
-        print(f"DEBUG NLP: Kiểm tra Report Status (regex: {self.problem_keywords_regex})") # DEBUG
-        problem_report_regex_combined = (
-            r'(.+?)\s+' + self.problem_keywords_regex + r'|' + # Mẫu 1: Item Problem
-            self.problem_keywords_regex + r'\s+([a-zA-Z0-9\s.-]+)' # Mẫu 2: Problem Item
-        )
-        match_problem = re.search(problem_report_regex_combined, query_lower)
-        if match_problem:
-            print(f"DEBUG NLP: MATCHED Report Status. Groups: {match_problem.groups()}") # DEBUG
-            reported_item_or_location = None
-            problem_description = None
+        # --- Nhận diện Ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ (Sử dụng cách kiểm tra từ khóa đơn giản hơn) ---
+        # Xử lý các mẫu: "không thấy H2SO4", "H2SO4 đã hết", "tủ sấy bị hỏng"
+        print(f"DEBUG NLP: Kiểm tra Report Status (simple keyword check)") # DEBUG
 
-            if match_problem.group(1):
-                reported_item_or_location = match_problem.group(1).strip()
-                problem_description_raw = match_problem.group(0)[len(reported_item_or_location):].strip()
-                for kw_problem in self.problem_keywords_list:
-                    if re.search(r'\b' + re.escape(kw_problem) + r'\b', problem_description_raw, flags=re.IGNORECASE):
-                        problem_description = kw_problem
-                        break
-            elif match_problem.group(2):
-                problem_description_raw = match_problem.group(0)[0:match_problem.start(2) - match_problem.start(0)].strip()
-                reported_item_or_location = match_problem.group(2).strip()
-                for kw_problem in self.problem_keywords_list:
-                    if re.search(r'\b' + re.escape(kw_problem) + r'\b', problem_description_raw, flags=re.IGNORECASE):
-                        problem_description = kw_problem
-                        break
+        reported_item_or_location = None
+        problem_description = None
 
-            if reported_item_or_location and problem_description:
-                print(f"DEBUG NLP: Extracted Item/Loc: '{reported_item_or_location}', Problem: '{problem_description}'") # DEBUG
+        # Tìm từ khóa vấn đề và vị trí của nó
+        problem_match_pos = -1
+        matched_problem_kw = ""
+        for kw in self.problem_keywords_list:
+            pos = query_lower.find(kw)
+            if pos != -1:
+                problem_match_pos = pos
+                matched_problem_kw = kw
+                break
+
+        if problem_match_pos != -1:
+            # Nếu từ khóa vấn đề ở đầu hoặc giữa: (problem item) hoặc (item problem)
+            # Loại bỏ từ khóa vấn đề để lấy item_or_location
+            temp_query_without_problem_kw = query_lower.replace(matched_problem_kw, '').strip()
+            reported_item_or_location = self._remove_keywords(temp_query_without_problem_kw, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list + self.location_phrases_list)
+            problem_description = matched_problem_kw
+
+            if reported_item_or_location:
+                print(f"DEBUG NLP: MATCHED Report Status (simple). Item/Loc: '{reported_item_or_location}', Problem: '{problem_description}'") # DEBUG
                 is_id = re.fullmatch(r'[a-zA-Z0-9-]+', reported_item_or_location)
                 is_location_phrase = re.fullmatch(r'(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', reported_item_or_location)
 
@@ -130,29 +120,42 @@ class NLPProcessor:
                 else:
                     return {"intent": "report_status_or_problem", "reported_item_name": reported_item_or_location, "problem_description": problem_description}
 
+        # --- Các ý định tìm kiếm vị trí (Sử dụng cách kiểm tra từ khóa đơn giản hơn) ---
+        # Mẫu: [tên/công thức] ở đâu / vị trí của [tên/công thức] / tìm vị trí [tên]
+        print(f"DEBUG NLP: Kiểm tra Get Location (simple keyword check)") # DEBUG
 
-        # --- Các ý định tìm kiếm vị trí (Đặt cao hơn để đảm bảo nhận diện chính xác) ---
-        print(f"DEBUG NLP: Kiểm tra Get Location (regex: {self.location_phrases_regex})") # DEBUG
-        # Mẫu 1: [tên/công thức] ở đâu / vị trí của [tên/công thức] (ví dụ: "h2so4 ở đâu?")
-        match_get_location_direct = re.search(r'(.+?)\s+' + self.location_phrases_regex, query_lower)
-        if match_get_location_direct:
-            print(f"DEBUG NLP: MATCHED Get Location (direct). Groups: {match_get_location_direct.groups()}") # DEBUG
-            item_name = match_get_location_direct.group(1).strip()
-            item_name = self._remove_keywords(item_name, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list + self.location_phrases_list)
-            if item_name:
-                print(f"DEBUG NLP: Extracted Location Item (direct): '{item_name}'") # DEBUG
-                return {"intent": "get_location", "item_name": item_name}
+        location_match = None
+        item_name_for_location = None
 
-        # Mẫu 2: tìm/liệt kê/có vị trí [tên/công thức] (ví dụ: "tìm vị trí h2so4")
-        print(f"DEBUG NLP: Kiểm tra Get Location (verb phrase) (regex: {self.list_search_verbs_regex} ... {self.location_phrases_regex})") # DEBUG
-        match_get_location_verb_phrase = re.search(self.list_search_verbs_regex + r'\s+' + self.location_phrases_regex + r'\s*(của)?\s*(.+)', query_lower)
-        if match_get_location_verb_phrase:
-            print(f"DEBUG NLP: MATCHED Get Location (verb phrase). Groups: {match_get_location_verb_phrase.groups()}") # DEBUG
-            item_name = match_get_location_verb_phrase.group(4).strip() # group(4) là nhóm chứa tên item sau (của)?
-            item_name = self._remove_keywords(item_name, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list + self.list_search_verbs_regex.replace(r'(?:', '').replace(r')', '').split('|'))
-            if item_name:
-                print(f"DEBUG NLP: Extracted Location Item (verb phrase): '{item_name}'") # DEBUG
-                return {"intent": "get_location", "item_name": item_name}
+        # Mẫu 1: [item] ở đâu / [item] vị trí của
+        for loc_phrase in self.location_phrases_list:
+            if loc_phrase in query_lower:
+                parts = query_lower.split(loc_phrase, 1)
+                if parts:
+                    item_name_candidate = parts[0].strip() # Lấy phần trước "ở đâu"
+                    item_name_for_location = self._remove_keywords(item_name_candidate, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list)
+                    if item_name_for_location:
+                        location_match = loc_phrase
+                        break
+
+        # Mẫu 2: tìm vị trí [item] / liệt kê ở đâu [item]
+        if not item_name_for_location: # Nếu mẫu 1 không khớp
+            for verb in self.list_search_verbs_regex.replace(r'(?:', '').replace(r')', '').split('|'):
+                for loc_phrase in self.location_phrases_list:
+                    pattern = verb + r'\s+' + loc_phrase # ví dụ: "tìm ở đâu"
+                    match = re.search(pattern, query_lower)
+                    if match:
+                        item_name_candidate = query_lower[match.end():].strip() # Lấy phần sau "tìm ở đâu"
+                        item_name_for_location = self._remove_keywords(item_name_candidate, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list)
+                        if item_name_for_location:
+                            location_match = loc_phrase
+                            break
+                if item_name_for_location:
+                    break
+
+        if item_name_for_location and location_match:
+            print(f"DEBUG NLP: MATCHED Get Location (simple). Item: '{item_name_for_location}'") # DEBUG
+            return {"intent": "get_location", "item_name": item_name_for_location}
 
         # --- Các ý định tìm kiếm khác (sau vị trí và báo cáo) ---
 
@@ -243,8 +246,6 @@ class NLPProcessor:
             # và xử lý trong chatbot_logic. Tuy nhiên, nếu mục đích là chuyển về tìm kiếm chung,
             # thì block này cũng nên được bỏ đi. Để phù hợp với giải pháp "chuyển về tìm kiếm chung",
             # tôi sẽ bỏ đi logic này.
-
-            # Đã bỏ logic ở đây để nó rơi xuống tìm kiếm chung.
             pass 
 
 
@@ -252,7 +253,7 @@ class NLPProcessor:
         commands_to_remove_in_general_search = list(set(
             self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list +
             self.status_keywords_list + self.guidance_keywords_list + self.download_log_keywords_list +
-            self.greeting_keywords_list + self.problem_keywords_list + self.location_phrases_list + # Thêm location_phrases_list
+            self.greeting_keywords_list + self.problem_keywords_list + self.location_phrases_list +
             self.list_search_verbs_regex.replace(r'(?:', '').replace(r')', '').split('|')
         ))
 
