@@ -2,23 +2,20 @@ import pandas as pd
 from src.database_manager import DatabaseManager
 from src.nlp_processor import NLPProcessor
 import re
-import os # Thêm dòng này
-import json # Thêm dòng này
+import os
+import json
 
 class ChatbotLogic:
-    # Tên file log và đường dẫn thư mục log
     LOG_FILE = "chat_log.jsonl"
 
     def __init__(self):
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
 
-        # Đảm bảo thư mục 'logs' tồn tại
         if not os.path.exists('logs'):
             os.makedirs('logs')
-        self.log_filepath = os.path.join('logs', self.LOG_FILE) # Đường dẫn đầy đủ đến file log
+        self.log_filepath = os.path.join('logs', self.LOG_FILE)
 
-    # Nội dung hướng dẫn tìm kiếm chi tiết
     GUIDANCE_MESSAGE = """
     Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm.
     Dưới đây là các loại câu lệnh bạn có thể sử dụng:
@@ -90,7 +87,7 @@ class ChatbotLogic:
             "user_query": user_query,
             "chatbot_response": chatbot_response_text,
             "parsed_intent": parsed_query.get("intent"),
-            "parsed_entities": {k: v for k, v in parsed_query.items() if k != "intent"} # Chỉ lấy các thực thể
+            "parsed_entities": {k: v for k, v in parsed_query.items() if k != "intent"}
         }
         try:
             with open(self.log_filepath, 'a', encoding='utf-8') as f:
@@ -103,8 +100,11 @@ class ChatbotLogic:
         parsed_query = self.nlp_processor.process_query(user_query)
         intent = parsed_query.get("intent")
 
-        # --- Xử lý ý định HƯỚNG DẪN (Ưu tiên cao nhất) ---
-        if intent == "request_guidance":
+        # --- Xử lý ý định CHÀO HỎI (Ưu tiên cao nhất) ---
+        if intent == "greeting":
+            final_response = self.GUIDANCE_MESSAGE # Trả về hướng dẫn khi chào hỏi
+        # --- Xử lý ý định HƯỚNG DẪN ---
+        elif intent == "request_guidance":
             final_response = self.GUIDANCE_MESSAGE
         # --- Xử lý các ý định cụ thể khác ---
         elif intent == "get_quantity_status":

@@ -18,12 +18,14 @@ class NLPProcessor:
     def __init__(self):
         self.quantity_phrases = ["có bao nhiêu", "số lượng", "bao nhiêu"]
         self.unit_words = ["chai", "lọ", "thùng", "gói", "hộp", "bình", "cái", "m", "kg", "g", "ml", "l", "đơn vị", "viên", "cuộn"]
-        # Đã thêm các từ khóa liên quan đến "hướng dẫn" vào đây
         self.general_stopwords = ["tìm", "kiếm", "về", "thông tin về", "cho tôi biết về", "hãy tìm", "hỏi về", "của", "là", "?", "vật tư", "hóa chất", "chất"]
         self.status_keywords = ["đã mở", "còn nguyên"]
 
-        # Thêm các từ khóa để nhận diện yêu cầu hướng dẫn
         self.guidance_keywords = ["hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không"]
+        self.download_log_keywords = ["tải nhật ký", "xuất log", "lịch sử chat", "tải log"]
+
+        # Thêm các từ khóa để nhận diện câu chào hỏi
+        self.greeting_keywords = ["xin chào", "chào", "hello", "hi", "hey"]
 
 
     def _remove_keywords(self, text, keywords_to_remove):
@@ -33,8 +35,10 @@ class NLPProcessor:
         """
         cleaned_text = text
         for kw in keywords_to_remove:
-            # Chỉ loại bỏ nếu từ khóa không phải là một phần của cụm từ khóa hướng dẫn
-            if kw not in self.guidance_keywords: # Đảm bảo không loại bỏ các từ khóa hướng dẫn
+            # Đảm bảo không loại bỏ các từ khóa hướng dẫn, tải log, hoặc chào hỏi
+            if kw not in self.guidance_keywords and \
+               kw not in self.download_log_keywords and \
+               kw not in self.greeting_keywords: # Thêm điều kiện này
                 cleaned_text = re.sub(r'\b' + re.escape(kw) + r'\b', '', cleaned_text, flags=re.IGNORECASE).strip()
 
         cleaned_text = re.sub(r'^\W+|\W+$', '', cleaned_text).strip()
@@ -49,12 +53,22 @@ class NLPProcessor:
         """
         query_lower = query.lower().strip()
 
-        # --- Nhận diện Ý định HƯỚNG DẪN (Ưu tiên cao nhất) ---
+        # --- Nhận diện Ý định CHÀO HỎI (Ưu tiên cao nhất) ---
+        for kw in self.greeting_keywords:
+            if kw in query_lower:
+                return {"intent": "greeting"}
+
+        # --- Nhận diện Ý định TẢI LOG (Ưu tiên cao thứ hai) ---
+        for kw in self.download_log_keywords:
+            if kw in query_lower:
+                return {"intent": "download_logs"}
+
+        # --- Nhận diện Ý định HƯỚNG DẪN (Ưu tiên cao thứ ba) ---
         for kw in self.guidance_keywords:
             if kw in query_lower:
                 return {"intent": "request_guidance"}
 
-        # --- Các ý định cụ thể hơn (sau khi kiểm tra hướng dẫn) ---
+        # --- Các ý định cụ thể khác (sau khi kiểm tra hướng dẫn và tải log) ---
 
         # Ý định: Get Quantity AND Status
         match_quantity_status = re.search(r'(có\s+bao\s+nhiêu|số\s+lượng|bao\s+nhiêu)\s+(?:' + '|'.join(self.unit_words) + r')?\s*([a-zA-Z0-9\s.-]+?)\s*(' + '|'.join(self.status_keywords) + r')', query_lower)
@@ -143,7 +157,7 @@ class NLPProcessor:
 
 
         # --- Ý định chung (Fallback cuối cùng) ---
-        all_keywords_to_remove = self.general_stopwords + self.quantity_phrases + self.unit_words + self.status_keywords + self.guidance_keywords
+        all_keywords_to_remove = self.general_stopwords + self.quantity_phrases + self.unit_words + self.status_keywords + self.guidance_keywords + self.download_log_keywords + self.greeting_keywords # Thêm greeting_keywords
         cleaned_query_for_general_search = self._remove_keywords(query_lower, all_keywords_to_remove)
 
         if not cleaned_query_for_general_search:
