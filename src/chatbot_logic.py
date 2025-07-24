@@ -4,8 +4,9 @@ from src.nlp_processor import NLPProcessor
 import re
 import os
 import json
-import git # Thêm dòng này
-from datetime import datetime # Thêm dòng này
+import git
+from datetime import datetime
+import streamlit as st # Thêm dòng này để truy cập st.secrets
 
 class ChatbotLogic:
     LOG_FILE = "chat_log.jsonl"
@@ -16,7 +17,6 @@ class ChatbotLogic:
 
         if not os.path.exists('logs'):
             os.makedirs('logs')
-        # Tạo thư mục archive nếu chưa có
         if not os.path.exists('logs/archive'):
             os.makedirs('logs/archive')
 
@@ -106,16 +106,18 @@ class ChatbotLogic:
         Đọc file log hiện tại, tải lên GitHub và làm rỗng file log cục bộ.
         Sử dụng Personal Access Token (PAT) từ Streamlit secrets.
         """
-        github_token = os.getenv("GITHUB_TOKEN") or st.secrets.get("GITHUB_TOKEN") # Lấy token từ biến môi trường hoặc secrets.toml
+        github_token = st.secrets.get("GITHUB_TOKEN") # Lấy token từ st.secrets
 
         if not github_token:
-            return "Lỗi: Không tìm thấy GitHub Personal Access Token. Vui lòng cấu hình trong biến môi trường hoặc .streamlit/secrets.toml."
+            print("Lỗi: Không tìm thấy GitHub Personal Access Token trong st.secrets.")
+            return "Lỗi: Không tìm thấy GitHub Personal Access Token. Vui lòng cấu hình trong .streamlit/secrets.toml trên Streamlit Cloud."
 
         try:
-            # Đảm bảo PATH được thiết lập để tìm thấy Git
-            # Trên Streamlit Cloud, Git thường có sẵn. Cục bộ có thể cần đảm bảo git.exe nằm trong PATH.
-            repo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+            # Lấy đường dẫn thư mục gốc của repo
+            repo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+            print(f"Đường dẫn repo đang xét: {repo_path}")
             repo = git.Repo(repo_path)
+            print("Đã khởi tạo đối tượng Git Repo.")
 
             # Cấu hình thông tin người dùng Git nếu chưa có
             with repo.config_writer() as cw:
@@ -123,13 +125,16 @@ class ChatbotLogic:
                     cw.set_value('user', 'email', 'chatbot@streamlit.app').release()
                 if not cw.has_option('user', 'name') or not cw.get_value('user', 'name'):
                     cw.set_value('user', 'name', 'Streamlit Chatbot').release()
+            print("Đã cấu hình thông tin người dùng Git.")
 
             # Đọc nội dung log hiện tại
             if not os.path.exists(self.log_filepath) or os.stat(self.log_filepath).st_size == 0:
+                print("Không có dữ liệu nhật ký để tải lên.")
                 return "Không có dữ liệu nhật ký để tải lên."
 
             with open(self.log_filepath, 'r', encoding='utf-8') as f:
                 log_content = f.read()
+            print("Đã đọc nội dung file log cục bộ.")
 
             # Tạo tên file log lưu trữ với timestamp
             timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -139,39 +144,37 @@ class ChatbotLogic:
             # Ghi nội dung vào file log lưu trữ
             with open(archive_filepath, 'w', encoding='utf-8') as f:
                 f.write(log_content)
+            print(f"Đã ghi nội dung vào file lưu trữ: {archive_filepath}")
 
             # Thêm file vào Git và commit
             repo.index.add([archive_filepath])
             commit_message = f"feat(logs): Archive chat log {archive_filename}"
             repo.index.commit(commit_message)
+            print(f"Đã commit file {archive_filename} với thông báo: {commit_message}")
 
-            # Đẩy lên GitHub sử dụng PAT
-            # Format URL: https://oauth2:<GITHUB_TOKEN>@github.com/<OWNER>/<REPO_NAME>.git
+            # Lấy URL remote và chuẩn bị cho xác thực PAT
             remote_url = repo.remotes.origin.url
-            # Lấy phần owner/repo_name từ remote_url
-            if "@" in remote_url:
-                auth_part, repo_part = remote_url.split("@", 1)
-                repo_url_with_auth = f"https://oauth2:{github_token}@{repo_part}"
-            else: # Fallback cho trường hợp URL không có @ (ví dụ: ssh)
-                # Cố gắng chuyển đổi sang https nếu là ssh
-                if remote_url.startswith("git@github.com:"):
-                    repo_path_no_git = remote_url.replace("git@github.com:", "")
-                    repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{repo_path_no_git}"
-                else: # Nếu không phải ssh và cũng không có @ (hiếm)
-                     return "Lỗi: Không thể xác định URL kho lưu trữ GitHub để tải lên. Vui lòng cấu hình URL từ xa của bạn."
+            print(f"URL remote gốc: {remote_url}")
 
-
-            # Đẩy lên nhánh chính (main)
-            # Sử dụng 'force=True' nếu muốn ghi đè lịch sử, nhưng không nên dùng cho log. Chỉ push bình thường.
-            # Sử dụng command line git push
-            # Cần thêm HEAD:main để chỉ định đẩy nhánh hiện tại lên main
-            # Tắt xác minh SSL nếu cần (streamlit cloud thường ok)
-
-            # repo.git.push(repo_url_with_auth, 'HEAD:main') # Cách dùng GitPython
-            # Hoặc dùng subprocess để kiểm soát tốt hơn nếu GitPython phức tạp
+            # Chuyển đổi URL SSH sang HTTPS nếu cần và thêm PAT
+            repo_url_with_auth = ""
+            if remote_url.startswith("git@github.com:"):
+                # Chuyển đổi từ git@github.com:user/repo.git sang https://github.com/user/repo.git
+                repo_path_no_git = remote_url.replace("git@github.com:", "").replace(".git", "")
+                repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{repo_path_no_git}.git"
+                print(f"Đã chuyển đổi URL SSH sang HTTPS: {repo_url_with_auth}")
+            elif remote_url.startswith("https://github.com/"):
+                # Đối với HTTPS, chỉ cần chèn PAT vào
+                parts = remote_url.split("https://github.com/")
+                repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{parts[1]}"
+                print(f"Đã thêm PAT vào URL HTTPS: {repo_url_with_auth}")
+            else:
+                print(f"Lỗi: Định dạng URL remote không được hỗ trợ: {remote_url}")
+                return "Lỗi: Không thể xác định URL kho lưu trữ GitHub để tải lên. Vui lòng kiểm tra định dạng URL remote của bạn (phải là HTTPS hoặc SSH)."
 
             # Lấy tên nhánh hiện tại để push
             current_branch = repo.active_branch.name
+            print(f"Nhánh hiện tại: {current_branch}")
 
             # Sử dụng subprocess để đảm bảo lệnh push được thực thi đúng cách với PAT
             import subprocess
@@ -181,7 +184,7 @@ class ChatbotLogic:
                 f'{current_branch}:{current_branch}' # Đẩy nhánh hiện tại lên cùng tên nhánh trên remote
             ]
 
-            # Chạy lệnh push, ẩn output nhạy cảm
+            print(f"Đang thực thi lệnh push: {' '.join(push_command[:2])} *** (ẩn PAT) *** {' '.join(push_command[3:])}")
             process = subprocess.run(push_command, capture_output=True, text=True, check=True)
             print(f"Git Push stdout: {process.stdout}")
             print(f"Git Push stderr: {process.stderr}")
@@ -189,14 +192,18 @@ class ChatbotLogic:
             # Làm rỗng file log cục bộ sau khi tải lên thành công
             with open(self.log_filepath, 'w', encoding='utf-8') as f:
                 f.truncate(0)
+            print("Đã làm rỗng file log cục bộ.")
 
             return f"Đã tải nhật ký '{archive_filename}' lên GitHub thành công và làm rỗng nhật ký cục bộ."
 
         except git.InvalidGitRepositoryError:
+            print("Lỗi: Thư mục dự án không phải là một kho lưu trữ Git hợp lệ.")
             return "Lỗi: Thư mục dự án không phải là một kho lưu trữ Git hợp lệ. Vui lòng đảm bảo bạn đã khởi tạo Git."
         except git.GitCommandError as e:
+            print(f"Lỗi Git khi tải nhật ký lên GitHub: {e.stderr or e.stdout}")
             return f"Lỗi Git khi tải nhật ký lên GitHub: {e.stderr or e.stdout}. Vui lòng kiểm tra GitHub PAT và quyền truy cập."
         except Exception as e:
+            print(f"Lỗi không xác định khi tải nhật ký lên GitHub: {e}")
             return f"Lỗi không xác định khi tải nhật ký lên GitHub: {e}"
 
     def get_response(self, user_query):
