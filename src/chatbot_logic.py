@@ -4,10 +4,9 @@ from src.nlp_processor import NLPProcessor
 import re
 import os
 import json
-# Đã bỏ import git và datetime (vì đã chuyển sang DatabaseManager)
 
 class ChatbotLogic:
-    LOG_FILE = "chat_log.jsonl" # Định nghĩa tên file log
+    LOG_FILE = "chat_log.jsonl"
 
     def __init__(self):
         self.db_manager = DatabaseManager()
@@ -20,7 +19,6 @@ class ChatbotLogic:
         self.log_filepath = os.path.join(self.logs_base_dir, self.LOG_FILE)
 
 
-    # Nội dung hướng dẫn tìm kiếm chi tiết
     GUIDANCE_MESSAGE = """
     Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm.
     Dưới đây là các loại câu lệnh bạn có thể sử dụng:
@@ -75,7 +73,8 @@ class ChatbotLogic:
         """Hàm trợ giúp để định dạng kết quả tìm kiếm và thêm gợi ý hướng dẫn."""
         if results.empty:
             return_message = f"Xin lỗi, tôi không tìm thấy vật tư/hóa chất nào liên quan đến '*{query_context}*'." if query_context else "Xin lỗi, tôi không tìm thấy kết quả nào phù hợp."
-            return_message += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?"
+            # Thay đổi lời nhắc tại đây
+            return_message += "\n\nHãy thử tìm kiếm bằng công thức hoặc tên tiếng Anh hoặc sử dụng từ khóa khác ngắn hơn. Hãy nói tôi hướng dẫn nếu bạn cần chi tiết hơn."
             return return_message
 
         response = f"Tôi tìm thấy **{len(results)}** kết quả:\n\n"
