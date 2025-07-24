@@ -4,7 +4,7 @@ from src.nlp_processor import NLPProcessor
 import re
 import os
 import json
-# Đã bỏ import git và datetime
+# Đã bỏ import git và datetime (đúng, vì nó đã được chuyển sang DatabaseManager)
 
 class ChatbotLogic:
     LOG_FILE = "chat_log.jsonl"
@@ -19,11 +19,73 @@ class ChatbotLogic:
 
         self.log_filepath = os.path.join(self.logs_base_dir, self.LOG_FILE)
 
+    # Đảm bảo GUIDANCE_MESSAGE được định nghĩa ở đây, KHÔNG bị ghi chú
+    GUIDANCE_MESSAGE = """
+    Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm.
+    Dưới đây là các loại câu lệnh bạn có thể sử dụng:
 
-    # GUIDANCE_MESSAGE và _format_results không thay đổi
+    **1. Tìm kiếm chung:**
+    - Tìm kiếm theo tên (Tiếng Việt hoặc Tiếng Anh), công thức, hoặc từ khóa trong mô tả.
+    - **Cấu trúc:** `[Từ khóa]`, `tìm [Từ khóa]`, `hãy tìm [Từ khóa]`, `tra cứu [Từ khóa]`.
+    - **Ví dụ:** `axit sulfuric`, `SULFURIC ACID`, `H2SO4`, `tìm ống nghiệm`.
+
+    **2. Tìm kiếm theo Mã ID:**
+    - **Cấu trúc:** `tìm mã [ID]`, `tìm code [ID]`.
+    - **Ví dụ:** `tìm mã A001A`, `tìm code HC001`.
+
+    **3. Tìm kiếm theo số CAS:**
+    - **Cấu trúc:** `tìm CAS [Số CAS]`, `CAS [Số CAS]`, `số cas [Số CAS]`.
+    - **Ví dụ:** `tìm CAS 553-24-2`.
+
+    **4. Liệt kê theo Vị trí:**
+    - **Cấu trúc:** `liệt kê tủ [Vị trí]`, `tìm trong tủ [Vị trí]`, `có ở kệ [Vị trí]`.
+    - **Ví dụ:** `liệt kê tủ 3C`, `tìm trong kệ A1`.
+
+    **5. Liệt kê theo Loại:**
+    - **Cấu trúc:** `liệt kê [Loại]`, `tìm [Loại]`.
+    - **Loại được hỗ trợ:** `Hóa chất`, `Vật tư`.
+    - **Ví dụ:** `liệt kê Hóa chất`, `tìm Vật tư`.
+
+    **6. Liệt kê theo Loại và Tình trạng:**
+    - **Cấu trúc:** `liệt kê [Loại] [Tình trạng]`, `tìm [Loại] [Tình trạng]`.
+    - **Tình trạng được hỗ trợ:** `đã mở`, `còn nguyên`.
+    - **Ví dụ:** `liệt kê Hóa chất đã mở`, `tìm Vật tư còn nguyên`.
+
+    **7. Liệt kê theo Vị trí và Tình trạng:**
+    - **Cấu trúc:** `liệt kê [Tình trạng] từ tủ [Vị trí]`, `tìm [Tình trạng] ở kệ [Vị trí]`.
+    - **Ví dụ:** `liệt kê đã mở từ tủ 3C`.
+
+    **8. Liệt kê theo Loại và Vị trí:**
+    - **Cấu trúc:** `liệt kê [Loại] trong tủ [Vị trí]`, `tìm [Loại] ở kệ [Vị trí]`.
+    - **Ví dụ:** `liệt kê hóa chất trong tủ 3C`.
+
+    **9. Hỏi số lượng:**
+    - **Cấu trúc:** `có bao nhiêu [Tên vật tư/hóa chất]`, `số lượng [Tên vật tư/hóa chất]`, `bao nhiêu [Tên vật tư/hóa chất]`.
+    - **Ví dụ:** `có bao nhiêu Axeton`.
+
+    **10. Hỏi vị trí:**
+    - **Cấu trúc:** `[Tên vật tư/hóa chất] ở đâu`, `vị trí của [Tên vật tư/hóa chất]`.
+    - **Ví dụ:** `Ống nghiệm ở đâu`.
+
+    Nếu bạn cần hướng dẫn này bất cứ lúc nào, chỉ cần hỏi "hướng dẫn tìm kiếm" hoặc "cách tìm kiếm".
+    """
+
+    def _format_results(self, results, query_context=""):
+        """Hàm trợ giúp để định dạng kết quả tìm kiếm và thêm gợi ý hướng dẫn."""
+        if results.empty:
+            return_message = f"Xin lỗi, tôi không tìm thấy vật tư/hóa chất nào liên quan đến '*{query_context}*'." if query_context else "Xin lỗi, tôi không tìm thấy kết quả nào phù hợp."
+            return_message += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?"
+            return return_message
+
+        response = f"Tôi tìm thấy **{len(results)}** kết quả:\n\n"
+        for index, row in results.iterrows():
+            response += (f"- **{row['name']}** (ID: {row['id']}, Loại: {row['type']})\n"
+                         f"  Số lượng: {row['quantity']} {row['unit']}, Vị trí: {row['location']}.\n"
+                         f"  Mô tả: {row['description']}\n\n")
+        return response.strip()
 
     def _log_interaction(self, user_query, chatbot_response_text, parsed_query):
-        # Hàm này không thay đổi
+        """Ghi lại tương tác của người dùng và phản hồi của chatbot vào file log."""
         log_entry = {
             "timestamp": pd.Timestamp.now().isoformat(),
             "user_query": user_query,
@@ -37,13 +99,15 @@ class ChatbotLogic:
         except Exception as e:
             print(f"Lỗi khi ghi log: {e}")
 
-    # Đã bỏ toàn bộ hàm _upload_log_to_github từ đây
+    # Hàm _upload_log_to_github đã được chuyển sang DatabaseManager
+    # Do đó, nó không còn ở đây nữa.
 
     def get_response(self, user_query):
         parsed_query = self.nlp_processor.process_query(user_query)
         intent = parsed_query.get("intent")
 
-        # --- Đã bỏ block if intent == "upload_log_github": ---
+        # --- Xử lý ý định TẢI LOG LÊN GITHUB (Ý định này đã bị loại bỏ khỏi NLPProcessor) ---
+        # Do đó, block if intent == "upload_log_github" không còn được sử dụng ở đây
 
         # --- Xử lý ý định CHÀO HỎI (Ưu tiên cao nhất) ---
         if intent == "greeting":
