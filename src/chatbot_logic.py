@@ -6,7 +6,7 @@ import os
 import json
 import git
 from datetime import datetime
-import streamlit as st # Thêm dòng này để truy cập st.secrets
+import streamlit as st
 
 class ChatbotLogic:
     LOG_FILE = "chat_log.jsonl"
@@ -15,12 +15,13 @@ class ChatbotLogic:
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
 
-        if not os.path.exists('logs'):
-            os.makedirs('logs')
-        if not os.path.exists('logs/archive'):
-            os.makedirs('logs/archive')
+        # Cấu hình đường dẫn log ban đầu (chỉ tạo thư mục gốc logs/)
+        self.logs_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'logs'))
+        if not os.path.exists(self.logs_base_dir):
+            os.makedirs(self.logs_base_dir)
 
-        self.log_filepath = os.path.join('logs', self.LOG_FILE)
+        self.log_filepath = os.path.join(self.logs_base_dir, self.LOG_FILE)
+
 
     GUIDANCE_MESSAGE = """
     Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm.
@@ -114,7 +115,9 @@ class ChatbotLogic:
 
         try:
             # Lấy đường dẫn thư mục gốc của repo
-            repo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+            # os.path.dirname(__file__) là /mount/src/lab-manager/src
+            # os.path.join(..., '..') là /mount/src/lab-manager
+            repo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) 
             print(f"Đường dẫn repo đang xét: {repo_path}")
             repo = git.Repo(repo_path)
             print("Đã khởi tạo đối tượng Git Repo.")
@@ -136,10 +139,16 @@ class ChatbotLogic:
                 log_content = f.read()
             print("Đã đọc nội dung file log cục bộ.")
 
+            # Tạo thư mục archive nếu chưa có (đảm bảo nó tồn tại ngay trước khi ghi file)
+            archive_dir = os.path.join(repo_path, 'logs', 'archive') # Tạo path tuyệt đối
+            if not os.path.exists(archive_dir):
+                os.makedirs(archive_dir)
+                print(f"DEBUG: Đã tạo thư mục lưu trữ mới: {archive_dir}")
+
             # Tạo tên file log lưu trữ với timestamp
             timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
             archive_filename = f"chat_log_archive_{timestamp_str}.jsonl"
-            archive_filepath = os.path.join('logs', 'archive', archive_filename)
+            archive_filepath = os.path.join(archive_dir, archive_filename) # Path tuyệt đối
 
             # Ghi nội dung vào file log lưu trữ
             with open(archive_filepath, 'w', encoding='utf-8') as f:
@@ -147,7 +156,9 @@ class ChatbotLogic:
             print(f"Đã ghi nội dung vào file lưu trữ: {archive_filepath}")
 
             # Thêm file vào Git và commit
-            repo.index.add([archive_filepath])
+            # Thêm file bằng đường dẫn tương đối từ gốc repo
+            repo_relative_archive_filepath = os.path.relpath(archive_filepath, repo_path)
+            repo.index.add([repo_relative_archive_filepath])
             commit_message = f"feat(logs): Archive chat log {archive_filename}"
             repo.index.commit(commit_message)
             print(f"Đã commit file {archive_filename} với thông báo: {commit_message}")
@@ -156,15 +167,12 @@ class ChatbotLogic:
             remote_url = repo.remotes.origin.url
             print(f"URL remote gốc: {remote_url}")
 
-            # Chuyển đổi URL SSH sang HTTPS nếu cần và thêm PAT
             repo_url_with_auth = ""
             if remote_url.startswith("git@github.com:"):
-                # Chuyển đổi từ git@github.com:user/repo.git sang https://github.com/user/repo.git
                 repo_path_no_git = remote_url.replace("git@github.com:", "").replace(".git", "")
                 repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{repo_path_no_git}.git"
                 print(f"Đã chuyển đổi URL SSH sang HTTPS: {repo_url_with_auth}")
             elif remote_url.startswith("https://github.com/"):
-                # Đối với HTTPS, chỉ cần chèn PAT vào
                 parts = remote_url.split("https://github.com/")
                 repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{parts[1]}"
                 print(f"Đã thêm PAT vào URL HTTPS: {repo_url_with_auth}")
@@ -172,16 +180,14 @@ class ChatbotLogic:
                 print(f"Lỗi: Định dạng URL remote không được hỗ trợ: {remote_url}")
                 return "Lỗi: Không thể xác định URL kho lưu trữ GitHub để tải lên. Vui lòng kiểm tra định dạng URL remote của bạn (phải là HTTPS hoặc SSH)."
 
-            # Lấy tên nhánh hiện tại để push
             current_branch = repo.active_branch.name
             print(f"Nhánh hiện tại: {current_branch}")
 
-            # Sử dụng subprocess để đảm bảo lệnh push được thực thi đúng cách với PAT
             import subprocess
             push_command = [
                 'git', 'push',
                 repo_url_with_auth,
-                f'{current_branch}:{current_branch}' # Đẩy nhánh hiện tại lên cùng tên nhánh trên remote
+                f'{current_branch}:{current_branch}'
             ]
 
             print(f"Đang thực thi lệnh push: {' '.join(push_command[:2])} *** (ẩn PAT) *** {' '.join(push_command[3:])}")
