@@ -70,30 +70,46 @@ class NLPProcessor:
             if kw in query_lower:
                 return {"intent": "request_guidance"}
 
-        # --- Nhận diện Ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ (Ưu tiên cao hơn tìm kiếm chung) ---
-        # Regex để bắt các mẫu như "H2SO4 đã hết", "A247A không còn", "tủ sấy bị hư hỏng"
-        # Mẫu: [tên/id/vị trí] [từ khóa vấn đề]
+        # --- Nhận diện Ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ (Ưu tiên cao hơn tìm kiếm chung và các tìm kiếm đơn) ---
         problem_regex_pattern = r'(.+?)\s+(?:' + '|'.join(map(re.escape, self.problem_keywords)) + r')'
         match_problem = re.search(problem_regex_pattern, query_lower)
         if match_problem:
             reported_item_or_location = match_problem.group(1).strip()
-            reported_status = match_problem.group(0)[len(reported_item_or_location):].strip() # Lấy toàn bộ cụm từ vấn đề
+            reported_status = match_problem.group(0)[len(reported_item_or_location):].strip()
 
-            # Cố gắng xác định xem phần đầu là ID, tên hay vị trí
-            is_id = re.fullmatch(r'[a-zA-Z0-9-]+', reported_item_or_location) # Giả định ID chỉ có chữ, số, gạch ngang
-            is_location = re.fullmatch(r'(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', reported_item_or_location) # Giả định vị trí có "tủ/kệ"
+            is_id = re.fullmatch(r'[a-zA-Z0-9-]+', reported_item_or_location)
+            is_location = re.fullmatch(r'(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', reported_item_or_location)
 
             if is_id:
                 return {"intent": "report_status_or_problem", "reported_id": reported_item_or_location.upper(), "problem_description": reported_status}
             elif is_location:
                 return {"intent": "report_status_or_problem", "reported_location": reported_item_or_location, "problem_description": reported_status}
-            else: # Mặc định là tên vật tư/hóa chất
+            else:
                 return {"intent": "report_status_or_problem", "reported_item_name": reported_item_or_location, "problem_description": reported_status}
 
+        # --- Các ý định tìm kiếm vị trí (Ưu tiên cao hơn các tìm kiếm thông thường) ---
+        # Mở rộng regex để bắt các mẫu như "h2so4 ở đâu", "tìm vị trí h2so4", "vị trí của h2so4"
+        # match_get_location_v2 (tên/công thức) ở đâu/vị trí của
+        # match_get_location_v3 (tìm/liệt kê) vị trí/ở đâu (tên/công thức)
 
-        # --- Các ý định cụ thể khác (sau khi kiểm tra báo cáo tình trạng) ---
+        # Mẫu 1: [tên/công thức] ở đâu / vị trí của [tên/công thức] (ví dụ: "h2so4 ở đâu?")
+        match_get_location_direct = re.search(r'([a-zA-Z0-9\s.-]+?)\s+(?:ở\s+đâu|vị\s+trí\s+của)', query_lower)
+        if match_get_location_direct:
+            item_name = match_get_location_direct.group(1).strip()
+            item_name = self._remove_keywords(item_name, self.general_stopwords + self.quantity_phrases + self.unit_words)
+            if item_name:
+                return {"intent": "get_location", "item_name": item_name}
 
-        # (Các regex nhận diện ý định khác như list_by_type_location, search_by_id, v.v. giữ nguyên)
+        # Mẫu 2: tìm/liệt kê/có vị trí [tên/công thức] (ví dụ: "tìm vị trí h2so4")
+        match_get_location_verb_phrase = re.search(self.list_search_verbs + r'\s+(vị\s+trí|ở\s+đâu)\s*(của)?\s*([a-zA-Z0-9\s.-]+)', query_lower)
+        if match_get_location_verb_phrase:
+            item_name = match_get_location_verb_phrase.group(3).strip()
+            item_name = self._remove_keywords(item_name, self.general_stopwords + self.quantity_phrases + self.unit_words)
+            if item_name:
+                return {"intent": "get_location", "item_name": item_name}
+
+        # --- Các ý định cụ thể khác (sau vị trí) ---
+
         # Ý định: Get Quantity AND Status
         match_quantity_status = re.search(r'(?:' + '|'.join(self.quantity_phrases) + r')\s+(?:' + '|'.join(self.unit_words) + r')?\s*([a-zA-Z0-9\s.-]+?)\s*(' + '|'.join(self.status_keywords) + r')', query_lower)
         if match_quantity_status:
@@ -178,14 +194,6 @@ class NLPProcessor:
         match_location_simple = re.search(self.list_search_verbs + r'\s*(trong|từ|ở)?\s*(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', query_lower)
         if match_location_simple:
             return {"intent": "list_by_location", "location": match_location_simple.group(4).strip().upper()}
-
-        # Ý định: Get Location
-        match_get_location = re.search(r'([a-zA-Z0-9\s.-]+?)\s+(?:ở\s+đâu|vị\s+trí\s+của)', query_lower)
-        if match_get_location:
-            item_name = match_get_location.group(1).strip()
-            item_name = self._remove_keywords(item_name, self.general_stopwords + self.quantity_phrases + self.unit_words)
-            if item_name:
-                return {"intent": "get_location", "item_name": item_name}
 
 
         # --- Ý định chung (Fallback cuối cùng) ---
