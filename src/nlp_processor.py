@@ -29,8 +29,17 @@ class NLPProcessor:
 
         # Hàm trợ giúp để chuyển danh sách từ/cụm từ sang regex pattern an toàn
         def _list_to_regex_pattern(word_list):
-            # Tạo pattern an toàn cho regex, xử lý khoảng trắng trong cụm từ
-            return r"(?:" + "|".join(re.escape(phrase.replace(' ', r'\s+')) for phrase in word_list) + r")"
+            # Chuyển một danh sách các cụm từ (ví dụ: ["không thấy", "đã hết"])
+            # thành một pattern regex alternation (ví dụ: "(?:không\s+thấy|đã\s+hết)")
+            pattern_parts = []
+            for phrase in word_list:
+                # Tách cụm từ thành từng từ, escape từng từ, sau đó nối lại bằng "\s+"
+                # Điều này xử lý đúng khoảng trắng (match 1 hoặc nhiều khoảng trắng) và escape các ký tự đặc biệt
+                regex_phrase = r'\s+'.join(re.escape(word) for word in phrase.split())
+                pattern_parts.append(regex_phrase)
+
+            # Nối tất cả các phần tử đã xử lý bằng '|' và gói trong non-capturing group
+            return r"(?:" + "|".join(pattern_parts) + r")"
 
         # Tạo các regex pattern từ danh sách từ khóa
         self.quantity_phrases_regex = _list_to_regex_pattern(self.quantity_phrases_list)
@@ -81,35 +90,50 @@ class NLPProcessor:
             if kw in query_lower:
                 return {"intent": "request_guidance"}
 
-        # --- Nhận diện Ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ (Ưu tiên cao) ---
+        # --- Nhận diện Ý định BÁO CÁO TÌNH TRẠẠNG/VẤN ĐỀ (Ưu tiên cao) ---
         # Mẫu 1: [tên/id/vị trí] [từ khóa vấn đề] (ví dụ: "H2SO4 đã hết")
         # Mẫu 2: [từ khóa vấn đề] [tên/id/vị trí] (ví dụ: "Không thấy H2SO4")
-        problem_report_regex_1 = r'(.+?)\s+' + self.problem_keywords_regex
-        problem_report_regex_2 = self.problem_keywords_regex + r'\s+([a-zA-Z0-9\s.-]+)'
 
-        match_problem_1 = re.search(problem_report_regex_1, query_lower)
-        match_problem_2 = re.search(problem_report_regex_2, query_lower)
+        # Kết hợp cả hai mẫu vào một regex để tăng cường khả năng nhận diện
+        problem_report_regex_combined = (
+            r'(.+?)\s+' + self.problem_keywords_regex + r'|' + # Mẫu 1: Item Problem
+            self.problem_keywords_regex + r'\s+([a-zA-Z0-9\s.-]+)' # Mẫu 2: Problem Item
+        )
+        match_problem = re.search(problem_report_regex_combined, query_lower)
 
-        reported_item_or_location = None
-        problem_description = None
+        if match_problem:
+            reported_item_or_location = None
+            problem_description = None
 
-        if match_problem_1:
-            reported_item_or_location = match_problem_1.group(1).strip()
-            problem_description = match_problem_1.group(0)[len(reported_item_or_location):].strip()
-        elif match_problem_2:
-            problem_description = match_problem_2.group(0)[0:match_problem_2.start(1)].strip() # Toàn bộ cụm từ vấn đề
-            reported_item_or_location = match_problem_2.group(1).strip()
+            if match_problem.group(1): # Nếu khớp với mẫu 1 (Item Problem)
+                reported_item_or_location = match_problem.group(1).strip()
+                # Lấy phần problem_description từ nhóm match_problem.group(0) sau khi loại bỏ reported_item_or_location
+                problem_description_raw = match_problem.group(0)[len(reported_item_or_location):].strip()
+                # Cần tìm kiếm từ khóa vấn đề đã khớp trong problem_description_raw
+                for kw_problem in self.problem_keywords_list:
+                    if re.search(r'\b' + re.escape(kw_problem) + r'\b', problem_description_raw, flags=re.IGNORECASE):
+                        problem_description = kw_problem
+                        break
+            elif match_problem.group(2): # Nếu khớp với mẫu 2 (Problem Item)
+                # group(2) chứa toàn bộ phần từ khóa vấn đề + item
+                problem_description_raw = match_problem.group(0)[0:match_problem.start(2) - match_problem.start(0)].strip()
+                reported_item_or_location = match_problem.group(2).strip()
+                # Lấy từ khóa vấn đề đã khớp
+                for kw_problem in self.problem_keywords_list:
+                    if re.search(r'\b' + re.escape(kw_problem) + r'\b', problem_description_raw, flags=re.IGNORECASE):
+                        problem_description = kw_problem
+                        break
 
-        if reported_item_or_location and problem_description:
-            is_id = re.fullmatch(r'[a-zA-Z0-9-]+', reported_item_or_location)
-            is_location_phrase = re.fullmatch(r'(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', reported_item_or_location)
+            if reported_item_or_location and problem_description:
+                is_id = re.fullmatch(r'[a-zA-Z0-9-]+', reported_item_or_location)
+                is_location_phrase = re.fullmatch(r'(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', reported_item_or_location)
 
-            if is_id:
-                return {"intent": "report_status_or_problem", "reported_id": reported_item_or_location.upper(), "problem_description": problem_description}
-            elif is_location_phrase:
-                return {"intent": "report_status_or_problem", "reported_location": reported_item_or_location, "problem_description": problem_description}
-            else:
-                return {"intent": "report_status_or_problem", "reported_item_name": reported_item_or_location, "problem_description": problem_description}
+                if is_id:
+                    return {"intent": "report_status_or_problem", "reported_id": reported_item_or_location.upper(), "problem_description": problem_description}
+                elif is_location_phrase:
+                    return {"intent": "report_status_or_problem", "reported_location": reported_item_or_location, "problem_description": problem_description}
+                else: # Mặc định là tên vật tư/hóa chất
+                    return {"intent": "report_status_or_problem", "reported_item_name": reported_item_or_location, "problem_description": problem_description}
 
 
         # --- Các ý định tìm kiếm vị trí (Ưu tiên cao hơn các tìm kiếm thông thường) ---
@@ -124,13 +148,7 @@ class NLPProcessor:
         # Mẫu 2: tìm/liệt kê/có vị trí [tên/công thức] (ví dụ: "tìm vị trí h2so4")
         match_get_location_verb_phrase = re.search(self.list_search_verbs_regex + r'\s+' + self.location_phrases_regex + r'\s*(của)?\s*([a-zA-Z0-9\s.-]+)', query_lower)
         if match_get_location_verb_phrase:
-            item_name = match_get_location_verb_phrase.group(3).strip() # group(3) nếu 'của' là optional group, group(2) nếu không có (của)?
-            # Cần kiểm tra lại group index cho trường hợp có '(của)?'
-            # Group 1: list_search_verbs_regex
-            # Group 2: location_phrases_regex
-            # Group 3: (của)?
-            # Group 4: ([a-zA-Z0-9\s.-]+) -> Đây là group chứa item_name
-            item_name = match_get_location_verb_phrase.group(4).strip()
+            item_name = match_get_location_verb_phrase.group(4).strip() # group(4) là nhóm chứa tên item sau (của)?
             item_name = self._remove_keywords(item_name, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list)
             if item_name:
                 return {"intent": "get_location", "item_name": item_name}
@@ -228,7 +246,7 @@ class NLPProcessor:
             self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list +
             self.status_keywords_list + self.guidance_keywords_list + self.download_log_keywords_list +
             self.greeting_keywords_list + self.problem_keywords_list + self.location_phrases_list +
-            self.list_search_verbs_regex.replace(r'(?:', '').replace(r')', '').split('|') # Lấy các từ từ regex verb
+            self.list_search_verbs_regex.replace(r'(?:', '').replace(r')', '').split('|')
         ))
 
         cleaned_query_for_general_search = query_lower
