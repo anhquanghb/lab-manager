@@ -73,7 +73,8 @@ class NLPProcessor:
         match_quantity_status = re.search(r'(?:' + '|'.join(self.quantity_phrases) + r')\s+(?:' + '|'.join(self.unit_words) + r')?\s*([a-zA-Z0-9\s.-]+?)\s*(' + '|'.join(self.status_keywords) + r')', query_lower)
         if match_quantity_status:
             raw_item_name = match_quantity_status.group(2).strip()
-            item_name = self._remove_keywords(raw_item_name, self.unit_words) # Vẫn dùng _remove_keywords để làm sạch tên item
+            status_found = match_quantity_status.group(3).strip()
+            item_name = self._remove_keywords(raw_item_name, self.unit_words)
             if item_name and "hóa chất" not in item_name and "vật tư" not in item_name:
                 return {"intent": "get_quantity_status", "item_name": item_name, "status": status_found}
 
@@ -156,7 +157,6 @@ class NLPProcessor:
 
         # --- Ý định chung (Fallback cuối cùng) ---
         # Danh sách các từ khóa lệnh cần loại bỏ trong tìm kiếm chung
-        # Đảm bảo các từ khóa trong self.list_search_verbs cũng được loại bỏ
         commands_to_remove_in_general_search = [
             "tìm", "kiếm", "về", "thông tin về", "cho tôi biết về", "hãy tìm", "hỏi về", "tra cứu", "find", "liệt kê", "có", "thống kê", # Từ khóa tìm kiếm chung
             "có bao nhiêu", "số lượng", "bao nhiêu", # Từ khóa số lượng
@@ -167,7 +167,12 @@ class NLPProcessor:
             "xin chào", "chào", "hello", "hi", "hey" # Từ khóa chào hỏi
         ]
 
-        cleaned_query_for_general_search = self._remove_keywords(query_lower, commands_to_remove_in_general_search)
+        # Sử dụng một bản sao của query_lower để làm sạch
+        cleaned_query_for_general_search = query_lower
+        for kw in commands_to_remove_in_general_search:
+            cleaned_query_for_general_search = re.sub(r'\b' + re.escape(kw) + r'\b', ' ', cleaned_query_for_general_search, flags=re.IGNORECASE).strip()
+
+        cleaned_query_for_general_search = re.sub(r'\s+', ' ', cleaned_query_for_general_search).strip() # Làm sạch khoảng trắng thừa
 
         if not cleaned_query_for_general_search:
             return {"intent": "search_item", "query": ""} 
