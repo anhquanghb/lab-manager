@@ -13,14 +13,10 @@ class ChatbotLogic:
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
 
-        # Cấu hình đường dẫn log ban đầu
-        # logs_base_dir sẽ được quản lý bởi DatabaseManager khi upload.
-        # Ở đây chỉ cần đảm bảo đường dẫn cục bộ để ghi log là chính xác.
-        # Dòng này cần phải khớp với cách log_filepath được dùng ở _log_interaction.
-        # LOG_FILE là một thuộc tính tĩnh của class, không phải self.LOG_FILE
         self.logs_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'logs'))
         if not os.path.exists(self.logs_base_dir):
             os.makedirs(self.logs_base_dir)
+
         self.log_filepath = os.path.join(self.logs_base_dir, self.LOG_FILE)
 
 

@@ -22,11 +22,12 @@ class NLPProcessor:
         self.status_keywords = ["đã mở", "còn nguyên"]
 
         self.guidance_keywords = ["hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không"]
-        self.download_log_keywords = ["tải nhật ký", "xuất log", "lịch sử chat", "tải log"] # Giữ lại nếu bạn muốn chức năng tải cục bộ qua nút khác
+        self.download_log_keywords = ["tải nhật ký", "xuất log", "lịch sử chat", "tải log"] 
 
         self.greeting_keywords = ["xin chào", "chào", "hello", "hi", "hey"]
 
         self.list_search_verbs = r'(liệt\s+kê|tìm|có|thống\s+kê)'
+
 
     def _remove_keywords(self, text, keywords_to_remove):
         """
@@ -69,7 +70,6 @@ class NLPProcessor:
                 return {"intent": "request_guidance"}
 
         # --- Các ý định cụ thể khác ---
-        # ... (Các regex nhận diện ý định khác như list_by_type_location, search_by_id, v.v. giữ nguyên)
 
         # Ý định: Get Quantity AND Status
         match_quantity_status = re.search(r'(?:' + '|'.join(self.quantity_phrases) + r')\s+(?:' + '|'.join(self.unit_words) + r')?\s*([a-zA-Z0-9\s.-]+?)\s*(' + '|'.join(self.status_keywords) + r')', query_lower)
