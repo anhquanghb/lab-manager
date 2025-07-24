@@ -56,7 +56,7 @@ class NLPProcessor:
         query_lower = query.lower().strip()
         print(f"DEBUG NLP: Xử lý truy vấn: '{query_lower}'")
 
-        # --- Nhận diện Ý định CHÀO HỎI ---
+        # --- Nhận diện Ý định CHÀO HỎI (Ưu tiên cao nhất) ---
         for kw in self.greeting_keywords_list:
             if kw in query_lower:
                 print(f"DEBUG NLP: MATCHED Greeting: '{kw}'")
@@ -74,7 +74,31 @@ class NLPProcessor:
                 print(f"DEBUG NLP: MATCHED Guidance: '{kw}'")
                 return {"intent": "request_guidance"}
 
-        # --- Nhận diện Ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ ---
+        # --- Các ý định tìm kiếm vị trí (Ưu tiên RẤT CAO, trước báo cáo tình trạng) ---
+        print(f"DEBUG NLP: Kiểm tra Get Location (regex: {self.location_phrases_regex})")
+        # Mẫu 1: [tên/công thức] ở đâu / vị trí của [tên/công thức] (ví dụ: "h2so4 ở đâu?")
+        match_get_location_direct = re.search(r'(.+?)\s+' + self.location_phrases_regex, query_lower)
+        if match_get_location_direct:
+            print(f"DEBUG NLP: MATCHED Get Location (direct). Groups: {match_get_location_direct.groups()}")
+            item_name = match_get_location_direct.group(1).strip()
+            item_name = self._remove_keywords(item_name, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list)
+            if item_name:
+                print(f"DEBUG NLP: Extracted Location Item (direct): '{item_name}'")
+                return {"intent": "get_location", "item_name": item_name}
+
+        # Mẫu 2: tìm/liệt kê/có vị trí [tên/công thức] (ví dụ: "tìm vị trí h2so4")
+        print(f"DEBUG NLP: Kiểm tra Get Location (verb phrase) (regex: {self.list_search_verbs_regex} ... {self.location_phrases_regex})")
+        match_get_location_verb_phrase = re.search(self.list_search_verbs_regex + r'\s+' + self.location_phrases_regex + r'\s*(của)?\s*(.+)', query_lower)
+        if match_get_location_verb_phrase:
+            print(f"DEBUG NLP: MATCHED Get Location (verb phrase). Groups: {match_get_location_verb_phrase.groups()}")
+            item_name = match_get_location_verb_phrase.group(4).strip() # group(4) là nhóm chứa tên item sau (của)?
+            item_name = self._remove_keywords(item_name, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list)
+            if item_name:
+                print(f"DEBUG NLP: Extracted Location Item (verb phrase): '{item_name}'")
+                return {"intent": "get_location", "item_name": item_name}
+
+
+        # --- Nhận diện Ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ (Sau Get Location) ---
         print(f"DEBUG NLP: Kiểm tra Report Status (regex: {self.problem_keywords_regex})")
         problem_report_regex_combined = (
             r'(.+?)\s+' + self.problem_keywords_regex + r'|' + 
@@ -113,29 +137,6 @@ class NLPProcessor:
                 else:
                     return {"intent": "report_status_or_problem", "reported_item_name": reported_item_or_location, "problem_description": problem_description}
 
-
-        # --- Các ý định tìm kiếm vị trí (Đặt cao hơn để đảm bảo nhận diện chính xác) ---
-        print(f"DEBUG NLP: Kiểm tra Get Location (regex: {self.location_phrases_regex})")
-        # Mẫu 1: [tên/công thức] ở đâu / vị trí của [tên/công thức] (ví dụ: "h2so4 ở đâu?")
-        match_get_location_direct = re.search(r'([a-zA-Z0-9\s.-]+?)\s+' + self.location_phrases_regex, query_lower)
-        if match_get_location_direct:
-            print(f"DEBUG NLP: MATCHED Get Location (direct). Groups: {match_get_location_direct.groups()}")
-            item_name = match_get_location_direct.group(1).strip()
-            item_name = self._remove_keywords(item_name, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list + self.location_phrases_list) # Loại bỏ cả từ khóa vị trí nếu dính vào
-            if item_name:
-                print(f"DEBUG NLP: Extracted Location Item (direct): '{item_name}'")
-                return {"intent": "get_location", "item_name": item_name}
-
-        # Mẫu 2: tìm/liệt kê/có vị trí [tên/công thức] (ví dụ: "tìm vị trí h2so4")
-        print(f"DEBUG NLP: Kiểm tra Get Location (verb phrase) (regex: {self.list_search_verbs_regex} ... {self.location_phrases_regex})")
-        match_get_location_verb_phrase = re.search(self.list_search_verbs_regex + r'\s+' + self.location_phrases_regex + r'\s*(của)?\s*([a-zA-Z0-9\s.-]+)', query_lower)
-        if match_get_location_verb_phrase:
-            print(f"DEBUG NLP: MATCHED Get Location (verb phrase). Groups: {match_get_location_verb_phrase.groups()}")
-            item_name = match_get_location_verb_phrase.group(4).strip() # group(4) là nhóm chứa tên item sau (của)?
-            item_name = self._remove_keywords(item_name, self.general_stopwords_list + self.quantity_phrases_list + self.unit_words_list + self.list_search_verbs_regex.replace(r'(?:', '').replace(r')', '').split('|')) # Loại bỏ các từ khóa liên quan
-            if item_name:
-                print(f"DEBUG NLP: Extracted Location Item (verb phrase): '{item_name}'")
-                return {"intent": "get_location", "item_name": item_name}
 
         # --- Các ý định tìm kiếm khác (sau vị trí và báo cáo) ---
 
