@@ -1,6 +1,7 @@
 import re
 import nltk
 import os
+import unicodedata
 
 # Tải gói PunktTokenizer cho NLTK (chỉ cần chạy một lần)
 try:
@@ -15,14 +16,15 @@ except LookupError:
 
 class NLPProcessor:
     def __init__(self):
-        # Các từ khóa liên quan đến số lượng (sẽ loại bỏ khi trích xuất tên vật tư)
         self.quantity_phrases = ["có bao nhiêu", "số lượng", "bao nhiêu"]
-        # Các từ chỉ đơn vị (sẽ loại bỏ khi trích xuất tên vật tư)
         self.unit_words = ["chai", "lọ", "thùng", "gói", "hộp", "bình", "cái", "m", "kg", "g", "ml", "l", "đơn vị", "viên", "cuộn"]
-        # Các từ dừng chung khi tìm kiếm (sẽ loại bỏ khi tìm kiếm chung)
+        # Đã thêm các từ khóa liên quan đến "hướng dẫn" vào đây
         self.general_stopwords = ["tìm", "kiếm", "về", "thông tin về", "cho tôi biết về", "hãy tìm", "hỏi về", "của", "là", "?", "vật tư", "hóa chất", "chất"]
-        # Các từ khóa tình trạng
         self.status_keywords = ["đã mở", "còn nguyên"]
+
+        # Thêm các từ khóa để nhận diện yêu cầu hướng dẫn
+        self.guidance_keywords = ["hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không"]
+
 
     def _remove_keywords(self, text, keywords_to_remove):
         """
@@ -31,11 +33,11 @@ class NLPProcessor:
         """
         cleaned_text = text
         for kw in keywords_to_remove:
-            cleaned_text = re.sub(r'\b' + re.escape(kw) + r'\b', '', cleaned_text, flags=re.IGNORECASE).strip()
+            # Chỉ loại bỏ nếu từ khóa không phải là một phần của cụm từ khóa hướng dẫn
+            if kw not in self.guidance_keywords: # Đảm bảo không loại bỏ các từ khóa hướng dẫn
+                cleaned_text = re.sub(r'\b' + re.escape(kw) + r'\b', '', cleaned_text, flags=re.IGNORECASE).strip()
 
-        # Loại bỏ các ký tự đặc biệt hoặc khoảng trắng thừa ở đầu/cuối
         cleaned_text = re.sub(r'^\W+|\W+$', '', cleaned_text).strip()
-        # Loại bỏ khoảng trắng thừa giữa các từ
         cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
 
         return cleaned_text
@@ -47,22 +49,21 @@ class NLPProcessor:
         """
         query_lower = query.lower().strip()
 
-        # --- Nhận diện các ý định cụ thể hơn (Ưu tiên các ý định kết hợp trước) ---
+        # --- Nhận diện Ý định HƯỚNG DẪN (Ưu tiên cao nhất) ---
+        for kw in self.guidance_keywords:
+            if kw in query_lower:
+                return {"intent": "request_guidance"}
 
-        # Ý định: Get Quantity AND Status (MỚI: "có bao nhiêu chai h2so4 đã mở")
-        # Tìm các cụm từ hỏi số lượng + tên vật tư + từ khóa tình trạng
+        # --- Các ý định cụ thể hơn (sau khi kiểm tra hướng dẫn) ---
+
+        # Ý định: Get Quantity AND Status
         match_quantity_status = re.search(r'(có\s+bao\s+nhiêu|số\s+lượng|bao\s+nhiêu)\s+(?:' + '|'.join(self.unit_words) + r')?\s*([a-zA-Z0-9\s.-]+?)\s*(' + '|'.join(self.status_keywords) + r')', query_lower)
         if match_quantity_status:
             raw_item_name = match_quantity_status.group(2).strip()
             status_found = match_quantity_status.group(3).strip()
-
-            # Làm sạch tên vật tư/hóa chất: chỉ loại bỏ các từ chỉ đơn vị
             item_name = self._remove_keywords(raw_item_name, self.unit_words)
-
-            # Đảm bảo item_name không rỗng và không phải từ chung chung
             if item_name and "hóa chất" not in item_name and "vật tư" not in item_name:
                 return {"intent": "get_quantity_status", "item_name": item_name, "status": status_found}
-
 
         # Ý định: List by Type AND Location
         match_type_location = re.search(r'(liệt\s+kê|tìm|có)\s+(hóa\s+chất|vật\s+tư|chất)\s+(trong|từ|ở)\s+(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', query_lower)
@@ -89,7 +90,6 @@ class NLPProcessor:
                 if kw in status_phrase_full:
                     status = kw.capitalize()
                     break
-
             return {"intent": "list_by_location_status", "location": location, "status": status}
 
         # Ý định: List by Type AND Status
@@ -118,18 +118,13 @@ class NLPProcessor:
 
         # --- CÁC Ý ĐỊNH ĐƠN LẺ ---
 
-        # Ý định: Get Quantity (CẬP NHẬT: "có bao nhiêu chai H2SO4", "số lượng Axeton")
-        # Bắt toàn bộ phần còn lại của câu hỏi sau cụm từ hỏi số lượng
+        # Ý định: Get Quantity
         match_get_quantity = re.search(r'(?:' + '|'.join(self.quantity_phrases) + r')\s+(.+)', query_lower)
         if match_get_quantity:
-            raw_item_name = match_get_quantity.group(1).strip() # Lấy toàn bộ phần sau cụm từ hỏi số lượng
-            # Làm sạch tên vật tư/hóa chất: chỉ loại bỏ các từ chỉ đơn vị
+            raw_item_name = match_get_quantity.group(1).strip()
             item_name = self._remove_keywords(raw_item_name, self.unit_words)
-
-            # Đảm bảo item_name không rỗng sau khi làm sạch và không phải là từ chung chung
             if item_name and "hóa chất" not in item_name and "vật tư" not in item_name:
                 return {"intent": "get_quantity", "item_name": item_name}
-
 
         # Ý định: Search by ID
         match_id = re.search(r'(mã|code)\s+([a-zA-Z0-9-]+)', query_lower)
@@ -148,11 +143,25 @@ class NLPProcessor:
 
 
         # --- Ý định chung (Fallback cuối cùng) ---
-        # Sử dụng tất cả các từ khóa để làm sạch truy vấn tìm kiếm chung
-        all_keywords_to_remove = self.general_stopwords + self.quantity_phrases + self.unit_words + self.status_keywords
+        all_keywords_to_remove = self.general_stopwords + self.quantity_phrases + self.unit_words + self.status_keywords + self.guidance_keywords
         cleaned_query_for_general_search = self._remove_keywords(query_lower, all_keywords_to_remove)
 
-        # Trả về ý định tìm kiếm chung với truy vấn đã được làm sạch.
-        # Nếu cleaned_query_for_general_search rỗng (ví dụ: người dùng chỉ gõ "tìm"),
-        # thì vẫn giữ nguyên query_lower ban đầu để ChatbotLogic có thể xử lý lỗi "nhập từ khóa cụ thể hơn".
-        return {"intent": "search_item", "query": cleaned_query_for_general_search if cleaned_query_for_general_search else query_lower}
+        if not cleaned_query_for_general_search:
+            return {"intent": "search_item", "query": ""} 
+
+        return {"intent": "search_item", "query": cleaned_query_for_general_search}
+
+    def _extract_item_name(self, query_lower, keywords_to_remove):
+        """
+        Hàm trợ giúp này được dùng trong các phiên bản trước cho tìm kiếm chung.
+        Hiện tại, các regex ở trên đã cụ thể hơn, nhưng hàm này vẫn có thể được giữ lại
+        cho các trường hợp tìm kiếm chung mà không có từ khóa rõ ràng.
+        """
+        # Hàm này sẽ được thay thế bởi _remove_keywords. Tạm giữ để tránh lỗi nếu còn được gọi từ đâu đó.
+        item_name_candidate = query_lower
+        for kw in keywords_to_remove:
+            item_name_candidate = item_name_candidate.replace(kw, "").strip()
+
+        item_name_candidate = re.sub(r'(của|là|\?|vật tư|hóa chất)$', '', item_name_candidate).strip()
+        item_name_candidate = re.sub(r'\s+', ' ', item_name_candidate).strip()
+        return item_name_candidate

@@ -1,18 +1,70 @@
 import pandas as pd
 from src.database_manager import DatabaseManager
 from src.nlp_processor import NLPProcessor
-# from googletrans import Translator # Đã bỏ dòng này
 import re
 
 class ChatbotLogic:
     def __init__(self):
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
-        # self.translator = Translator() # Đã bỏ dòng này
+
+    # Nội dung hướng dẫn tìm kiếm chi tiết
+    GUIDANCE_MESSAGE = """
+    Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm.
+    Dưới đây là các loại câu lệnh bạn có thể sử dụng:
+
+    **1. Tìm kiếm chung:**
+    - Tìm kiếm theo tên (Tiếng Việt hoặc Tiếng Anh), công thức, hoặc từ khóa trong mô tả.
+    - **Cấu trúc:** `[Từ khóa]`, `tìm [Từ khóa]`, `hãy tìm [Từ khóa]`, `tra cứu [Từ khóa]`.
+    - **Ví dụ:** `axit sulfuric`, `SULFURIC ACID`, `H2SO4`, `tìm ống nghiệm`.
+
+    **2. Tìm kiếm theo Mã ID:**
+    - **Cấu trúc:** `tìm mã [ID]`, `tìm code [ID]`.
+    - **Ví dụ:** `tìm mã A001A`, `tìm code HC001`.
+
+    **3. Tìm kiếm theo số CAS:**
+    - **Cấu trúc:** `tìm CAS [Số CAS]`, `CAS [Số CAS]`, `số cas [Số CAS]`.
+    - **Ví dụ:** `tìm CAS 553-24-2`.
+
+    **4. Liệt kê theo Vị trí:**
+    - **Cấu trúc:** `liệt kê tủ [Vị trí]`, `tìm trong tủ [Vị trí]`, `có ở kệ [Vị trí]`.
+    - **Ví dụ:** `liệt kê tủ 3C`, `tìm trong kệ A1`.
+
+    **5. Liệt kê theo Loại:**
+    - **Cấu trúc:** `liệt kê [Loại]`, `tìm [Loại]`.
+    - **Loại được hỗ trợ:** `Hóa chất`, `Vật tư`.
+    - **Ví dụ:** `liệt kê Hóa chất`, `tìm Vật tư`.
+
+    **6. Liệt kê theo Loại và Tình trạng:**
+    - **Cấu trúc:** `liệt kê [Loại] [Tình trạng]`, `tìm [Loại] [Tình trạng]`.
+    - **Tình trạng được hỗ trợ:** `đã mở`, `còn nguyên`.
+    - **Ví dụ:** `liệt kê Hóa chất đã mở`, `tìm Vật tư còn nguyên`.
+
+    **7. Liệt kê theo Vị trí và Tình trạng:**
+    - **Cấu trúc:** `liệt kê [Tình trạng] từ tủ [Vị trí]`, `tìm [Tình trạng] ở kệ [Vị trí]`.
+    - **Ví dụ:** `liệt kê đã mở từ tủ 3C`.
+
+    **8. Liệt kê theo Loại và Vị trí:**
+    - **Cấu trúc:** `liệt kê [Loại] trong tủ [Vị trí]`, `tìm [Loại] ở kệ [Vị trí]`.
+    - **Ví dụ:** `liệt kê hóa chất trong tủ 3C`.
+
+    **9. Hỏi số lượng:**
+    - **Cấu trúc:** `có bao nhiêu [Tên vật tư/hóa chất]`, `số lượng [Tên vật tư/hóa chất]`, `bao nhiêu [Tên vật tư/hóa chất]`.
+    - **Ví dụ:** `có bao nhiêu Axeton`.
+
+    **10. Hỏi vị trí:**
+    - **Cấu trúc:** `[Tên vật tư/hóa chất] ở đâu`, `vị trí của [Tên vật tư/hóa chất]`.
+    - **Ví dụ:** `Ống nghiệm ở đâu`.
+
+    Nếu bạn cần hướng dẫn này bất cứ lúc nào, chỉ cần hỏi "hướng dẫn tìm kiếm" hoặc "cách tìm kiếm".
+    """
 
     def _format_results(self, results, query_context=""):
+        """Hàm trợ giúp để định dạng kết quả tìm kiếm và thêm gợi ý hướng dẫn."""
         if results.empty:
-            return f"Xin lỗi, tôi không tìm thấy vật tư/hóa chất nào liên quan đến '*{query_context}*'." if query_context else "Xin lỗi, tôi không tìm thấy kết quả nào phù hợp."
+            return_message = f"Xin lỗi, tôi không tìm thấy vật tư/hóa chất nào liên quan đến '*{query_context}*'." if query_context else "Xin lỗi, tôi không tìm thấy kết quả nào phù hợp."
+            return_message += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?"
+            return return_message
 
         response = f"Tôi tìm thấy **{len(results)}** kết quả:\n\n"
         for index, row in results.iterrows():
@@ -21,41 +73,17 @@ class ChatbotLogic:
                          f"  Mô tả: {row['description']}\n\n")
         return response.strip()
 
-    # Đã bỏ toàn bộ hàm _translate_query
-
-    def _handle_no_results_fallback(self, original_user_query, specific_intent_query_text):
-        """
-        Xử lý các trường hợp không có kết quả từ tìm kiếm cụ thể bằng cách thử tìm kiếm dự phòng.
-        Giai đoạn 1: Thử tìm kiếm chung.
-        Giai đoạn 2: Bỏ qua (không dịch thuật).
-        """
-        # print(f"DEBUG: _handle_no_results_fallback được gọi. Query gốc: '{original_user_query}', Query cụ thể: '{specific_intent_query_text}'")
-        fallback_response = ""
-
-        # GIAI ĐOẠN 1: Thử tìm kiếm chung trên toàn bộ các trường (với truy vấn đã làm sạch)
-        # print(f"DEBUG: Giai đoạn 1 - Tìm kiếm chung với '{specific_intent_query_text}'")
-        general_search_results = self.db_manager.search_item(specific_intent_query_text)
-        if not general_search_results.empty:
-            # print(f"DEBUG: Giai đoạn 1 - Tìm thấy {len(general_search_results)} kết quả chung.")
-            fallback_response += f"Tôi không tìm thấy kết quả chính xác cho yêu cầu ban đầu của bạn, nhưng tôi tìm thấy các mục sau khi tìm kiếm chung với từ khóa '*{specific_intent_query_text}*':\n\n"
-            fallback_response += self._format_results(general_search_results)
-            return fallback_response
-        else:
-            # print("DEBUG: Giai đoạn 1 - Không tìm thấy kết quả chung.")
-            pass # Không cần làm gì thêm ở đây, sẽ rơi xuống trả về "không tìm thấy"
-
-        # GIAI ĐOẠN 2: Bỏ qua dịch thuật vì lý do tương thích thư viện
-        # print("DEBUG: Giai đoạn 2 - Bỏ qua dịch thuật.")
-
-        return self._format_results(pd.DataFrame(), specific_intent_query_text) # Vẫn không tìm thấy
-
     def get_response(self, user_query):
         parsed_query = self.nlp_processor.process_query(user_query)
         intent = parsed_query.get("intent")
 
-        # --- Xử lý các ý định cụ thể ---
+        # --- Xử lý ý định HƯỚNG DẪN (Ưu tiên cao nhất) ---
+        if intent == "request_guidance":
+            return self.GUIDANCE_MESSAGE
 
-        if intent == "get_quantity_status":
+        # --- Xử lý các ý định cụ thể khác ---
+
+        elif intent == "get_quantity_status":
             item_name = parsed_query.get("item_name")
             status = parsed_query.get("status")
 
@@ -80,9 +108,9 @@ class ChatbotLogic:
                                      f"  Mô tả: {row['description']}\n\n")
                     return response.strip()
                 else:
-                    return self._handle_no_results_fallback(user_query, f"{item_name} {status}")
+                    return self._format_results(pd.DataFrame(), f"{item_name} {status}") # Truyền rỗng để hiển thị "không tìm thấy" + gợi ý
             else:
-                return self._handle_no_results_fallback(user_query, item_name)
+                return self._format_results(pd.DataFrame(), item_name) # Truyền rỗng để hiển thị "không tìm thấy" + gợi ý
 
         elif intent == "list_by_type_location":
             item_type = parsed_query.get("type")
@@ -90,8 +118,6 @@ class ChatbotLogic:
             if not item_type or not location:
                 return "Bạn muốn tìm hóa chất/vật tư loại gì và ở vị trí nào?"
             results = self.db_manager.list_by_type_and_location(item_type, location)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, f"{item_type} {location}")
             return self._format_results(results, f"loại '{item_type}' trong vị trí '{location}'")
 
         elif intent == "list_by_location_status":
@@ -113,8 +139,6 @@ class ChatbotLogic:
                 results = self.db_manager.list_by_status(status)
                 query_context_text = f"tình trạng '{status}'"
 
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, query_context_text)
             return self._format_results(results, query_context_text)
 
         elif intent == "list_by_type_status":
@@ -130,8 +154,6 @@ class ChatbotLogic:
                 results = self.db_manager.list_by_type_and_status(item_type, status)
                 query_context_text = f"loại '{item_type}' và tình trạng '{status}'"
 
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, query_context_text)
             return self._format_results(results, query_context_text)
 
         elif intent == "list_by_type":
@@ -139,8 +161,6 @@ class ChatbotLogic:
             if not item_type:
                 return "Bạn muốn liệt kê vật tư/hóa chất theo loại nào?"
             results = self.db_manager.list_by_type(item_type)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, f"loại '{item_type}'")
             return self._format_results(results, f"loại '{item_type}'")
 
         elif intent == "search_by_id":
@@ -149,8 +169,6 @@ class ChatbotLogic:
                 return "Bạn muốn tìm vật tư/hóa chất theo mã ID nào?"
 
             results = self.db_manager.get_by_id(item_id)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, item_id)
             return self._format_results(results, item_id)
 
         elif intent == "search_by_cas":
@@ -159,8 +177,6 @@ class ChatbotLogic:
                 return "Bạn muốn tìm hóa chất theo số CAS nào?"
 
             results = self.db_manager.search_by_cas(cas_number)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, cas_number)
             return self._format_results(results, f"CAS {cas_number}")
 
         elif intent == "list_by_location":
@@ -169,8 +185,6 @@ class ChatbotLogic:
                 return "Bạn muốn liệt kê vật tư/hóa chất ở vị trí nào?"
 
             results = self.db_manager.list_by_location(location)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, location)
             return self._format_results(results, f"vị trí '{location}'")
 
         elif intent == "get_quantity":
@@ -178,7 +192,7 @@ class ChatbotLogic:
             if not item_name:
                 return "Bạn muốn hỏi số lượng của vật tư/hóa chất nào?"
 
-            matching_items = self.db_manager.search_item(item_name)
+            matching_items = self.db_manager.search_item(item_name) 
 
             if not matching_items.empty:
                 total_quantity = matching_items['quantity'].sum()
@@ -193,7 +207,7 @@ class ChatbotLogic:
                                  f"  Mô tả: {row['description']}\n\n")
                 return response.strip()
             else:
-                return self._handle_no_results_fallback(user_query, item_name)
+                return self._format_results(pd.DataFrame(), item_name) # Truyền rỗng để hiển thị "không tìm thấy" + gợi ý
 
         elif intent == "get_location":
             item_name = parsed_query.get("item_name")
@@ -203,17 +217,19 @@ class ChatbotLogic:
             if location:
                 return f"**{item_name.capitalize()}** được đặt tại: **{location}**."
             else:
-                return self._handle_no_results_fallback(user_query, item_name)
+                return self._format_results(pd.DataFrame(), item_name) # Truyền rỗng để hiển thị "không tìm thấy" + gợi ý
 
         elif intent == "search_item":
             query_text = parsed_query.get("query")
             if not query_text or len(query_text.strip()) < 2:
-                return "Bạn muốn tôi tìm kiếm thông tin gì? Vui lòng nhập từ khóa cụ thể hơn."
+                return_message = "Bạn muốn tôi tìm kiếm thông tin gì? Vui lòng nhập từ khóa cụ thể hơn."
+                return_message += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?" # Gợi ý hướng dẫn
+                return return_message
 
             results = self.db_manager.search_item(query_text)
-            if results.empty:
-                return self._handle_no_results_fallback(user_query, query_text)
             return self._format_results(results, query_text)
 
         else:
-            return "Tôi không hiểu yêu cầu của bạn. Bạn có thể hỏi về số lượng, vị trí, tìm kiếm một vật tư/hóa chất cụ thể (theo tên, ID, CAS), hoặc liệt kê theo vị trí, loại, tình trạng hoặc kết hợp chúng."
+            return_message = "Tôi không hiểu yêu cầu của bạn."
+            return_message += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?" # Gợi ý hướng dẫn
+            return return_message
