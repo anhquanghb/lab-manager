@@ -17,7 +17,8 @@ def get_chatbot_logic():
     # DatabaseManager cần được khởi tạo trước để có đường dẫn và hàm upload
     db_manager_instance = DatabaseManager() 
     print("Bắt đầu kiểm tra và tải nhật ký tự động khi ứng dụng khởi động...")
-    if db_manager_instance.upload_logs_to_github_on_startup(ChatbotLogic.LOG_FILE): # Gọi hàm từ DatabaseManager
+    # Sử dụng thuộc tính LOG_FILE từ ChatbotLogic class
+    if db_manager_instance.upload_logs_to_github_on_startup(ChatbotLogic.LOG_FILE): 
          print("Tải nhật ký tự động hoàn tất (hoặc không có log để tải).")
     else:
          print("Tải nhật ký tự động thất bại hoặc có lỗi xảy ra.")
@@ -31,13 +32,30 @@ def main():
 
     chatbot = get_chatbot_logic()
 
-    # ... (phần còn lại của hàm main không thay đổi) ...
+    # Khởi tạo lịch sử chat trong session_state
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+    # Hiển thị các tin nhắn cũ từ lịch sử
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
     # Xử lý input từ người dùng
     if prompt := st.chat_input("Nhập câu hỏi của bạn..."):
-        # ... (phần còn lại của hàm main không thay đổi) ...
-        response = chatbot.get_response(prompt)
-        # ... (phần còn lại của hàm main không thay đổi) ...
+        # Thêm tin nhắn người dùng vào lịch sử chat
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        # Lấy phản hồi từ chatbot
+        with st.spinner("Đang xử lý..."):
+            response = chatbot.get_response(prompt)
+
+        # Thêm tin nhắn của chatbot vào lịch sử chat
+        st.session_state.messages.append({"role": "assistant", "content": response})
+        with st.chat_message("assistant"):
+            st.markdown(response)
 
 if __name__ == "__main__":
     main()

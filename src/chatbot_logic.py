@@ -4,22 +4,27 @@ from src.nlp_processor import NLPProcessor
 import re
 import os
 import json
-# Đã bỏ import git và datetime (đúng, vì nó đã được chuyển sang DatabaseManager)
+# Đã bỏ import git và datetime (vì đã chuyển sang DatabaseManager)
 
 class ChatbotLogic:
-    LOG_FILE = "chat_log.jsonl"
+    LOG_FILE = "chat_log.jsonl" # Định nghĩa tên file log
 
     def __init__(self):
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
 
+        # Cấu hình đường dẫn log ban đầu
+        # logs_base_dir sẽ được quản lý bởi DatabaseManager khi upload.
+        # Ở đây chỉ cần đảm bảo đường dẫn cục bộ để ghi log là chính xác.
+        # Dòng này cần phải khớp với cách log_filepath được dùng ở _log_interaction.
+        # LOG_FILE là một thuộc tính tĩnh của class, không phải self.LOG_FILE
         self.logs_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'logs'))
         if not os.path.exists(self.logs_base_dir):
             os.makedirs(self.logs_base_dir)
-
         self.log_filepath = os.path.join(self.logs_base_dir, self.LOG_FILE)
 
-    # Đảm bảo GUIDANCE_MESSAGE được định nghĩa ở đây, KHÔNG bị ghi chú
+
+    # Nội dung hướng dẫn tìm kiếm chi tiết
     GUIDANCE_MESSAGE = """
     Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm.
     Dưới đây là các loại câu lệnh bạn có thể sử dụng:
@@ -99,15 +104,9 @@ class ChatbotLogic:
         except Exception as e:
             print(f"Lỗi khi ghi log: {e}")
 
-    # Hàm _upload_log_to_github đã được chuyển sang DatabaseManager
-    # Do đó, nó không còn ở đây nữa.
-
     def get_response(self, user_query):
         parsed_query = self.nlp_processor.process_query(user_query)
         intent = parsed_query.get("intent")
-
-        # --- Xử lý ý định TẢI LOG LÊN GITHUB (Ý định này đã bị loại bỏ khỏi NLPProcessor) ---
-        # Do đó, block if intent == "upload_log_github" không còn được sử dụng ở đây
 
         # --- Xử lý ý định CHÀO HỎI (Ưu tiên cao nhất) ---
         if intent == "greeting":
