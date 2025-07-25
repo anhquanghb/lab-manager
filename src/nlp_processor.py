@@ -22,11 +22,11 @@ class NLPProcessor:
         self.command_quantity_phrases_list = ["số lượng", "có bao nhiêu", "bao nhiêu", "còn bao nhiêu", "số", "lượng", "còn lại", "còn"]
         self.command_status_phrases_list = ["tình trạng", "trạng thái"] # Từ khóa để hỏi về tình trạng (ý định)
         self.command_guidance_phrases_list = ["hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không", "xin chào", "chào", "hello", "hi", "hey"]
-        self.download_log_command_phrases_list = ["tải nhật ký", "xuất log", "lịch sử chat", "tải log"]
+        # Đã loại bỏ self.download_log_command_phrases_list
 
         # CÁC TỪ KHÓA GIÁ TRỊ/THUỘC TÍNH (Sử dụng để trích xuất ENTITY hoặc lọc)
         self.item_type_keywords_list = ["vật tư", "hóa chất", "thiết bị"] # Loại item
-        self.specific_status_values_list = ["đã mở", "còn nguyên", "đã sử dụng", "hết hạn", "còn hạn", "hết", "đang sử dụng", "sử dụng"] # Giá trị của tình trạng
+        self.specific_status_values_list = ["đã mở", "còn nguyên", "đã sử dụng", "hết hạn", "còn hạn", "còn", "hết", "đang sử dụng", "sử dụng"] # Giá trị của tình trạng
         self.problem_keywords_list = ["không thấy", "đã hết", "không còn", "hỏng", "bị hỏng", "thiếu", "bị mất", "bị thất lạc", "bị lỗi", "lỗi", "vấn đề", "sự cố"] # Từ khóa báo cáo sự cố
         self.unit_words_list = ["chai", "lọ", "thùng", "gói", "hộp", "bình", "cái", "m", "kg", "g", "ml", "l", "đơn vị", "viên", "cuộn","cái", "cục", "gói", "hộp", "bịch"] # Từ khóa đơn vị
 
@@ -50,6 +50,10 @@ class NLPProcessor:
 
 
     def _remove_keywords(self, text, keywords_to_remove_list):
+        """
+        Hàm trợ giúp để loại bỏ các từ khóa khỏi chuỗi truy vấn.
+        Keywords_to_remove_list phải là danh sách các chuỗi, không phải regex.
+        """
         cleaned_text = text
         for kw in keywords_to_remove_list:
             kw_pattern = r'\b' + r'\s+'.join(re.escape(word) for word in kw.split()) + r'\b'
@@ -62,26 +66,22 @@ class NLPProcessor:
 
     def process_query(self, query):
         query_lower = query.lower().strip()
-        print(f"DEBUG NLP: Xử lý truy vấn: '{query_lower}'")
+        print(f"DEBUG NLP: Xử lý truy vấn: '{query_lower}'") # DEBUG
 
-        # --- Nhận diện Ý định HƯỚNG DẪN (Ưu tiên cao nhất) ---
-        if any(kw in query_lower for kw in self.command_guidance_phrases_list):
-            print(f"DEBUG NLP: MATCHED Guidance.")
+        # --- Nhận diện Ý định HƯỚNG DẪN (Ưu tiên cao nhất, bao gồm chào hỏi) ---
+        if any(kw in query_lower for kw in self.command_guidance_phrases_list): # Sử dụng command_guidance_phrases_list
+            print(f"DEBUG NLP: MATCHED Guidance.") # DEBUG
             return {"intent": "request_guidance"}
 
-        # --- Nhận diện Ý định TẢI LOG CỤC BỘ ---
-        if any(kw in query_lower for kw in self.download_log_command_phrases_list):
-            print(f"DEBUG NLP: MATCHED Download Log.")
-            return {"intent": "download_logs"} 
+        # --- Nhận diện Ý định TẢI LOG CỤC BỘ (Đã loại bỏ logic) ---
+        # (Không còn block if/elif cho download_logs)
 
         # --- Nhận diện Ý định BÁO CÁO SỰ CỐ (report_issue) ---
-        # Nếu có từ khóa báo cáo sự cố VÀ KHÔNG có từ khóa lệnh tìm kiếm
         has_problem_keyword = any(kw in query_lower for kw in self.problem_keywords_list)
         has_search_command_verb = any(kw in query_lower for kw in self.command_search_verbs_list)
 
         if has_problem_keyword and not has_search_command_verb:
-            print(f"DEBUG NLP: MATCHED Report Issue (Problem keyword present, no search command verb).")
-            # Trích xuất thông tin vấn đề (sử dụng logic tương tự report_status_or_problem cũ)
+            print(f"DEBUG NLP: MATCHED Report Issue (Problem keyword present, no search command verb).") # DEBUG
             problem_report_regex_combined = (
                 r'(.+?)\s+' + self.problem_keywords_regex + r'|' + # Item Problem
                 self.problem_keywords_regex + r'\s+([a-zA-Z0-9\s.-]+)' # Problem Item
@@ -107,6 +107,7 @@ class NLPProcessor:
                             break
 
                 if reported_item_or_location and problem_description:
+                    print(f"DEBUG NLP: Extracted Item/Loc: '{reported_item_or_location}', Problem: '{problem_description}'") # DEBUG
                     is_id = re.fullmatch(r'[a-zA-Z0-9-]+', reported_item_or_location)
                     is_location_phrase = re.fullmatch(r'(tủ|kệ)\s+([a-zA-Z0-9\s.-]+)', reported_item_or_location)
 
@@ -119,49 +120,53 @@ class NLPProcessor:
 
         # --- Xác định loại lệnh theo từ khóa chính (ưu tiên theo thứ tự: vị trí, số lượng, trạng thái, tìm kiếm chung) ---
 
-        # Ý định: Lệnh Vị trí (get_location) - Nếu có từ khóa vị trí
+        # Ý định: Lệnh Vị trí (get_location)
         if any(kw in query_lower for kw in self.command_location_phrases_list):
-            print(f"DEBUG NLP: MATCHED Get Location command.")
+            print(f"DEBUG NLP: MATCHED Get Location command.") # DEBUG
             item_name_candidate = self._remove_keywords(query_lower, self.command_location_phrases_list + self.command_search_verbs_list)
             if item_name_candidate:
+                print(f"DEBUG NLP: Extracted Location Item (simple): '{item_name_candidate}'") # DEBUG
                 return {"intent": "get_location", "item_name": item_name_candidate}
-            return {"intent": "get_location", "item_name": None} # Để chatbot_logic xử lý trường hợp không trích xuất được tên item
+            return {"intent": "get_location", "item_name": None}
 
         # Ý định: Lệnh Thống kê/Số lượng (get_quantity)
         if any(kw in query_lower for kw in self.command_quantity_phrases_list):
-            print(f"DEBUG NLP: MATCHED Get Quantity command.")
+            print(f"DEBUG NLP: Kiểm tra Get Quantity (simple keyword check)") # DEBUG
             item_name_candidate = self._remove_keywords(query_lower, self.command_quantity_phrases_list + self.command_search_verbs_list + self.command_location_phrases_list + self.unit_words_list)
             if item_name_candidate:
+                print(f"DEBUG NLP: Extracted Quantity Item (simple): '{item_name_candidate}'") # DEBUG
                 return {"intent": "get_quantity", "item_name": item_name_candidate}
             return {"intent": "get_quantity", "item_name": None}
 
         # Ý định: Lệnh Tình trạng (get_status)
         if any(kw in query_lower for kw in self.command_status_phrases_list):
-            print(f"DEBUG NLP: MATCHED Get Status command.")
+            print(f"DEBUG NLP: Kiểm tra Get Status (simple keyword check)") # DEBUG
             item_name_candidate = self._remove_keywords(query_lower, self.command_status_phrases_list + self.command_search_verbs_list + self.command_location_phrases_list + self.command_quantity_phrases_list)
             if item_name_candidate:
+                print(f"DEBUG NLP: Extracted Status Item (simple): '{item_name_candidate}'") # DEBUG
                 return {"intent": "get_status", "item_name": item_name_candidate}
             return {"intent": "get_status", "item_name": None}
 
         # Ý định: Lệnh Tìm kiếm (search_item) - Nếu có từ khóa lệnh tìm kiếm (hoặc chỉ loại item)
-        # Nếu có từ khóa lệnh tìm kiếm (tìm, tra cứu)
         if any(kw in query_lower for kw in self.command_search_verbs_list):
-            print(f"DEBUG NLP: MATCHED Search command.")
+            print(f"DEBUG NLP: MATCHED Search command.") # DEBUG
             cleaned_query = self._remove_keywords(query_lower, self.command_search_verbs_list + self.command_location_phrases_list + self.command_quantity_phrases_list + self.command_status_phrases_list)
             if cleaned_query:
+                print(f"DEBUG NLP: Cleaned Search Query (verb check): '{cleaned_query}'") # DEBUG
                 return {"intent": "search_item", "query": cleaned_query}
             return {"intent": "search_item", "query": None}
 
         # Nếu chỉ có từ khóa loại item mà không có từ khóa lệnh nào khác
         if any(kw in query_lower for kw in self.item_type_keywords_list):
-            print(f"DEBUG NLP: MATCHED Item Type (implicit search).")
+            print(f"DEBUG NLP: MATCHED Item Type (implicit search).") # DEBUG
             cleaned_query = self._remove_keywords(query_lower, self.item_type_keywords_list)
             if cleaned_query:
-                return {"intent": "search_item", "query": cleaned_query} # Vẫn gửi về search_item
+                print(f"DEBUG NLP: Cleaned Item Type Query: '{cleaned_query}'") # DEBUG
+                return {"intent": "search_item", "query": cleaned_query}
             return {"intent": "search_item", "query": query_lower} # Nếu chỉ gõ "hóa chất"
 
         # --- Ý định chung (Fallback cuối cùng) ---
-        print(f"DEBUG NLP: Rơi vào General Search Fallback.")
+        print(f"DEBUG NLP: Rơi vào General Search Fallback.") # DEBUG
         all_command_keywords = list(set(
             self.command_search_verbs_list + self.command_location_phrases_list +
             self.command_quantity_phrases_list + self.command_status_phrases_list +
@@ -178,4 +183,12 @@ class NLPProcessor:
 
         return {"intent": "search_item", "query": cleaned_query_for_general_search}
 
-    # _extract_item_name đã bị loại bỏ hoặc thay thế hoàn toàn bởi _remove_keywords
+    def _extract_item_name(self, query_lower, keywords_to_remove):
+        # Hàm này không còn được gọi từ process_query nữa, có thể xóa hoặc giữ nếu dùng ở nơi khác.
+        item_name_candidate = query_lower
+        for kw in keywords_to_remove:
+            item_name_candidate = item_name_candidate.replace(kw, "").strip()
+
+        item_name_candidate = re.sub(r'(của|là|\?|vật tư|hóa chất)$', '', item_name_candidate).strip()
+        item_name_candidate = re.sub(r'\s+', ' ', item_name_candidate).strip()
+        return item_name_candidate
