@@ -22,7 +22,7 @@ def get_chatbot_logic():
          print("Tải nhật ký tự động hoàn tất (hoặc không có log để tải).")
     else:
          print("Tải nhật ký tự động thất bại hoặc có lỗi xảy ra.")
-
+    
     return ChatbotLogic() # Trả về instance của ChatbotLogic như cũ
 
 def main():
@@ -51,7 +51,7 @@ def main():
         # Lấy phản hồi từ chatbot
         with st.spinner("Đang xử lý..."):
             response = chatbot.get_response(prompt)
-
+        
         # Thêm tin nhắn của chatbot vào lịch sử chat
         st.session_state.messages.append({"role": "assistant", "content": response})
         with st.chat_message("assistant"):
