@@ -131,7 +131,7 @@ class NLPProcessor:
             if item_name_candidate:
                 print(f"DEBUG NLP: Extracted Location Item (simple): '{item_name_candidate}'") # DEBUG
                 return {"intent": "get_location", "item_name": item_name_candidate}
-            return {"intent": "get_location", "item_name": None} # Nếu không trích xuất được tên item
+            return {"intent": "get_location", "item_name": None}
 
         # Ý định: Lệnh Thống kê/Số lượng (get_quantity)
         if any(kw in query_lower for kw in self.command_quantity_phrases_list):
@@ -195,3 +195,4 @@ class NLPProcessor:
         item_name_candidate = re.sub(r'(của|là|\?|vật tư|hóa chất)$', '', item_name_candidate).strip()
         item_name_candidate = re.sub(r'\s+', ' ', item_name_candidate).strip()
         return item_name_candidate
+    #2025-07-25-10:48

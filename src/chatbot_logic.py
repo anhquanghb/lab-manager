@@ -8,15 +8,15 @@ import json
 class ChatbotLogic:
     LOG_FILE = "chat_log.jsonl"
     ISSUE_LOG_DIR = "logs/issues" # Thư mục riêng cho log sự cố
-    
+
     def __init__(self):
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
-        
+
         self.logs_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'logs'))
         if not os.path.exists(self.logs_base_dir):
             os.makedirs(self.logs_base_dir)
-        
+
         self.log_filepath = os.path.join(self.logs_base_dir, self.LOG_FILE)
 
         # Đảm bảo thư mục logs/issues tồn tại
@@ -51,7 +51,7 @@ class ChatbotLogic:
 
     **6. Các lệnh khác:**
     - Tìm kiếm theo Mã ID: `tìm mã [ID]`.
-    - Tìm kiếm theo số CAS: `tìm CAS [Số CAS]`.
+    - Tìm kiếm theo số CAS: `tìm CAS [Số SỐ]`.
     - Liệt kê theo Loại: `liệt kê [Loại]`.
     - Liệt kê theo Loại và Vị trí: `liệt kê [Loại] trong tủ [Vị trí]`.
 
@@ -64,7 +64,7 @@ class ChatbotLogic:
             return_message = f"Xin lỗi, tôi không tìm thấy vật tư/hóa chất nào liên quan đến '*{query_context}*'." if query_context else "Xin lỗi, tôi không tìm thấy kết quả nào phù hợp."
             return_message += "\n\nHãy thử tìm kiếm bằng công thức hoặc tên tiếng Anh hoặc sử dụng từ khóa khác ngắn hơn. Hãy nói tôi hướng dẫn nếu bạn cần chi tiết hơn."
             return return_message
-        
+
         response = f"Tôi tìm thấy **{len(results)}** kết quả:\n\n"
         for index, row in results.iterrows():
             response += (f"- **{row['name']}** (ID: {row['id']}, Loại: {row['type']})\n"
@@ -86,7 +86,7 @@ class ChatbotLogic:
         }
         log_dir = self.logs_base_dir
         log_file = self.LOG_FILE
-        
+
         if log_type == "issue":
             log_dir = os.path.join(self.logs_base_dir, "issues") # Thư mục riêng cho issue logs
             if not os.path.exists(log_dir):
@@ -106,9 +106,9 @@ class ChatbotLogic:
             print(f"Lỗi khi ghi log ({log_type}): {e}")
 
     def get_response(self, user_query):
-        parsed_query = self.nlp_processor.process_query(user_query) # Lỗi ở đây (xem lại)
+        parsed_query = self.nlp_processor.process_query(user_query)
         intent = parsed_query.get("intent")
-        
+
         # --- Xử lý ý định CHÀO HỎI (Ưu tiên cao nhất) ---
         if intent == "greeting":
             final_response = self.GUIDANCE_MESSAGE
@@ -129,15 +129,15 @@ class ChatbotLogic:
                 context_info = f"vật tư/hóa chất '{reported_item_name}'"
             elif reported_location:
                 context_info = f"vị trí '{reported_location}'"
-            
+
             final_response = f"Phản ánh về {context_info} (vấn đề: '{problem_description}') đã được ghi nhận. Cám ơn bạn đã phản hồi về tình trạng này."
-            
+
             # Ghi log riêng cho sự cố
             self._log_interaction(user_query, final_response, parsed_query, log_type="issue")
             return final_response # Trả lời ngay và không ghi log chung ở cuối hàm
-        
+
         # --- Xử lý các ý định DỰA TRÊN TỪ KHÓA LỆNH (được nhận diện bởi nlp_processor mới) ---
-        
+
         # Ý định: Lệnh Vị trí (get_location)
         elif intent == "get_location":
             item_name = parsed_query.get("item_name")
@@ -188,7 +188,7 @@ class ChatbotLogic:
                     final_response = "".join(response_parts).strip()
                 else:
                     final_response = self._format_results(pd.DataFrame(), item_name)
-        
+
         # Ý định: Lệnh Tìm kiếm (search_item) - Cho các từ khóa lệnh tìm kiếm chung
         elif intent == "search_item": # Đây là intent cho các câu hỏi bắt đầu bằng "tìm", "tra cứu"
             query_text = parsed_query.get("query")
@@ -202,8 +202,8 @@ class ChatbotLogic:
         else:
             final_response = "Tôi không hiểu yêu cầu của bạn."
             final_response += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?"
-        
+
         # Ghi log chung (chỉ cho loại "chat")
         self._log_interaction(user_query, final_response, parsed_query, log_type="chat")
         return final_response
-    
+    #2025-07-25-10:48
