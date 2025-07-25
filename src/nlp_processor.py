@@ -31,7 +31,7 @@ class NLPProcessor:
         self.unit_words_list = ["chai", "lọ", "thùng", "gói", "hộp", "bình", "cái", "m", "kg", "g", "ml", "l", "đơn vị", "viên", "cuộn","cái", "cục", "gói", "hộp", "bịch"] # Từ khóa đơn vị
         
         # Các từ dừng chung khác (để làm sạch chung nếu không phải từ khóa lệnh)
-        self.general_stopwords_list = ["về", "thông tin về", "cho tôi biết về", "hỏi về", "của", "là", "?", "và", "trong", "ở"] 
+        self.general_stopwords_list = ["về", "thông tin về", "cho tôi biết về", "hỏi về", "của", "là", "?", "và", "trong", "ở", "tại", "có", "có thể", "làm thế nào", "giúp tôi", "giúp", "bạn có thể", "bạn muốn", "bạn cần", "bạn có biết", "bạn có thể cho tôi biết", "các", "này",] # Các từ dừng chung
 
         # REGEX PATTERNS TỪ CÁC DANH SÁCH (cho các regex cụ thể)
         def _list_to_regex_pattern(word_list):
