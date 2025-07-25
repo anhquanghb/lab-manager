@@ -21,7 +21,7 @@ def get_chatbot_logic():
     if db_manager_instance.upload_logs_to_github_on_startup(ChatbotLogic.LOG_FILE): 
          print("Tải nhật ký tự động hoàn tất (hoặc không có log để tải).")
     else:
-         print("Tải nhật ký tự động thất bại hoặc có lỗi xảy ra.")
+         print("Tải nhật nhật ký tự động thất bại hoặc có lỗi xảy ra.")
     
     return ChatbotLogic() # Trả về instance của ChatbotLogic như cũ
 
