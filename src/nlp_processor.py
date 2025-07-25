@@ -69,7 +69,7 @@ class NLPProcessor:
         print(f"DEBUG NLP: Xử lý truy vấn: '{query_lower}'") # DEBUG
 
         # --- Nhận diện Ý định HƯỚNG DẪN (Ưu tiên cao nhất, bao gồm chào hỏi) ---
-        if any(kw in query_lower for kw in self.command_guidance_phrases_list):
+        if any(kw in query_lower for kw in self.command_guidance_phrases_list): # Sử dụng command_guidance_phrases_list
             print(f"DEBUG NLP: MATCHED Guidance.") # DEBUG
             return {"intent": "request_guidance"}
 
@@ -86,8 +86,8 @@ class NLPProcessor:
         if has_problem_keyword and not has_search_command_verb:
             print(f"DEBUG NLP: MATCHED Report Issue (Problem keyword present, no search command verb).") # DEBUG
             problem_report_regex_combined = (
-                r'(.+?)\s+' + self.problem_keywords_regex + r'|' + 
-                self.problem_keywords_regex + r'\s+([a-zA-Z0-9\s.-]+)'
+                r'(.+?)\s+' + self.problem_keywords_regex + r'|' + # Item Problem
+                self.problem_keywords_regex + r'\s+([a-zA-Z0-9\s.-]+)' # Problem Item
             )
             match_problem = re.search(problem_report_regex_combined, query_lower)
             if match_problem:
