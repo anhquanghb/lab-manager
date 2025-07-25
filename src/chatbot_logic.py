@@ -106,7 +106,7 @@ class ChatbotLogic:
             print(f"Lỗi khi ghi log ({log_type}): {e}")
 
     def get_response(self, user_query):
-        parsed_query = self.nlp_processor.process_query(user_query)
+        parsed_query = self.nlp_processor.process_query(user_query) # Lỗi ở đây (xem lại)
         intent = parsed_query.get("intent")
         
         # --- Xử lý ý định CHÀO HỎI (Ưu tiên cao nhất) ---
@@ -206,3 +206,4 @@ class ChatbotLogic:
         # Ghi log chung (chỉ cho loại "chat")
         self._log_interaction(user_query, final_response, parsed_query, log_type="chat")
         return final_response
+    
