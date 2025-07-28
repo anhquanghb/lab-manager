@@ -2,9 +2,9 @@ import pandas as pd
 import json
 import os
 import unicodedata
-import git # Thêm dòng này
-from datetime import datetime # Thêm dòng này
-import streamlit as st # Thêm dòng này để truy cập st.secrets
+import git 
+from datetime import datetime
+import streamlit as st
 
 class DatabaseManager:
     def __init__(self, data_path='data/inventory.json'):
@@ -19,7 +19,17 @@ class DatabaseManager:
         try:
             with open(self.data_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            return pd.DataFrame(data)
+            df = pd.DataFrame(data)
+            # Tạo các cột đã chuẩn hóa (lower, bỏ dấu) ngay khi tải dữ liệu
+            for col in ['id', 'name', 'type', 'location', 'description', 
+                        'formula', 'cas_number', 'state_or_concentration', 
+                        'status_text', 'tracking', 'purpose']:
+                if col in df.columns:
+                    df[f'{col}_normalized'] = df[col].apply(self._remove_accents).str.lower()
+                else: # Đảm bảo cột normalized vẫn tồn tại ngay cả khi cột gốc không có
+                    df[f'{col}_normalized'] = "" 
+            
+            return df
         except json.JSONDecodeError:
             print(f"Lỗi: File {self.data_path} không phải là JSON hợp lệ.")
             return pd.DataFrame()
@@ -31,25 +41,36 @@ class DatabaseManager:
         """Hàm trợ giúp để loại bỏ dấu tiếng Việt và chuẩn hóa chuỗi."""
         if not isinstance(input_str, str):
             return str(input_str)
-        nfkd_form = unicodedata.normalize('NFKD', input_str)
+        s = input_str.lower().strip() # Chuẩn hóa lowercase và strip ở đây
+        nfkd_form = unicodedata.normalize('NFKD', s)
         only_ascii = nfkd_form.encode('ascii', 'ignore').decode('utf-8')
         return only_ascii
 
     def search_item(self, query):
         """
         Tìm kiếm vật tư/hóa chất theo bất kỳ thông tin liên quan nào
-        bao gồm: id, name, type, location, và description. (Tìm kiếm chung)
+        bao gồm: id, name, type, location, formula, cas_number, status_text, description.
         """
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        query_normalized = self._remove_accents(query.lower())
+        query_normalized = self._remove_accents(query) # query đã được lower/strip từ nlp_processor
+        
+        # Danh sách các cột đã chuẩn hóa để tìm kiếm
+        search_cols = [
+            'id_normalized', 'name_normalized', 'type_normalized', 
+            'location_normalized', 'description_normalized', 'formula_normalized', 
+            'cas_number_normalized', 'state_or_concentration_normalized', 
+            'status_text_normalized', 'tracking_normalized', 'purpose_normalized'
+        ]
+        
+        # Chỉ tìm kiếm trong các cột thực sự tồn tại trong DataFrame đã chuẩn hóa
+        valid_search_cols = [col for col in search_cols if col in self.inventory_data.columns]
 
-        searchable_df = self.inventory_data[['id', 'name', 'type', 'location', 'description']].astype(str)
-        searchable_df = searchable_df.applymap(self._remove_accents).apply(lambda x: x.str.lower())
-
-        mask = searchable_df.apply(lambda col: col.str.contains(query_normalized, na=False)).any(axis=1)
-
+        mask = self.inventory_data[valid_search_cols].apply(
+            lambda col: col.str.contains(query_normalized, na=False)
+        ).any(axis=1)
+        
         results = self.inventory_data[mask]
         return results
 
@@ -58,10 +79,10 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return None, None
 
-        item_name_normalized = self._remove_accents(item_name.lower())
-
+        item_name_normalized = self._remove_accents(item_name)
+        
         found_item = self.inventory_data[self.inventory_data['name'].apply(self._remove_accents).str.lower() == item_name_normalized]
-
+        
         if not found_item.empty:
             return found_item.iloc[0]['quantity'], found_item.iloc[0]['unit']
         return None, None
@@ -71,65 +92,71 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return None
 
-        item_name_normalized = self._remove_accents(item_name.lower())
+        item_name_normalized = self._remove_accents(item_name)
         found_item = self.inventory_data[self.inventory_data['name'].apply(self._remove_accents).str.lower() == item_name_normalized]
-
+        
         if not found_item.empty:
             return found_item.iloc[0]['location']
         return None
 
-    # --- CÁC HÀM TÌM KIẾM KHÁC ---
+    # --- CÁC HÀM TÌM KIẾM KHÁC (được gọi từ ChatbotLogic) ---
 
     def get_by_id(self, item_id):
         """Tìm kiếm vật tư/hóa chất theo ID chính xác."""
         if self.inventory_data.empty:
             return pd.DataFrame()
-
-        item_id_normalized = self._remove_accents(item_id.lower())
-        results = self.inventory_data[self.inventory_data['id'].apply(self._remove_accents).str.lower() == item_id_normalized]
+        
+        item_id_normalized = self._remove_accents(item_id)
+        results = self.inventory_data[self.inventory_data['id_normalized'] == item_id_normalized]
         return results
 
     def list_by_location(self, location_query):
         """Liệt kê vật tư/hóa chất theo vị trí."""
         if self.inventory_data.empty:
             return pd.DataFrame()
-
-        location_query_normalized = self._remove_accents(location_query.lower())
-        results = self.inventory_data[self.inventory_data['location'].apply(self._remove_accents).str.lower().str.contains(location_query_normalized, na=False)]
+        
+        location_query_normalized = self._remove_accents(location_query)
+        results = self.inventory_data[self.inventory_data['location_normalized'].str.contains(location_query_normalized, na=False)]
         return results
 
     def list_by_type(self, item_type):
         """Liệt kê vật tư/hóa chất theo loại."""
         if self.inventory_data.empty:
             return pd.DataFrame()
-
-        item_type_normalized = self._remove_accents(item_type.lower())
-        results = self.inventory_data[self.inventory_data['type'].apply(self._remove_accents).str.lower() == item_type_normalized]
+        
+        item_type_normalized = self._remove_accents(item_type)
+        results = self.inventory_data[self.inventory_data['type_normalized'] == item_type_normalized]
         return results
-
+    
     def list_by_status(self, status_query):
-        """Liệt kê vật tư/hóa chất theo tình trạng trong mô tả."""
+        """Liệt kê vật tư/hóa chất theo tình trạng trong cột 'status_text' hoặc 'description'."""
         if self.inventory_data.empty:
             return pd.DataFrame()
-
-        status_query_normalized = self._remove_accents(status_query.lower())
-        results = self.inventory_data[self.inventory_data['description'].apply(self._remove_accents).str.lower().str.contains(status_query_normalized, na=False)]
+        
+        status_query_normalized = self._remove_accents(status_query)
+        
+        mask_status_text = self.inventory_data['status_text_normalized'].str.contains(status_query_normalized, na=False)
+        mask_description = self.inventory_data['description_normalized'].str.contains(status_query_normalized, na=False)
+        
+        results = self.inventory_data[mask_status_text | mask_description] # Tìm trong cả 2 cột
         return results
 
     def list_by_location_and_status(self, location_query, status_query):
         """Liệt kê vật tư/hóa chất theo vị trí VÀ tình trạng."""
         if self.inventory_data.empty:
             return pd.DataFrame()
-
-        location_query_normalized = self._remove_accents(location_query.lower())
-        status_query_normalized = self._remove_accents(status_query.lower())
-
-        normalized_location_col = self.inventory_data['location'].apply(self._remove_accents).str.lower()
-        normalized_description_col = self.inventory_data['description'].apply(self._remove_accents).str.lower()
+        
+        location_query_normalized = self._remove_accents(location_query)
+        status_query_normalized = self._remove_accents(status_query)
+        
+        normalized_location_col = self.inventory_data['location_normalized']
+        normalized_status_text_col = self.inventory_data['status_text_normalized']
+        normalized_description_col = self.inventory_data['description_normalized']
 
         mask_location = normalized_location_col.str.contains(location_query_normalized, na=False)
-        mask_status = normalized_description_col.str.contains(status_query_normalized, na=False)
-
+        mask_status = normalized_status_text_col.str.contains(status_query_normalized, na=False) | \
+                      normalized_description_col.str.contains(status_query_normalized, na=False)
+        
         results = self.inventory_data[mask_location & mask_status]
         return results
 
@@ -137,33 +164,35 @@ class DatabaseManager:
         """Liệt kê vật tư/hóa chất theo loại VÀ tình trạng."""
         if self.inventory_data.empty:
             return pd.DataFrame()
-
-        item_type_normalized = self._remove_accents(item_type.lower())
-        status_query_normalized = self._remove_accents(status_query.lower())
-
-        normalized_type_col = self.inventory_data['type'].apply(self._remove_accents).str.lower()
-        normalized_description_col = self.inventory_data['description'].apply(self._remove_accents).str.lower()
+        
+        item_type_normalized = self._remove_accents(item_type)
+        status_query_normalized = self._remove_accents(status_query)
+        
+        normalized_type_col = self.inventory_data['type_normalized']
+        normalized_status_text_col = self.inventory_data['status_text_normalized']
+        normalized_description_col = self.inventory_data['description_normalized']
 
         mask_type = normalized_type_col == item_type_normalized
-        mask_status = normalized_description_col.str.contains(status_query_normalized, na=False)
-
+        mask_status = normalized_status_text_col.str.contains(status_query_normalized, na=False) | \
+                      normalized_description_col.str.contains(status_query_normalized, na=False)
+        
         results = self.inventory_data[mask_type & mask_status]
         return results
-
+    
     def list_by_type_and_location(self, item_type, location_query):
         """Liệt kê vật tư/hóa chất theo loại VÀ vị trí."""
         if self.inventory_data.empty:
             return pd.DataFrame()
-
-        item_type_normalized = self._remove_accents(item_type.lower())
-        location_query_normalized = self._remove_accents(location_query.lower())
-
-        normalized_type_col = self.inventory_data['type'].apply(self._remove_accents).str.lower()
-        normalized_location_col = self.inventory_data['location'].apply(self._remove_accents).str.lower()
+        
+        item_type_normalized = self._remove_accents(item_type)
+        location_query_normalized = self._remove_accents(location_query)
+        
+        normalized_type_col = self.inventory_data['type_normalized']
+        normalized_location_col = self.inventory_data['location_normalized']
 
         mask_type = normalized_type_col == item_type_normalized
         mask_location = normalized_location_col.str.contains(location_query_normalized, na=False)
-
+        
         results = self.inventory_data[mask_type & mask_location]
         return results
 
@@ -171,30 +200,27 @@ class DatabaseManager:
         """Tìm kiếm vật tư/hóa chất theo số CAS."""
         if self.inventory_data.empty:
             return pd.DataFrame()
-
-        cas_number_normalized = self._remove_accents(cas_number.lower())
-        results = self.inventory_data[self.inventory_data['description'].apply(self._remove_accents).str.lower().str.contains(f"cas: {cas_number_normalized}", na=False)]
+        
+        cas_number_normalized = self._remove_accents(cas_number)
+        results = self.inventory_data[self.inventory_data['cas_number_normalized'].str.contains(cas_number_normalized, na=False)]
         return results
 
-    def upload_logs_to_github_on_startup(self, log_filepath):
+    # --- CHỨC NĂNG TẢI LOG LÊN GITHUB TỰ ĐỘNG KHI KHỞI ĐỘNG ỨNG DỤNG ---
+    def upload_logs_to_github_on_startup(self, log_filename_from_chatbot_logic):
         """
-        Hàm này được gọi khi ứng dụng khởi động.
+        Hàm này được gọi khi ứng dụng khởi động (từ main.py).
         Đọc file log hiện tại, tải lên GitHub và làm rỗng file log cục bộ.
         Sử dụng Personal Access Token (PAT) từ Streamlit secrets.
         """
         github_token = st.secrets.get("GITHUB_TOKEN")
-
+        
         if not github_token:
             print("Lỗi: Không tìm thấy GitHub Personal Access Token trong st.secrets. Không thể tải log lên GitHub.")
-            return False # Trả về False nếu không có token
+            return False
 
         try:
-            # Lấy đường dẫn thư mục gốc của repo (ví dụ: /mount/src/lab-manager)
-            # Đây là nơi .git nằm
             repo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) 
-
-            # Khởi tạo đối tượng Git Repo.
-            # Kiểm tra nếu repo đã được khởi tạo để tránh lỗi GitCommandError nếu repo rỗng
+            
             try:
                 repo = git.Repo(repo_path)
             except git.InvalidGitRepositoryError:
@@ -202,8 +228,7 @@ class DatabaseManager:
                 return False
 
             print(f"Đường dẫn repo đang xét để tải log: {repo_path}")
-
-            # Cấu hình thông tin người dùng Git nếu chưa có
+            
             with repo.config_writer() as cw:
                 if not cw.has_option('user', 'email') or not cw.get_value('user', 'email'):
                     cw.set_value('user', 'email', 'chatbot@streamlit.app').release()
@@ -211,42 +236,38 @@ class DatabaseManager:
                     cw.set_value('user', 'name', 'Streamlit Chatbot').release()
             print("Đã cấu hình thông tin người dùng Git.")
 
-            # Đọc nội dung log hiện tại
-            if not os.path.exists(log_filepath) or os.stat(log_filepath).st_size == 0:
-                print("Không có dữ liệu nhật ký để tải lên (file log rỗng hoặc không tồn tại).")
-                return True # Không có gì để tải lên, coi như thành công
+            local_log_filepath = os.path.join(repo_path, 'logs', log_filename_from_chatbot_logic)
 
-            with open(log_filepath, 'r', encoding='utf-8') as f:
+            if not os.path.exists(local_log_filepath) or os.stat(local_log_filepath).st_size == 0:
+                print("Không có dữ liệu nhật ký để tải lên (file log rỗng hoặc không tồn tại).")
+                return True
+            
+            with open(local_log_filepath, 'r', encoding='utf-8') as f:
                 log_content = f.read()
             print("Đã đọc nội dung file log cục bộ.")
 
-            # Tạo thư mục archive nếu chưa có
             archive_dir = os.path.join(repo_path, 'logs', 'archive')
             if not os.path.exists(archive_dir):
                 os.makedirs(archive_dir)
                 print(f"DEBUG: Đã tạo thư mục lưu trữ mới: {archive_dir}")
 
-            # Tạo tên file log lưu trữ với timestamp
             timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
             archive_filename = f"chat_log_archive_{timestamp_str}.jsonl"
             archive_filepath = os.path.join(archive_dir, archive_filename) # Path tuyệt đối
-
-            # Ghi nội dung vào file log lưu trữ
+            
             with open(archive_filepath, 'w', encoding='utf-8') as f:
                 f.write(log_content)
             print(f"Đã ghi nội dung vào file lưu trữ: {archive_filepath}")
 
-            # Thêm file vào Git và commit
             repo_relative_archive_filepath = os.path.relpath(archive_filepath, repo_path)
             repo.index.add([repo_relative_archive_filepath])
             commit_message = f"feat(logs): Archive chat log {archive_filename}"
             repo.index.commit(commit_message)
             print(f"Đã commit file {archive_filename} với thông báo: {commit_message}")
 
-            # Lấy URL remote và chuẩn bị cho xác thực PAT
             remote_url = repo.remotes.origin.url
             print(f"URL remote gốc: {remote_url}")
-
+            
             repo_url_with_auth = ""
             if remote_url.startswith("git@github.com:"):
                 repo_path_no_git = remote_url.replace("git@github.com:", "").replace(".git", "")
@@ -258,29 +279,28 @@ class DatabaseManager:
                 print(f"Đã thêm PAT vào URL HTTPS: {repo_url_with_auth}")
             else:
                 print(f"Lỗi: Định dạng URL remote không được hỗ trợ: {remote_url}")
-                return False # Trả về False nếu không xác định được URL
+                return False
 
             current_branch = repo.active_branch.name
             print(f"Nhánh hiện tại: {current_branch}")
-
+            
             import subprocess
             push_command = [
                 'git', 'push',
                 repo_url_with_auth,
                 f'{current_branch}:{current_branch}'
             ]
-
+            
             print(f"Đang thực thi lệnh push: {' '.join(push_command[:2])} *** (ẩn PAT) *** {' '.join(push_command[3:])}")
             process = subprocess.run(push_command, capture_output=True, text=True, check=True)
             print(f"Git Push stdout: {process.stdout}")
             print(f"Git Push stderr: {process.stderr}")
 
-            # Làm rỗng file log cục bộ sau khi tải lên thành công
-            with open(log_filepath, 'w', encoding='utf-8') as f:
+            with open(local_log_filepath, 'w', encoding='utf-8') as f:
                 f.truncate(0)
             print("Đã làm rỗng file log cục bộ.")
 
-            return True # Trả về True nếu thành công
+            return True
 
         except git.InvalidGitRepositoryError:
             print("Lỗi: Thư mục dự án không phải là một kho lưu trữ Git hợp lệ.")
@@ -291,25 +311,3 @@ class DatabaseManager:
         except Exception as e:
             print(f"Lỗi không xác định khi tải nhật ký lên GitHub: {e}")
             return False
-
-    def get_response(self, user_query):
-        parsed_query = self.nlp_processor.process_query(user_query)
-        intent = parsed_query.get("intent")
-
-        # --- Xử lý ý định TẢI LOG LÊN GITHUB (Ưu tiên cao nhất) ---
-        if intent == "upload_log_github":
-            # Logic này sẽ bị bỏ đi, nhưng nếu bạn muốn giữ nó tạm thời để thử nghiệm
-            # thì nó sẽ nằm ở đây. Sau khi tự động hóa, ý định này sẽ được loại bỏ.
-            upload_success = self.upload_logs_to_github_on_startup(self.log_filepath)
-            if upload_success:
-                return "Yêu cầu tải nhật ký lên GitHub đã được xử lý. Vui lòng kiểm tra kho lưu trữ của bạn."
-            else:
-                return "Có lỗi xảy ra khi cố gắng tải nhật ký lên GitHub. Vui lòng kiểm tra log ứng dụng."
-        # ... (phần còn lại của hàm get_response không thay đổi) ...
-        else:
-            final_response = "Tôi không hiểu yêu cầu của bạn."
-            final_response += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?"
-
-        # Ghi log sau khi xác định được final_response
-        self._log_interaction(user_query, final_response, parsed_query)
-        return final_response
