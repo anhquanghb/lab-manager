@@ -172,7 +172,7 @@ class NLPProcessor:
             all_command_keywords = list(set(
                 self.command_search_verbs_list + self.command_location_phrases_list +
                 self.command_quantity_phrases_list + self.command_status_phrases_list +
-                self.general_stopwords_list + self.command_guidance_phrases_list +
+                self.general_stopwords_list + self.command_guidance_phrases_list + # THIS IS THE PROBLEM
                 self.download_log_command_phrases_list + self.greeting_keywords_list +
                 self.problem_keywords_list + self.unit_words_list +
                 self.item_type_keywords_list
