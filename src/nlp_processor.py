@@ -17,12 +17,11 @@ except LookupError:
 class NLPProcessor:
     def __init__(self):
         # CÁC TỪ KHÓA LỆNH CHÍNH (Xác định INTENT) - theo yêu cầu mới của người dùng
-        self.command_search_verbs_list = ["tìm", "hãy tìm", "tra cứu", "kiếm", "thông tin về", "hỏi về"]
+        self.command_search_verbs_list = ["hãy tìm", "tra cứu", "thông tin về", "hỏi về", "tìm", "kiếm"]
         self.command_location_phrases_list = ["ở đâu", "vị trí của"]
         self.command_quantity_phrases_list = ["số lượng", "có bao nhiêu", "bao nhiêu", "còn bao nhiêu", "số", "lượng", "còn lại", "còn"]
         self.command_status_phrases_list = ["tình trạng", "trạng thái"] # Từ khóa để hỏi về tình trạng (ý định)
         self.command_guidance_phrases_list = ["hướng dẫn", "giúp tôi tìm kiếm", "cách tìm kiếm", "cách hỏi", "chỉ dẫn", "tôi không hiểu", "bạn có thể hướng dẫn không", "xin chào", "chào", "hello", "hi", "hey"]
-        self.download_log_command_phrases_list = ["tải nhật ký", "xuất log", "lịch sử chat", "tải log"]
 
         # CÁC TỪ KHÓA GIÁ TRỊ/THUỘC TÍNH (Sử dụng để trích xuất ENTITY hoặc lọc)
         self.item_type_keywords_list = ["vật tư", "hóa chất", "thiết bị"] # Loại item
