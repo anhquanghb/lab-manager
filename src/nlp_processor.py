@@ -95,6 +95,9 @@ class NLPProcessor:
         return cleaned_text
 
     def process_query(self, query):
+        # Lưu trữ truy vấn gốc
+        original_query_text = query 
+        
         # Chuẩn hóa truy vấn ngay từ đầu: loại bỏ dấu và chuyển chữ thường
         query_normalized = unicodedata.normalize('NFKD', query).encode('ascii', 'ignore').decode('utf-8').lower().strip()
         print(f"DEBUG NLP: Xử lý truy vấn (normalized): '{query_normalized}'")
@@ -102,12 +105,12 @@ class NLPProcessor:
         # --- Nhận diện Ý định HƯỚNG DẪN (Ưu tiên cao nhất, bao gồm chào hỏi) ---
         if any(re.search(r'\b' + re.escape(kw) + r'\b', query_normalized) for kw in self.command_guidance_phrases_list):
             print(f"DEBUG NLP: MATCHED Guidance/Greeting.")
-            return {"intent": "request_guidance"}
+            return {"intent": "request_guidance", "original_query": original_query_text}
 
         # --- Nhận diện Ý định TẢI LOG LÊN GITHUB ---
         if any(re.search(r'\b' + re.escape(kw) + r'\b', query_normalized) for kw in self.upload_log_command_phrases_list):
             print(f"DEBUG NLP: MATCHED Upload Log.")
-            return {"intent": "upload_logs_to_github"} # Đổi intent name cho rõ ràng hơn
+            return {"intent": "upload_logs_to_github", "original_query": original_query_text}
 
         # --- Nhận diện Ý định BÁO CÁO SỰ CỐ (report_issue) ---
         print(f"DEBUG NLP: Kiểm tra Report Issue logic.")
@@ -148,11 +151,12 @@ class NLPProcessor:
                     "reported_id": reported_id,
                     "reported_item_name": reported_item_name,
                     "reported_location": reported_location,
-                    "problem_description": problem_description if problem_description else "không xác định"
+                    "problem_description": problem_description if problem_description else "không xác định",
+                    "original_query": original_query_text
                 }
             else:
                 # Nếu không trích xuất được thực thể nào, vẫn báo cáo sự cố nhưng thiếu ngữ cảnh
-                return {"intent": "report_issue", "problem_description": problem_description if problem_description else "không xác định", "raw_query": query}
+                return {"intent": "report_issue", "problem_description": problem_description if problem_description else "không xác định", "raw_query": query, "original_query": original_query_text}
 
 
         # --- Xác định loại lệnh theo từ khóa chính (ưu tiên theo thứ tự: vị trí, số lượng, trạng thái, tìm kiếm chung) ---
@@ -163,8 +167,8 @@ class NLPProcessor:
             item_name_candidate = self._remove_keywords(query_normalized, self.command_location_phrases_list + self.command_search_verbs_list)
             if item_name_candidate:
                 print(f"DEBUG NLP: Extracted Location Item: '{item_name_candidate}'")
-                return {"intent": "get_location", "item_name": item_name_candidate}
-            return {"intent": "get_location", "item_name": None}
+                return {"intent": "get_location", "item_name": item_name_candidate, "original_query": original_query_text}
+            return {"intent": "get_location", "item_name": None, "original_query": original_query_text}
 
         # Ý định: Lệnh Thống kê/Số lượng (get_quantity)
         if re.search(self.quantity_phrases_regex, query_normalized):
@@ -172,8 +176,8 @@ class NLPProcessor:
             item_name_candidate = self._remove_keywords(query_normalized, self.command_quantity_phrases_list + self.command_search_verbs_list + self.command_location_phrases_list + self.unit_words_list)
             if item_name_candidate:
                 print(f"DEBUG NLP: Extracted Quantity Item: '{item_name_candidate}'")
-                return {"intent": "get_quantity", "item_name": item_name_candidate}
-            return {"intent": "get_quantity", "item_name": None}
+                return {"intent": "get_quantity", "item_name": item_name_candidate, "original_query": original_query_text}
+            return {"intent": "get_quantity", "item_name": None, "original_query": original_query_text}
 
         # Ý định: Lệnh Tình trạng (get_status)
         if re.search(self.status_command_phrases_regex, query_normalized):
@@ -181,23 +185,22 @@ class NLPProcessor:
             item_name_candidate = self._remove_keywords(query_normalized, self.command_status_phrases_list + self.command_search_verbs_list + self.command_location_phrases_list + self.command_quantity_phrases_list)
             if item_name_candidate:
                 print(f"DEBUG NLP: Extracted Status Item: '{item_name_candidate}'")
-                return {"intent": "get_status", "item_name": item_name_candidate}
-            return {"intent": "get_status", "item_name": None}
+                return {"intent": "get_status", "item_name": item_name_candidate, "original_query": original_query_text}
+            return {"intent": "get_status", "item_name": None, "original_query": original_query_text}
 
         # --- BỔ SUNG: NHẬN DIỆN Ý ĐỊNH LIỆT KÊ (LIST_BY_...) ---
         # Ý định: Lệnh Liệt kê theo Vị trí (list_by_location)
         # Ví dụ: "liệt kê tủ 3C", "mô tả tủ L", "liệt kê 3C"
         # Pattern: (list_verb) (location_phrase)
-        # Location phrase có thể là "tủ 3c", "3c", "khu A", v.v.
-        # Sử dụng một regex linh hoạt hơn để bắt phần vị trí
-        location_list_pattern = r"(?:{})\s*([a-z0-9.\s]+)".format(self.command_list_verbs_regex)
-        match_location_list = re.search(location_list_pattern, query_normalized)
+        # Location phrase có thể là "tủ 3c", "3c", "khu a", v.v.
+        # Sử dụng một regex linh hoạt hơn để bắt phần vị trí và kiểm tra kết thúc chuỗi
+        location_list_full_pattern = r"(?:{})\s*((?:tủ|kệ|khu)\s*[a-z0-9.-]+|[a-z0-9.-]+)\s*$".format(self.command_list_verbs_regex)
+        match_location_list = re.search(location_list_full_pattern, query_normalized)
         if match_location_list:
             location_entity = match_location_list.group(1).strip()
-            # Có thể thêm kiểm tra độ dài hoặc định dạng của location_entity nếu muốn chính xác hơn
-            if location_entity:
+            if location_entity: # Đảm bảo trích xuất được entity
                 print(f"DEBUG NLP: MATCHED List By Location. Entity: '{location_entity}'")
-                return {"intent": "list_by_location", "location_query": location_entity}
+                return {"intent": "list_by_location", "location_query": location_entity, "original_query": original_query_text}
             
         # Ý định: Lệnh Liệt kê theo Loại (list_by_type)
         # Ví dụ: "liệt kê hóa chất", "mô tả vật tư"
@@ -212,7 +215,7 @@ class NLPProcessor:
                     break
             if found_type_keyword:
                 print(f"DEBUG NLP: MATCHED List By Type. Type: '{found_type_keyword}'")
-                return {"intent": "list_by_type", "item_type": found_type_keyword}
+                return {"intent": "list_by_type", "item_type": found_type_keyword, "original_query": original_query_text}
 
         # Ý định: Lệnh Tìm kiếm (search_item) - Cho các từ khóa lệnh tìm kiếm chung
         if re.search(self.search_command_verbs_regex, query_normalized):
@@ -227,8 +230,8 @@ class NLPProcessor:
                                                   self.general_stopwords_list) # Và các từ dừng chung
             if cleaned_query:
                 print(f"DEBUG NLP: Cleaned Search Query (verb check): '{cleaned_query}'")
-                return {"intent": "search_item", "query": cleaned_query}
-            return {"intent": "search_item", "query": None}
+                return {"intent": "search_item", "query": cleaned_query, "original_query": original_query_text}
+            return {"intent": "search_item", "query": None, "original_query": original_query_text}
 
         # Nếu chỉ có từ khóa loại item mà không có từ khóa lệnh nào khác (implicit search)
         if re.search(self.item_type_keywords_regex, query_normalized):
@@ -236,8 +239,8 @@ class NLPProcessor:
             cleaned_query = self._remove_keywords(query_normalized, self.item_type_keywords_list)
             if cleaned_query:
                 print(f"DEBUG NLP: Cleaned Item Type Query: '{cleaned_query}'")
-                return {"intent": "search_item", "query": cleaned_query}
-            return {"intent": "search_item", "query": query_normalized} # Nếu chỉ gõ "hóa chất"
+                return {"intent": "search_item", "query": cleaned_query, "original_query": original_query_text}
+            return {"intent": "search_item", "query": query_normalized, "original_query": original_query_text} # Nếu chỉ gõ "hóa chất"
 
         # --- Ý định chung (Fallback cuối cùng) ---
         print(f"DEBUG NLP: Rơi vào General Search Fallback.")
@@ -254,6 +257,6 @@ class NLPProcessor:
         cleaned_query_for_general_search = self._remove_keywords(query_normalized, all_command_keywords)
 
         if not cleaned_query_for_general_search:
-            return {"intent": "search_item", "query": ""} # Trả về query rỗng nếu không còn gì
+            return {"intent": "search_item", "query": "", "original_query": original_query_text}
 
-        return {"intent": "search_item", "query": cleaned_query_for_general_search}
+        return {"intent": "search_item", "query": cleaned_query_for_general_search, "original_query": original_query_text}
