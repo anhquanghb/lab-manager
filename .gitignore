@@ -207,3 +207,7 @@ marimo/_lsp/
 __marimo__/
 # Ignore Streamlit secrets file
 .streamlit/secrets.toml
+
+# Logs
+logs/chat_log.jsonl
+logs/issues/
