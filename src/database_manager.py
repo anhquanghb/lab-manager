@@ -2,33 +2,65 @@ import pandas as pd
 import json
 import os
 import unicodedata
-import git 
+import re # Import re for parsing CAS from description if needed, though now less
+from pathlib import Path # Sử dụng pathlib
+import git
 from datetime import datetime
 import streamlit as st
 
 class DatabaseManager:
     def __init__(self, data_path='data/inventory.json'):
-        self.data_path = os.path.join(os.path.dirname(__file__), '..', data_path)
+        # Sử dụng pathlib để xây dựng đường dẫn đến file dữ liệu
+        project_root = Path(__file__).parent.parent
+        self.data_path = project_root / data_path
         self.inventory_data = self._load_data()
 
     def _load_data(self):
-        """Tải dữ liệu từ file JSON."""
-        if not os.path.exists(self.data_path):
+        """
+        Tải dữ liệu từ file JSON và chuẩn hóa các cột cần thiết.
+        Dữ liệu JSON giờ đây đã có cấu trúc tách biệt rõ ràng hơn.
+        """
+        if not self.data_path.exists():
             print(f"Lỗi: Không tìm thấy file dữ liệu tại {self.data_path}")
             return pd.DataFrame()
         try:
             with open(self.data_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             df = pd.DataFrame(data)
-            # Tạo các cột đã chuẩn hóa (lower, bỏ dấu) ngay khi tải dữ liệu
-            for col in ['id', 'name', 'type', 'location', 'description', 
-                        'formula', 'cas_number', 'state_or_concentration', 
-                        'status_text', 'tracking', 'purpose']:
-                if col in df.columns:
-                    # Thay thế applymap bằng map
-                    df[f'{col}_normalized'] = df[col].apply(self._remove_accents).str.lower()
-                else:
-                    df[f'{col}_normalized'] = "" 
+
+            # --- BẮT ĐẦU CHUẨN HÓA DỮ LIỆU SAU KHI TẢI ---
+            # Hàm trợ giúp để loại bỏ dấu tiếng Việt và chuẩn hóa chuỗi.
+            # Đã đưa vào đây để đảm bảo logic chuẩn hóa tập trung.
+            def _remove_accents_and_normalize(input_str):
+                if pd.isna(input_str): # Xử lý NaN
+                    return ''
+                input_str = str(input_str)
+                nfkd_form = unicodedata.normalize('NFKD', input_str)
+                only_ascii = nfkd_form.encode('ascii', 'ignore').decode('utf-8')
+                return only_ascii.lower() # Luôn chuyển về chữ thường
+
+            # Tạo các cột đã được chuẩn hóa để tăng tốc tìm kiếm
+            # Các cột này được tạo 1 lần khi load dữ liệu, thay vì mỗi lần tìm kiếm
+            df['id_normalized'] = df['id'].apply(_remove_accents_and_normalize)
+            df['name_normalized'] = df['name'].apply(_remove_accents_and_normalize)
+            df['type_normalized'] = df['type'].apply(_remove_accents_and_normalize)
+            df['location_normalized'] = df['location'].apply(_remove_accents_and_normalize)
+            
+            # Các cột mới được tách ra từ description trong convert_data.py
+            df['chemical_formula_normalized'] = df['chemical_formula'].apply(_remove_accents_and_normalize)
+            df['cas_number_normalized'] = df['cas_number'].apply(_remove_accents_and_normalize)
+            df['state_or_concentration_normalized'] = df['state_or_concentration'].apply(_remove_accents_and_normalize)
+            df['status_normalized'] = df['status'].apply(_remove_accents_and_normalize)
+            df['purpose_normalized'] = df['purpose'].apply(_remove_accents_and_normalize)
+            df['tracking_normalized'] = df['tracking'].apply(_remove_accents_and_normalize)
+            df['iupac_name_normalized'] = df['iupac_name'].apply(_remove_accents_and_normalize)
+            df['vietnamese_name_normalized'] = df['vietnamese_name'].apply(_remove_accents_and_normalize)
+            
+            # Cột description gốc vẫn giữ để tìm kiếm từ khóa chung (nếu người dùng gõ cụm từ dài)
+            df['description_normalized'] = df['description'].apply(_remove_accents_and_normalize)
+
+
+            # --- KẾT THÚC CHUẨN HÓA DỮ LIỆU ---
 
             return df
         except json.JSONDecodeError:
@@ -38,324 +70,287 @@ class DatabaseManager:
             print(f"Lỗi khi tải dữ liệu: {e}")
             return pd.DataFrame()
 
-    def _remove_accents(self, input_str):
-        """Hàm trợ giúp để loại bỏ dấu tiếng Việt và chuẩn hóa chuỗi."""
-        if not isinstance(input_str, str):
-            return str(input_str)
-        s = input_str.lower().strip()
-        nfkd_form = unicodedata.normalize('NFKD', s)
-        only_ascii = nfkd_form.encode('ascii', 'ignore').decode('utf-8')
-        return only_ascii
+    # Hàm _remove_accents đã được tích hợp trực tiếp vào _load_data khi tạo các cột _normalized
+    # và sẽ không cần gọi riêng nữa.
+    # def _remove_accents(self, input_str):
+    #     """Hàm trợ giúp để loại bỏ dấu tiếng Việt và chuẩn hóa chuỗi."""
+    #     if not isinstance(input_str, str):
+    #         return str(input_str)
+    #     nfkd_form = unicodedata.normalize('NFKD', input_str)
+    #     only_ascii = nfkd_form.encode('ascii', 'ignore').decode('utf-8')
+    #     return only_ascii # Giữ nguyên như cũ nếu muốn chỉ loại bỏ dấu không chuyển lower
 
     def search_item(self, query):
         """
         Tìm kiếm vật tư/hóa chất theo bất kỳ thông tin liên quan nào
-        bao gồm: id, name, type, location, formula, cas_number, status_text, description.
+        bao gồm: id, name, type, location, description, chemical_formula, cas_number, iupac_name, vietnamese_name.
+        Sử dụng các cột đã chuẩn hóa để tìm kiếm.
         """
         if self.inventory_data.empty:
             return pd.DataFrame()
 
-        query_normalized = self._remove_accents(query)
+        # Query cũng cần được chuẩn hóa tương tự dữ liệu
+        query_normalized = unicodedata.normalize('NFKD', query).encode('ascii', 'ignore').decode('utf-8').lower()
 
+        # Định nghĩa các cột sẽ tìm kiếm trên phiên bản đã chuẩn hóa
         search_cols = [
             'id_normalized', 'name_normalized', 'type_normalized', 
-            'location_normalized', 'description_normalized', 'formula_normalized', 
-            'cas_number_normalized', 'state_or_concentration_normalized', 
-            'status_text_normalized', 'tracking_normalized', 'purpose_normalized'
+            'location_normalized', 'description_normalized', 
+            'chemical_formula_normalized', 'cas_number_normalized',
+            'iupac_name_normalized', 'vietnamese_name_normalized'
         ]
 
-        valid_search_cols = [col for col in search_cols if col in self.inventory_data.columns]
-
-        # Thay thế applymap bằng map
-        mask = self.inventory_data[valid_search_cols].map(
-            lambda x: x.str.contains(query_normalized, na=False) if isinstance(x, pd.Series) else False # Thêm kiểm tra isinstance(x, pd.Series)
-        ).any(axis=1) # The apply().any(axis=1) is already correct. This is complicated.
-
-        # Simpler replacement for applymap: direct map if the function applies element-wise
-        # For applying a function element-wise across *all* columns of a DataFrame in this context:
-        # We already create _normalized columns on load. So searchable_df contains normalized data.
-        # We only need to check contains.
-
-        # Revert to a simpler search logic that uses already normalized data.
-        # The issue was in searchable_df = searchable_df.applymap(self._remove_accents).apply(lambda x: x.str.lower())
-        # This line is in load_data already. So here we just need to use the _normalized columns.
-
-        # Let's adjust the original search_item to work with the pre-normalized columns.
-        # The error means the `DataFrame.applymap` on line 49 is problematic.
-        # Line 49 in my current `database_manager.py` is `searchable_df = searchable_df.applymap(self._remove_accents).apply(lambda x: x.str.lower())`
-        # This line IS the problem. It's redundant and causing the warning.
-        # `_load_data` already creates `_normalized` columns. So `search_item` should use them directly.
-
-        # Removing the problematic line 49 and adjust search_cols if necessary
-        # The current `search_item` does this:
-        # searchable_df = self.inventory_data[['id', 'name', 'type', 'location', 'description', 'formula', 'cas_number', 'state_or_concentration', 'status_text', 'tracking', 'purpose']].astype(str)
-        # searchable_df = searchable_df.applymap(self._remove_accents).apply(lambda x: x.str.lower())
-        # This is the line creating the problem. It re-normalizes already normalized data.
-
-        # Remove line 49 and adjust `search_cols` directly.
-
-        search_cols_to_use = [
-            'id_normalized', 'name_normalized', 'type_normalized', 
-            'location_normalized', 'description_normalized', 'formula_normalized', 
-            'cas_number_normalized', 'state_or_concentration_normalized', 
-            'status_text_normalized', 'tracking_normalized', 'purpose_normalized'
-        ]
-
-        # Filter for columns that actually exist in the DataFrame
-        valid_search_cols = [col for col in search_cols_to_use if col in self.inventory_data.columns]
-
-        # Perform the search on the already normalized columns
-        mask = self.inventory_data[valid_search_cols].apply(
-            lambda col: col.str.contains(query_normalized, na=False)
+        # Áp dụng hàm str.contains trên các cột đã chuẩn hóa
+        # .fillna('') để xử lý NaN một cách an toàn trước khi gọi .str.contains
+        mask = self.inventory_data[search_cols].apply(
+            lambda col: col.fillna('').str.contains(query_normalized, na=False)
         ).any(axis=1)
 
         results = self.inventory_data[mask]
         return results
 
-def get_quantity(self, item_name):
-    """Lấy số lượng của một vật tư/hóa chất cụ thể."""
-    if self.inventory_data.empty:
+    def get_quantity(self, item_name):
+        """Lấy số lượng của một vật tư/hóa chất cụ thể dựa trên tên đã chuẩn hóa."""
+        if self.inventory_data.empty:
+            return None, None
+        
+        item_name_normalized = unicodedata.normalize('NFKD', item_name).encode('ascii', 'ignore').decode('utf-8').lower()
+
+        # Tìm kiếm trên cả name_normalized, iupac_name_normalized, vietnamese_name_normalized để khớp tên tốt hơn
+        found_item_mask = (
+            (self.inventory_data['name_normalized'] == item_name_normalized) |
+            (self.inventory_data['iupac_name_normalized'] == item_name_normalized) |
+            (self.inventory_data['vietnamese_name_normalized'] == item_name_normalized)
+        )
+        found_item = self.inventory_data[found_item_mask]
+
+        if not found_item.empty:
+            # Trả về tổng số lượng nếu có nhiều mục khớp tên (ví dụ: A001A, A001B)
+            total_quantity = found_item['quantity'].sum()
+            # Đơn vị thường là nhất quán, lấy đơn vị của mục đầu tiên
+            unit = found_item.iloc[0]['unit']
+            return total_quantity, unit
         return None, None
 
-    item_name_normalized = self._remove_accents(item_name)
+    def get_location(self, item_name):
+        """Lấy vị trí của một vật tư/hóa chất cụ thể dựa trên tên đã chuẩn hóa."""
+        if self.inventory_data.empty:
+            return None
 
-    # Sử dụng cột đã chuẩn hóa
-    found_item = self.inventory_data[self.inventory_data['name_normalized'] == item_name_normalized]
+        item_name_normalized = unicodedata.normalize('NFKD', item_name).encode('ascii', 'ignore').decode('utf-8').lower()
+        
+        found_item_mask = (
+            (self.inventory_data['name_normalized'] == item_name_normalized) |
+            (self.inventory_data['iupac_name_normalized'] == item_name_normalized) |
+            (self.inventory_data['vietnamese_name_normalized'] == item_name_normalized)
+        )
+        found_item = self.inventory_data[found_item_mask]
 
-    if not found_item.empty:
-        return found_item.iloc[0]['quantity'], found_item.iloc[0]['unit']
-    return None, None
-
-def get_location(self, item_name):
-    """Lấy vị trí của một vật tư/hóa chất cụ thể."""
-    if self.inventory_data.empty:
+        if not found_item.empty:
+            # Nếu có nhiều mục trùng tên nhưng khác ID/vị trí, trả về tất cả các vị trí duy nhất
+            unique_locations = found_item['location'].unique()
+            return ", ".join(unique_locations)
         return None
 
-    item_name_normalized = self._remove_accents(item_name)
-    # Sử dụng cột đã chuẩn hóa
-    found_item = self.inventory_data[self.inventory_data['name_normalized'] == item_name_normalized]
+    # --- CÁC HÀM TÌM KIẾM KHÁC (ĐÃ CẬP NHẬT ĐỂ SỬ DỤNG CÁC CỘT CHUẨN HÓA) ---
 
-    if not found_item.empty:
-        return found_item.iloc[0]['location']
-    return None
+    def get_by_id(self, item_id):
+        """Tìm kiếm vật tư/hóa chất theo ID chính xác."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
 
-# --- CÁC HÀM TÌM KIẾM KHÁC (được gọi từ ChatbotLogic) ---
+        item_id_normalized = unicodedata.normalize('NFKD', item_id).encode('ascii', 'ignore').decode('utf-8').lower()
+        results = self.inventory_data[self.inventory_data['id_normalized'] == item_id_normalized]
+        return results
 
-def get_by_id(self, item_id):
-    """Tìm kiếm vật tư/hóa chất theo ID chính xác."""
-    if self.inventory_data.empty:
-        return pd.DataFrame()
+    def list_by_location(self, location_query):
+        """Liệt kê vật tư/hóa chất theo vị trí."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
 
-    item_id_normalized = self._remove_accents(item_id)
-    # Sử dụng cột đã chuẩn hóa
-    results = self.inventory_data[self.inventory_data['id_normalized'] == item_id_normalized]
-    return results
+        location_query_normalized = unicodedata.normalize('NFKD', location_query).encode('ascii', 'ignore').decode('utf-8').lower()
+        results = self.inventory_data[self.inventory_data['location_normalized'].str.contains(location_query_normalized, na=False)]
+        return results
 
-def list_by_location(self, location_query):
-    """Liệt kê vật tư/hóa chất theo vị trí."""
-    if self.inventory_data.empty:
-        return pd.DataFrame()
+    def list_by_type(self, item_type):
+        """Liệt kê vật tư/hóa chất theo loại."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
 
-    location_query_normalized = self._remove_accents(location_query)
-    # Sử dụng cột đã chuẩn hóa
-    results = self.inventory_data[self.inventory_data['location_normalized'].str.contains(location_query_normalized, na=False)]
-    return results
+        item_type_normalized = unicodedata.normalize('NFKD', item_type).encode('ascii', 'ignore').decode('utf-8').lower()
+        results = self.inventory_data[self.inventory_data['type_normalized'] == item_type_normalized]
+        return results
 
-def list_by_type(self, item_type):
-    """Liệt kê vật tư/hóa chất theo loại."""
-    if self.inventory_data.empty:
-        return pd.DataFrame()
+    def list_by_status(self, status_query):
+        """Liệt kê vật tư/hóa chất theo tình trạng đã chuẩn hóa."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
 
-    item_type_normalized = self._remove_accents(item_type)
-    # Sử dụng cột đã chuẩn hóa
-    results = self.inventory_data[self.inventory_data['type_normalized'] == item_type_normalized]
-    return results
+        status_query_normalized = unicodedata.normalize('NFKD', status_query).encode('ascii', 'ignore').decode('utf-8').lower()
+        results = self.inventory_data[self.inventory_data['status_normalized'] == status_query_normalized]
+        return results
 
-def list_by_status(self, status_query):
-    """Liệt kê vật tư/hóa chất theo tình trạng trong cột 'status_text' hoặc 'description'."""
-    if self.inventory_data.empty:
-        return pd.DataFrame()
+    def list_by_location_and_status(self, location_query, status_query):
+        """Liệt kê vật tư/hóa chất theo vị trí VÀ tình trạng."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
 
-    status_query_normalized = self._remove_accents(status_query)
+        location_query_normalized = unicodedata.normalize('NFKD', location_query).encode('ascii', 'ignore').decode('utf-8').lower()
+        status_query_normalized = unicodedata.normalize('NFKD', status_query).encode('ascii', 'ignore').decode('utf-8').lower()
 
-    # Sử dụng cột đã chuẩn hóa
-    mask_status_text = self.inventory_data['status_text_normalized'].str.contains(status_query_normalized, na=False)
-    mask_description = self.inventory_data['description_normalized'].str.contains(status_query_normalized, na=False)
+        mask_location = self.inventory_data['location_normalized'].str.contains(location_query_normalized, na=False)
+        mask_status = self.inventory_data['status_normalized'] == status_query_normalized
 
-    results = self.inventory_data[mask_status_text | mask_description]
-    return results
+        results = self.inventory_data[mask_location & mask_status]
+        return results
 
-def list_by_location_and_status(self, location_query, status_query):
-    """Liệt kê vật tư/hóa chất theo vị trí VÀ tình trạng."""
-    if self.inventory_data.empty:
-        return pd.DataFrame()
+    def list_by_type_and_status(self, item_type, status_query):
+        """Liệt kê vật tư/hóa chất theo loại VÀ tình trạng."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
 
-    location_query_normalized = self._remove_accents(location_query)
-    status_query_normalized = self._remove_accents(status_query)
+        item_type_normalized = unicodedata.normalize('NFKD', item_type).encode('ascii', 'ignore').decode('utf-8').lower()
+        status_query_normalized = unicodedata.normalize('NFKD', status_query).encode('ascii', 'ignore').decode('utf-8').lower()
 
-    # Sử dụng cột đã chuẩn hóa
-    normalized_location_col = self.inventory_data['location_normalized']
-    normalized_status_text_col = self.inventory_data['status_text_normalized']
-    normalized_description_col = self.inventory_data['description_normalized']
+        mask_type = self.inventory_data['type_normalized'] == item_type_normalized
+        mask_status = self.inventory_data['status_normalized'] == status_query_normalized
 
-    mask_location = normalized_location_col.str.contains(location_query_normalized, na=False)
-    mask_status = normalized_status_text_col.str.contains(status_query_normalized, na=False) | \
-                  normalized_description_col.str.contains(status_query_normalized, na=False)
+        results = self.inventory_data[mask_type & mask_status]
+        return results
 
-    results = self.inventory_data[mask_location & mask_status]
-    return results
+    def list_by_type_and_location(self, item_type, location_query):
+        """Liệt kê vật tư/hóa chất theo loại VÀ vị trí."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
 
-def list_by_type_and_status(self, item_type, status_query):
-    """Liệt kê vật tư/hóa chất theo loại VÀ tình trạng."""
-    if self.inventory_data.empty:
-        return pd.DataFrame()
+        item_type_normalized = unicodedata.normalize('NFKD', item_type).encode('ascii', 'ignore').decode('utf-8').lower()
+        location_query_normalized = unicodedata.normalize('NFKD', location_query).encode('ascii', 'ignore').decode('utf-8').lower()
 
-    item_type_normalized = self._remove_accents(item_type)
-    status_query_normalized = self._remove_accents(status_query)
+        mask_type = self.inventory_data['type_normalized'] == item_type_normalized
+        mask_location = self.inventory_data['location_normalized'].str.contains(location_query_normalized, na=False)
 
-    # Sử dụng cột đã chuẩn hóa
-    normalized_type_col = self.inventory_data['type_normalized']
-    normalized_status_text_col = self.inventory_data['status_text_normalized']
-    normalized_description_col = self.inventory_data['description_normalized']
+        results = self.inventory_data[mask_type & mask_location]
+        return results
+ 
+    def search_by_cas(self, cas_number):
+        """Tìm kiếm vật tư/hóa chất theo số CAS chính xác."""
+        if self.inventory_data.empty:
+            return pd.DataFrame()
 
-    mask_type = normalized_type_col == item_type_normalized
-    mask_status = normalized_status_text_col.str.contains(status_query_normalized, na=False) | \
-                  normalized_description_col.str.contains(status_query_normalized, na=False)
+        cas_number_normalized = unicodedata.normalize('NFKD', cas_number).encode('ascii', 'ignore').decode('utf-8').lower()
+        results = self.inventory_data[self.inventory_data['cas_number_normalized'] == cas_number_normalized]
+        return results
 
-    results = self.inventory_data[mask_type & mask_status]
-    return results
+    def upload_logs_to_github_on_startup(self, log_filepath):
+        """
+        Hàm này được gọi khi ứng dụng khởi động.
+        Đọc file log hiện tại, tải lên GitHub và làm rỗng file log cục bộ.
+        Sử dụng Personal Access Token (PAT) từ Streamlit secrets.
+        """
+        github_token = st.secrets.get("GITHUB_TOKEN")
 
-def list_by_type_and_location(self, item_type, location_query):
-    """Liệt kê vật tư/hóa chất theo loại VÀ vị trí."""
-    if self.inventory_data.empty:
-        return pd.DataFrame()
-
-    item_type_normalized = self._remove_accents(item_type)
-    location_query_normalized = self._remove_accents(location_query)
-
-    # Sử dụng cột đã chuẩn hóa
-    normalized_type_col = self.inventory_data['type_normalized']
-    normalized_location_col = self.inventory_data['location_normalized']
-
-    mask_type = normalized_type_col == item_type_normalized
-    mask_location = normalized_location_col.str.contains(location_query_normalized, na=False)
-
-    results = self.inventory_data[mask_type & mask_location]
-    return results
-
-def search_by_cas(self, cas_number):
-    """Tìm kiếm vật tư/hóa chất theo số CAS."""
-    if self.inventory_data.empty:
-        return pd.DataFrame()
-
-    cas_number_normalized = self._remove_accents(cas_number)
-    # Sử dụng cột đã chuẩn hóa
-    results = self.inventory_data[self.inventory_data['cas_number_normalized'].str.contains(cas_number_normalized, na=False)]
-    return results
-
-# --- CHỨC NĂNG TẢI LOG LÊN GITHUB TỰ ĐỘNG KHI KHỞI ĐỘNG ỨNG DỤNG ---
-def upload_logs_to_github_on_startup(self, log_filename_from_chatbot_logic):
-    """
-    Hàm này được gọi khi ứng dụng khởi động (từ main.py).
-    Đọc file log hiện tại, tải lên GitHub và làm rỗng file log cục bộ.
-    Sử dụng Personal Access Token (PAT) từ Streamlit secrets.
-    """
-    github_token = st.secrets.get("GITHUB_TOKEN")
-
-    if not github_token:
-        print("Lỗi: Không tìm thấy GitHub Personal Access Token trong st.secrets. Không thể tải log lên GitHub.")
-        return False
-
-    try:
-        repo_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) 
+        if not github_token:
+            print("Lỗi: Không tìm thấy GitHub Personal Access Token trong st.secrets. Không thể tải log lên GitHub.")
+            return False # Trả về False nếu không có token
 
         try:
-            repo = git.Repo(repo_path)
-        except git.InvalidGitRepositoryError:
-            print(f"DEBUG: {repo_path} không phải là kho lưu trữ Git hợp lệ. Bỏ qua tải log.")
-            return False
+            # Lấy đường dẫn thư mục gốc của repo (ví dụ: /mount/src/lab-manager)
+            repo_path = Path(__file__).parent.parent # Sử dụng pathlib
 
-        print(f"Đường dẫn repo đang xét để tải log: {repo_path}")
+            # Khởi tạo đối tượng Git Repo.
+            try:
+                repo = git.Repo(repo_path)
+            except git.InvalidGitRepositoryError:
+                print(f"DEBUG: {repo_path} không phải là kho lưu trữ Git hợp lệ. Bỏ qua tải log.")
+                return False
 
-        with repo.config_writer() as cw:
-            if not cw.has_option('user', 'email') or not cw.get_value('user', 'email'):
-                cw.set_value('user', 'email', 'chatbot@streamlit.app').release()
-            if not cw.has_option('user', 'name') or not cw.get_value('user', 'name'):
-                cw.set_value('user', 'name', 'Streamlit Chatbot').release()
-        print("Đã cấu hình thông tin người dùng Git.")
+            print(f"Đường dẫn repo đang xét để tải log: {repo_path}")
 
-        local_log_filepath = os.path.join(repo_path, 'logs', log_filename_from_chatbot_logic)
+            # Cấu hình thông tin người dùng Git nếu chưa có
+            with repo.config_writer() as cw:
+                if not cw.has_option('user', 'email') or not cw.get_value('user', 'email'):
+                    cw.set_value('user', 'email', 'chatbot@streamlit.app').release()
+                if not cw.has_option('user', 'name') or not cw.get_value('user', 'name'):
+                    cw.set_value('user', 'name', 'Streamlit Chatbot').release()
+            print("Đã cấu hình thông tin người dùng Git.")
 
-        if not os.path.exists(local_log_filepath) or os.stat(local_log_filepath).st_size == 0:
-            print("Không có dữ liệu nhật ký để tải lên (file log rỗng hoặc không tồn tại).")
-            return True
+            # Đọc nội dung log hiện tại
+            # Sử dụng pathlib để kiểm tra file tồn tại
+            if not Path(log_filepath).exists() or Path(log_filepath).stat().st_size == 0:
+                print("Không có dữ liệu nhật ký để tải lên (file log rỗng hoặc không tồn tại).")
+                return True # Không có gì để tải lên, coi như thành công
 
-        with open(local_log_filepath, 'r', encoding='utf-8') as f:
-            log_content = f.read()
-        print("Đã đọc nội dung file log cục bộ.")
+            with open(log_filepath, 'r', encoding='utf-8') as f:
+                log_content = f.read()
+            print("Đã đọc nội dung file log cục bộ.")
 
-        archive_dir = os.path.join(repo_path, 'logs', 'archive')
-        if not os.path.exists(archive_dir):
-            os.makedirs(archive_dir)
+            # Tạo thư mục archive nếu chưa có
+            archive_dir = repo_path / 'logs' / 'archive' # Sử dụng pathlib
+            archive_dir.mkdir(parents=True, exist_ok=True) # Tạo thư mục nếu chưa có
             print(f"DEBUG: Đã tạo thư mục lưu trữ mới: {archive_dir}")
 
-        timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
-        archive_filename = f"chat_log_archive_{timestamp_str}.jsonl"
-        archive_filepath = os.path.join(archive_dir, archive_filename)
+            # Tạo tên file log lưu trữ với timestamp
+            timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+            archive_filename = f"chat_log_archive_{timestamp_str}.jsonl"
+            archive_filepath = archive_dir / archive_filename # Sử dụng pathlib
 
-        with open(archive_filepath, 'w', encoding='utf-8') as f:
-            f.write(log_content)
-        print(f"Đã ghi nội dung vào file lưu trữ: {archive_filepath}")
+            # Ghi nội dung vào file log lưu trữ
+            with open(archive_filepath, 'w', encoding='utf-8') as f:
+                f.write(log_content)
+            print(f"Đã ghi nội dung vào file lưu trữ: {archive_filepath}")
 
-        repo_relative_archive_filepath = os.path.relpath(archive_filepath, repo_path)
-        repo.index.add([repo_relative_archive_filepath])
-        commit_message = f"feat(logs): Archive chat log {archive_filename}"
-        repo.index.commit(commit_message)
-        print(f"Đã commit file {archive_filename} với thông báo: {commit_message}")
+            # Thêm file vào Git và commit
+            repo_relative_archive_filepath = archive_filepath.relative_to(repo_path) # Sử dụng pathlib
+            repo.index.add([str(repo_relative_archive_filepath)]) # add cần string
+            commit_message = f"feat(logs): Archive chat log {archive_filename}"
+            repo.index.commit(commit_message)
+            print(f"Đã commit file {archive_filename} với thông báo: {commit_message}")
 
-        remote_url = repo.remotes.origin.url
-        print(f"URL remote gốc: {remote_url}")
+            # Lấy URL remote và chuẩn bị cho xác thực PAT
+            remote_url = repo.remotes.origin.url
+            print(f"URL remote gốc: {remote_url}")
 
-        repo_url_with_auth = ""
-        if remote_url.startswith("git@github.com:"):
-            repo_path_no_git = remote_url.replace("git@github.com:", "").replace(".git", "")
-            repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{repo_path_no_git}.git"
-            print(f"Đã chuyển đổi URL SSH sang HTTPS: {repo_url_with_auth}")
-        elif remote_url.startswith("https://github.com/"):
-            parts = remote_url.split("https://github.com/")
-            repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{parts[1]}"
-            print(f"Đã thêm PAT vào URL HTTPS: {repo_url_with_auth}")
-        else:
-            print(f"Lỗi: Định dạng URL remote không được hỗ trợ: {remote_url}")
+            repo_url_with_auth = ""
+            if remote_url.startswith("git@github.com:"):
+                repo_path_no_git = remote_url.replace("git@github.com:", "").replace(".git", "")
+                repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{repo_path_no_git}"
+                print(f"Đã chuyển đổi URL SSH sang HTTPS: {repo_url_with_auth}")
+            elif remote_url.startswith("https://github.com/"):
+                parts = remote_url.split("https://github.com/")
+                repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{parts[1]}"
+                print(f"Đã thêm PAT vào URL HTTPS: {repo_url_with_auth}")
+            else:
+                print(f"Lỗi: Định dạng URL remote không được hỗ trợ: {remote_url}")
+                return False # Trả về False nếu không xác định được URL
+
+            current_branch = repo.active_branch.name
+            print(f"Nhánh hiện tại: {current_branch}")
+
+            import subprocess
+            push_command = [
+                'git', 'push',
+                repo_url_with_auth,
+                f'{current_branch}:{current_branch}'
+            ]
+
+            print(f"Đang thực thi lệnh push: {' '.join(push_command[:2])} *** (ẩn PAT) *** {' '.join(push_command[3:])}")
+            process = subprocess.run(push_command, capture_output=True, text=True, check=True)
+            print(f"Git Push stdout: {process.stdout}")
+            print(f"Git Push stderr: {process.stderr}")
+
+            # Làm rỗng file log cục bộ sau khi tải lên thành công
+            with open(log_filepath, 'w', encoding='utf-8') as f:
+                f.truncate(0)
+            print("Đã làm rỗng file log cục bộ.")
+
+            return True # Trả về True nếu thành công
+
+        except git.InvalidGitRepositoryError:
+            print("Lỗi: Thư mục dự án không phải là một kho lưu trữ Git hợp lệ.")
             return False
-
-        current_branch = repo.active_branch.name
-        print(f"Nhánh hiện tại: {current_branch}")
-
-        import subprocess
-        push_command = [
-            'git', 'push',
-            repo_url_with_auth,
-            f'{current_branch}:{current_branch}'
-        ]
-
-        print(f"Đang thực thi lệnh push: {' '.join(push_command[:2])} *** (ẩn PAT) *** {' '.join(push_command[3:])}")
-        process = subprocess.run(push_command, capture_output=True, text=True, check=True)
-        print(f"Git Push stdout: {process.stdout}")
-        print(f"Git Push stderr: {process.stderr}")
-
-        with open(local_log_filepath, 'w', encoding='utf-8') as f:
-            f.truncate(0)
-        print("Đã làm rỗng file log cục bộ.")
-
-        return True
-
-    except git.InvalidGitRepositoryError:
-        print("Lỗi: Thư mục dự án không phải là một kho lưu trữ Git hợp lệ.")
-        return False
-    except git.GitCommandError as e:
-        print(f"Lỗi Git khi tải nhật ký lên GitHub: {e.stderr or e.stdout}")
-        return False
-    except Exception as e:
-        print(f"Lỗi không xác định khi tải nhật ký lên GitHub: {e}")
-        return False
+        except git.GitCommandError as e:
+            print(f"Lỗi Git khi tải nhật ký lên GitHub: {e.stderr or e.stdout}")
+            return False
+        except Exception as e:
+            print(f"Lỗi không xác định khi tải nhật ký lên GitHub: {e}")
+            return False
