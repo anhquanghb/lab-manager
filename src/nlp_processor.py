@@ -49,7 +49,7 @@ class NLPProcessor:
         self.unit_words_list = _remove_accents_and_normalize("chai, lọ, thùng, gói, hộp, bình, cái, m, kg, g, ml, l, đơn vị, viên, cuộn, cục, bịch").split(', ')
 
         # Các từ dừng chung khác (để làm sạch chung nếu không phải từ khóa lệnh) - đã chuẩn hóa
-        self.general_stopwords_list = _remove_accents_and_normalize("về, thông tin về, cho tôi biết về, hỏi về, của, là, ?, và, trong, ở, tại, có, có thể, làm thế nào, bạn muốn, bạn cần, bạn có biết, bạn có thể cho tôi biết, các, này, trong, tủ, phòng").split(', ')
+        self.general_stopwords_list = _remove_accents_and_normalize("về, thông tin về, cho tôi biết về, hỏi về, của, là, ?, và, có, có thể, làm thế nào, bạn muốn, bạn cần, bạn có biết, bạn có thể cho tôi biết, các, này, trong, tủ, phòng").split(', ')
 
         # REGEX PATTERNS TỪ CÁC DANH SÁCH (cho các regex cụ thể)
         def _list_to_regex_pattern(word_list):
