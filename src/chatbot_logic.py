@@ -46,8 +46,8 @@ class ChatbotLogic:
     - **Ví dụ:** `tình trạng Axeton`, `trạng thái Hóa chất đã mở`.
 
     **5. Báo cáo Tình trạng/Vấn đề:**
-    - **Cấu trúc:** `[Tên/Mã/Vị trí] [không thấy/đã hết/hỏng]`, `[không thấy/đã hết/hỏng] [Tên/Mã/Vị trí]`.
-    - **Ví dụ:** `Không thấy H2SO4`, `HCl đã hết`, `tủ sấy bị hư hỏng`.
+    - **Cấu trúc:** Báo cáo [Vấn đề].
+    - **Ví dụ:** `Báo cáo không thấy H2SO4`, `Báo cáo HCl đã hết`, `Báo cáo tủ sấy bị hư hỏng`.
 
     **6. Các lệnh khác:**
     - Tìm kiếm theo Mã ID: `tìm mã [ID]`.
