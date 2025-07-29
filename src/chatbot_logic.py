@@ -33,22 +33,14 @@ class ChatbotLogic:
     - **Ví dụ:** `axit sulfuric`, `SULFURIC ACID`, `H2SO4`, `tìm ống nghiệm`.
 
     **2. Hỏi vị trí:**
-    - **Cấu trúc:** `[Tên/Mã/CTHH] ở đâu`, `vị trí của [Tên/Mã/CTHH]`, `tìm vị trí [Tên/Mã/CTHH]`.
+    - **Cấu trúc:** `[Tên/Mã/CTHH] ở đâu`, `vị trí của [Tên/Mã/CTHH]`.
     - **Ví dụ:** `H2SO4 ở đâu`, `vị trí của NaCl`.
 
-    **3. Hỏi số lượng:**
-    - **Cấu trúc:** `có bao nhiêu [Tên/Mã/CTHH]`, `số lượng [Tên/Mã/CTHH]`.
-    - **Ví dụ:** `có bao nhiêu Axeton`, `số lượng H2SO4`.
-
-    **4. Hỏi tình trạng:**
-    - **Cấu trúc:** `tình trạng [Tên/Mã/Loại]`, `trạng thái [Tên/Mã/Loại]`.
-    - **Ví dụ:** `tình trạng Axeton`, `trạng thái Hóa chất đã mở`.
-
-    **5. Báo cáo Tình trạng/Vấn đề:**
+    **3. Báo cáo Tình trạng/Vấn đề:**
     - **Cấu trúc:** `[Tên/Mã/Vị trí] [không thấy/đã hết/hỏng]`, `[không thấy/đã hết/hỏng] [Tên/Mã/Vị trí]`.
     - **Ví dụ:** `Không thấy H2SO4`, `HCl đã hết`, `tủ sấy bị hư hỏng`.
 
-    **6. Các lệnh khác:**
+    **4. Các lệnh khác:**
     - Tìm kiếm theo Mã ID: `tìm mã [ID]`.
     - Tìm kiếm theo số CAS: `tìm CAS [Số SỐ]`.
     - Liệt kê theo Loại: `liệt kê [Loại]`.
