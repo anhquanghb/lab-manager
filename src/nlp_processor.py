@@ -17,7 +17,6 @@ except LookupError:
 class NLPProcessor:
     def __init__(self):
         # Hàm trợ giúp để loại bỏ dấu tiếng Việt và chuẩn hóa chuỗi về chữ thường.
-        # Được định nghĩa cục bộ trong class để tiện sử dụng cho các list từ khóa.
         def _remove_accents_and_normalize(input_str):
             if not isinstance(input_str, str):
                 return str(input_str)
@@ -34,15 +33,18 @@ class NLPProcessor:
         # Gộp từ khóa chào hỏi vào hướng dẫn
         self.command_guidance_phrases_list = _remove_accents_and_normalize("hướng dẫn, giúp tôi tìm kiếm, cách tìm kiếm, cách hỏi, chỉ dẫn, tôi không hiểu, bạn có thể hướng dẫn không, xin chào, chào, hello, hi, hey, giúp tôi").split(', ')
         
-        # Đã đổi tên intent từ download_logs sang upload_logs để khớp với chức năng
         self.upload_log_command_phrases_list = _remove_accents_and_normalize("tải nhật ký, xuất log, lịch sử chat, tải log, đẩy log").split(', ')
 
-        # --- BỔ SUNG: TỪ KHÓA LỆNH LIỆT KÊ ---
+        # BỔ SUNG: TỪ KHÓA LỆNH LIỆT KÊ
         self.command_list_verbs_list = _remove_accents_and_normalize("liệt kê, mô tả").split(', ')
+
+        # BỔ SUNG: TỪ KHÓA BÁO CÁO MỚI (chỉ cần "báo cáo")
+        self.report_command_keywords_list = _remove_accents_and_normalize("báo cáo").split(', ')
 
         # CÁC TỪ KHÓA GIÁ TRỊ/THUỘC TÍNH (Sử dụng để trích xuất ENTITY hoặc lọc) - đã chuẩn hóa
         self.item_type_keywords_list = _remove_accents_and_normalize("vật tư, hóa chất, thiết bị").split(', ')
         self.specific_status_values_list = _remove_accents_and_normalize("đã mở, còn nguyên, đã sử dụng, hết hạn, còn hạn, còn, hết, đang sử dụng, sử dụng, đang mượn, thất lạc, huỷ, không xác định").split(', ')
+        # problem_keywords_list vẫn giữ lại để trích xuất problem_description nếu người dùng vẫn dùng
         self.problem_keywords_list = _remove_accents_and_normalize("không thấy, đã hết, không còn, hỏng, bị hỏng, thiếu, bị mất, bị thất lạc, bị lỗi, lỗi, vấn đề, sự cố").split(', ')
         self.unit_words_list = _remove_accents_and_normalize("chai, lọ, thùng, gói, hộp, bình, cái, m, kg, g, ml, l, đơn vị, viên, cuộn, cục, bịch").split(', ')
 
@@ -51,11 +53,8 @@ class NLPProcessor:
 
         # REGEX PATTERNS TỪ CÁC DANH SÁCH (cho các regex cụ thể)
         def _list_to_regex_pattern(word_list):
-            # Tạo regex pattern cho các cụm từ (có thể chứa khoảng trắng)
             pattern_parts = []
             for phrase in word_list:
-                # re.escape để xử lý các ký tự đặc biệt trong từ khóa
-                # \b cho ranh giới từ để tránh khớp chuỗi con
                 regex_phrase = r'\b' + r'\s*'.join(re.escape(word) for word in phrase.split()) + r'\b'
                 pattern_parts.append(regex_phrase)
             return r"(?:" + "|".join(pattern_parts) + r")"
@@ -66,8 +65,9 @@ class NLPProcessor:
         self.problem_keywords_regex = _list_to_regex_pattern(self.problem_keywords_list)
         self.search_command_verbs_regex = _list_to_regex_pattern(self.command_search_verbs_list)
         self.item_type_keywords_regex = _list_to_regex_pattern(self.item_type_keywords_list)
-        # --- BỔ SUNG: REGEX LỆNH LIỆT KÊ ---
         self.command_list_verbs_regex = _list_to_regex_pattern(self.command_list_verbs_list)
+        # BỔ SUNG: REGEX CHO TỪ KHÓA BÁO CÁO MỚI
+        self.report_command_regex = _list_to_regex_pattern(self.report_command_keywords_list)
 
 
     def _remove_keywords(self, text, keywords_to_remove_list):
@@ -77,28 +77,20 @@ class NLPProcessor:
         Xử lý các từ khóa dài hơn trước để tránh xóa sai.
         """
         cleaned_text = text
-        # Sắp xếp từ khóa theo độ dài giảm dần để xử lý các cụm từ dài trước
-        # Ví dụ: "hãy tìm" trước "tìm"
         sorted_keywords = sorted(keywords_to_remove_list, key=len, reverse=True)
 
-        for kw in sorted_keywords: # Sử dụng sorted_keywords
-            # Tạo pattern với ranh giới từ để không xóa chuỗi con không mong muốn
-            # và chấp nhận 0 hoặc nhiều khoảng trắng giữa các từ trong cụm từ
+        for kw in sorted_keywords:
             kw_pattern = r'\b' + r'\s*'.join(re.escape(word) for word in kw.split()) + r'\b'
-            # Chỉ thay thế khi kw_pattern thực sự khớp với một cụm từ
             cleaned_text = re.sub(kw_pattern, ' ', cleaned_text, flags=re.IGNORECASE).strip()
 
-        # Xóa các ký tự không phải chữ cái/số/khoảng trắng ở đầu/cuối và nhiều khoảng trắng
         cleaned_text = re.sub(r'^\W+|\W+$', '', cleaned_text).strip()
         cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
 
         return cleaned_text
 
     def process_query(self, query):
-        # Lưu trữ truy vấn gốc
         original_query_text = query 
         
-        # Chuẩn hóa truy vấn ngay từ đầu: loại bỏ dấu và chuyển chữ thường
         query_normalized = unicodedata.normalize('NFKD', query).encode('ascii', 'ignore').decode('utf-8').lower().strip()
         print(f"DEBUG NLP: Xử lý truy vấn (normalized): '{query_normalized}'")
 
@@ -112,16 +104,54 @@ class NLPProcessor:
             print(f"DEBUG NLP: MATCHED Upload Log.")
             return {"intent": "upload_logs_to_github", "original_query": original_query_text}
 
-        # --- Nhận diện Ý định BÁO CÁO SỰ CỐ (report_issue) ---
-        print(f"DEBUG NLP: Kiểm tra Report Issue logic.")
+        # --- BỔ SUNG: Nhận diện Ý định BÁO CÁO SỰ CỐ (report_issue) dựa trên từ "báo cáo" ---
+        # Ưu tiên từ "báo cáo" trước các từ khóa vấn đề chi tiết
+        if re.search(self.report_command_regex, query_normalized):
+            print(f"DEBUG NLP: MATCHED Report Issue (via 'báo cáo' keyword).")
+            
+            # Loại bỏ từ "báo cáo" và các từ khóa vấn đề cũ để trích xuất phần còn lại
+            temp_query_cleaned = self._remove_keywords(query_normalized, self.report_command_keywords_list + self.problem_keywords_list)
+            
+            reported_id = None
+            reported_item_name = None
+            reported_location = None
+            problem_description = "không xác định" # Mặc định nếu chỉ có "báo cáo"
+
+            # Nếu có thêm thông tin sau "báo cáo", cố gắng trích xuất
+            if temp_query_cleaned:
+                # Cố gắng tìm từ khóa vấn đề trong phần còn lại của câu hỏi nếu có
+                for kw_problem in self.problem_keywords_list:
+                    if re.search(r'\b' + re.escape(kw_problem) + r'\b', query_normalized): # Kiểm tra trên query gốc đã normalized
+                        problem_description = kw_problem
+                        break
+                
+                # Sau đó cố gắng trích xuất ID/Tên/Vị trí từ phần còn lại sau khi loại bỏ từ khóa vấn đề
+                cleaned_for_entity = self._remove_keywords(temp_query_cleaned, self.problem_keywords_list)
+
+                if re.fullmatch(r'[a-z0-9-]+', cleaned_for_entity):
+                    reported_id = cleaned_for_entity.upper()
+                elif re.fullmatch(r'(tủ|kệ|khu)\s*[a-z0-9.-]+', cleaned_for_entity) or (re.fullmatch(r'[a-z0-9.-]+', cleaned_for_entity) and len(cleaned_for_entity) <= 3):
+                    reported_location = cleaned_for_entity
+                else:
+                    reported_item_name = cleaned_for_entity
+
+            return {
+                "intent": "report_issue",
+                "reported_id": reported_id,
+                "reported_item_name": reported_item_name,
+                "reported_location": reported_location,
+                "problem_description": problem_description,
+                "original_query": original_query_text
+            }
+
+        # --- Nhận diện Ý định BÁO CÁO SỰ CỐ (report_issue) DỰA TRÊN CÁC TỪ KHÓA VẤN ĐỀ CŨ ---
+        # Logic này chỉ chạy nếu không khớp với từ "báo cáo" ở trên
         has_problem_keyword = any(re.search(r'\b' + re.escape(kw) + r'\b', query_normalized) for kw in self.problem_keywords_list)
         has_search_command_verb = any(re.search(r'\b' + re.escape(kw) + r'\b', query_normalized) for kw in self.command_search_verbs_list)
 
-        # Nếu có từ khóa vấn đề và không phải là câu lệnh tìm kiếm
         if has_problem_keyword and not has_search_command_verb:
             print(f"DEBUG NLP: MATCHED Report Issue (Problem keyword present, no search command verb).")
             
-            # Loại bỏ các từ khóa vấn đề để tìm phần tên/ID/vị trí
             temp_query_cleaned = self._remove_keywords(query_normalized, self.problem_keywords_list)
             
             reported_id = None
@@ -129,18 +159,14 @@ class NLPProcessor:
             reported_location = None
             problem_description = ""
 
-            # Cố gắng tìm từ khóa vấn đề đã khớp (từ query gốc đã chuẩn hóa)
             for kw_problem in self.problem_keywords_list:
-                if re.search(r'\b' + re.escape(kw) + r'\b', query_normalized):
+                if re.search(r'\b' + re.escape(kw_problem) + r'\b', query_normalized):
                     problem_description = kw_problem
                     break
 
-            # Ưu tiên kiểm tra ID, sau đó Vị trí, sau đó Tên
-            # ID: thường là chuỗi chữ hoa/số/dấu gạch ngang (ví dụ A001A, ITEM_123)
             if re.fullmatch(r'[a-z0-9-]+', temp_query_cleaned):
                 reported_id = temp_query_cleaned.upper()
-            # Vị trí: thường có dạng "tủ X", "kệ Y", hoặc chỉ "3C", "2B"
-            elif re.fullmatch(r'(tủ|kệ|khu)\s*[a-z0-9.-]+', temp_query_cleaned) or re.fullmatch(r'[a-z0-9.-]+', temp_query_cleaned) and len(temp_query_cleaned) <= 3: # Giả định vị trí ngắn
+            elif re.fullmatch(r'(tủ|kệ|khu)\s*[a-z0-9.-]+', temp_query_cleaned) or (re.fullmatch(r'[a-z0-9.-]+', temp_query_cleaned) and len(temp_query_cleaned) <= 3):
                 reported_location = temp_query_cleaned
             else:
                 reported_item_name = temp_query_cleaned
@@ -155,7 +181,6 @@ class NLPProcessor:
                     "original_query": original_query_text
                 }
             else:
-                # Nếu không trích xuất được thực thể nào, vẫn báo cáo sự cố nhưng thiếu ngữ cảnh
                 return {"intent": "report_issue", "problem_description": problem_description if problem_description else "không xác định", "raw_query": query, "original_query": original_query_text}
 
 
@@ -188,23 +213,15 @@ class NLPProcessor:
                 return {"intent": "get_status", "item_name": item_name_candidate, "original_query": original_query_text}
             return {"intent": "get_status", "item_name": None, "original_query": original_query_text}
 
-        # --- BỔ SUNG: NHẬN DIỆN Ý ĐỊNH LIỆT KÊ (LIST_BY_...) ---
-        # Ý định: Lệnh Liệt kê theo Vị trí (list_by_location)
-        # Ví dụ: "liệt kê tủ 3C", "mô tả tủ L", "liệt kê 3C"
-        # Pattern: (list_verb) (location_phrase)
-        # Location phrase có thể là "tủ 3c", "3c", "khu a", v.v.
-        # Sử dụng một regex linh hoạt hơn để bắt phần vị trí và kiểm tra kết thúc chuỗi
+        # BỔ SUNG: NHẬN DIỆN Ý ĐỊNH LIỆT KÊ (LIST_BY_...)
         location_list_full_pattern = r"(?:{})\s*((?:tủ|kệ|khu)\s*[a-z0-9.-]+|[a-z0-9.-]+)\s*$".format(self.command_list_verbs_regex)
         match_location_list = re.search(location_list_full_pattern, query_normalized)
         if match_location_list:
             location_entity = match_location_list.group(1).strip()
-            if location_entity: # Đảm bảo trích xuất được entity
+            if location_entity:
                 print(f"DEBUG NLP: MATCHED List By Location. Entity: '{location_entity}'")
                 return {"intent": "list_by_location", "location_query": location_entity, "original_query": original_query_text}
             
-        # Ý định: Lệnh Liệt kê theo Loại (list_by_type)
-        # Ví dụ: "liệt kê hóa chất", "mô tả vật tư"
-        # Pattern: (list_verb) (item_type_keywords)
         type_list_pattern = r"(?:{})\s*(?:{})".format(self.command_list_verbs_regex, self.item_type_keywords_regex)
         match_type_list = re.search(type_list_pattern, query_normalized)
         if match_type_list:
@@ -220,14 +237,13 @@ class NLPProcessor:
         # Ý định: Lệnh Tìm kiếm (search_item) - Cho các từ khóa lệnh tìm kiếm chung
         if re.search(self.search_command_verbs_regex, query_normalized):
             print(f"DEBUG NLP: MATCHED Search command verb.")
-            # Loại bỏ tất cả các từ khóa lệnh và các từ dừng chung
             cleaned_query = self._remove_keywords(query_normalized, 
-                                                  self.command_search_verbs_list + 
-                                                  self.command_location_phrases_list + 
-                                                  self.command_quantity_phrases_list + 
-                                                  self.command_status_phrases_list + 
-                                                  self.command_list_verbs_list + # Bổ sung list verbs vào đây
-                                                  self.general_stopwords_list) # Và các từ dừng chung
+                                                    self.command_search_verbs_list + 
+                                                    self.command_location_phrases_list + 
+                                                    self.command_quantity_phrases_list + 
+                                                    self.command_status_phrases_list + 
+                                                    self.command_list_verbs_list +
+                                                    self.general_stopwords_list)
             if cleaned_query:
                 print(f"DEBUG NLP: Cleaned Search Query (verb check): '{cleaned_query}'")
                 return {"intent": "search_item", "query": cleaned_query, "original_query": original_query_text}
@@ -240,7 +256,7 @@ class NLPProcessor:
             if cleaned_query:
                 print(f"DEBUG NLP: Cleaned Item Type Query: '{cleaned_query}'")
                 return {"intent": "search_item", "query": cleaned_query, "original_query": original_query_text}
-            return {"intent": "search_item", "query": query_normalized, "original_query": original_query_text} # Nếu chỉ gõ "hóa chất"
+            return {"intent": "search_item", "query": query_normalized, "original_query": original_query_text}
 
         # --- Ý định chung (Fallback cuối cùng) ---
         print(f"DEBUG NLP: Rơi vào General Search Fallback.")
@@ -251,7 +267,8 @@ class NLPProcessor:
             self.upload_log_command_phrases_list + 
             self.problem_keywords_list + self.unit_words_list +
             self.item_type_keywords_list + 
-            self.command_list_verbs_list # Bổ sung list verbs vào đây
+            self.command_list_verbs_list +
+            self.report_command_keywords_list # Bổ sung từ khóa báo cáo vào đây
         ))
 
         cleaned_query_for_general_search = self._remove_keywords(query_normalized, all_command_keywords)
