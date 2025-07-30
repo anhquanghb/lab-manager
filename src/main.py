@@ -75,14 +75,19 @@ def chatbot_page():
 
 # Hàm chính để điều khiển các trang
 def main_app():
-    # st.set_page_config(page_title="Lab Chatbot - Duy Tan University", layout="centered") # Có thể đặt ở đây nếu muốn global
     st.sidebar.title("Điều hướng")
     page_selection = st.sidebar.radio("Chọn trang:", ["Chatbot", "Admin"])
+
+    # BỔ SUNG: Nút để xóa cache toàn cục
+    if st.sidebar.button("Xóa Cache 🗑️"):
+        st.cache_resource.clear()
+        st.success("Đã xóa toàn bộ cache!")
+        st.rerun() # Yêu cầu chạy lại ứng dụng để áp dụng việc xóa cache
 
     if page_selection == "Chatbot":
         chatbot_page()
     elif page_selection == "Admin":
-        admin_page() # Gọi hàm từ src/admin_page.py
+        admin_page()
 
 if __name__ == "__main__":
     main_app()
