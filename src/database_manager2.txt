@@ -1,15 +1,18 @@
 import pandas as pd
 import json
 import os
-import unicodedata # Giữ lại nếu có các hàm xử lý unicode khác được dùng, nếu không có thể xóa
-import re # Giữ lại nếu có các hàm regex khác được dùng, nếu không có thể xóa
+import unicodedata # Vẫn cần unicodedata cho các mục đích khác nếu có, nhưng không cho hàm chuẩn hóa chính
+import re
 from pathlib import Path
-import git # Vẫn cần cho upload_logs_to_github_on_startup
-from datetime import datetime # Vẫn cần cho upload_logs_to_github_on_startup
-import streamlit as st # Vẫn cần cho upload_logs_to_github_on_startup
-from src.common_utils import remove_accents_and_normalize # Import hàm chuẩn hóa từ common_utils
+import git
+from datetime import datetime
+import streamlit as st
+from src.common_utils import remove_accents_and_normalize # BỔ SUNG: Import hàm chuẩn hóa từ common_utils
 
 class DatabaseManager:
+    # Hàm _remove_accents_and_normalize staticmethod cũ ở đây đã được xóa
+    # vì nó đã được chuyển sang src/common_utils.py
+
     def __init__(self, data_path='data/inventory.json'):
         project_root = Path(__file__).parent.parent
         self.data_path = project_root / data_path
@@ -57,6 +60,7 @@ class DatabaseManager:
         if self.inventory_data.empty:
             return pd.DataFrame()
 
+        # Gọi hàm chuẩn hóa trực tiếp
         query_normalized = remove_accents_and_normalize(query)
 
         search_cols = [
@@ -73,6 +77,8 @@ class DatabaseManager:
         results = self.inventory_data[mask]
         return results
     
+    # HÀM _get_global_remove_accents_and_normalize ĐÃ ĐƯỢC XÓA VÌ KHÔNG CÒN CẦN THIẾT
+
     def get_quantity(self, item_name):
         if self.inventory_data.empty:
             return None, None
@@ -202,9 +208,98 @@ class DatabaseManager:
         results = self.inventory_data[self.inventory_data['cas_number_normalized'] == cas_number_normalized]
         return results
 
-    # Hàm save_inventory_to_json đã được di chuyển sang database_admin.py
-    # Hàm push_inventory_to_github đã được di chuyển sang database_admin.py
-    
+    def save_inventory_to_json(self):
+        """
+        Lưu DataFrame inventory_data hiện tại (chỉ các cột gốc) vào file data/inventory.json.
+        """
+        if self.inventory_data.empty:
+            print("Không có dữ liệu trong inventory_data để lưu.")
+            return False
+        
+        original_cols = [
+            'id', 'name', 'type', 'quantity', 'unit', 'location', 'description',
+            'iupac_name', 'vietnamese_name', 'chemical_formula', 'cas_number',
+            'state_or_concentration', 'status', 'purpose', 'tracking'
+        ]
+        
+        cols_to_save = [col for col in original_cols if col in self.inventory_data.columns]
+        data_to_save = self.inventory_data[cols_to_save].to_dict(orient='records')
+
+        try:
+            self.data_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.data_path, 'w', encoding='utf-8') as f:
+                json.dump(data_to_save, f, ensure_ascii=False, indent=2)
+            print(f"Đã lưu inventory_data vào {self.data_path} thành công.")
+            return True
+        except Exception as e:
+            print(f"Lỗi khi lưu inventory_data vào JSON: {e}")
+            return False
+
+    def push_inventory_to_github(self, commit_message):
+        """
+        Thực hiện git add, git commit và git push cho file data/inventory.json.
+        Tái sử dụng logic Git từ upload_logs_to_github_on_startup.
+        """
+        github_token = st.secrets.get("GITHUB_TOKEN")
+
+        if not github_token:
+            print("Lỗi: Không tìm thấy GitHub Personal Access Token trong st.secrets. Không thể đẩy inventory lên GitHub.")
+            return False
+        
+        try:
+            repo_path = Path(__file__).parent.parent
+            repo = git.Repo(repo_path)
+
+            with repo.config_writer() as cw:
+                if not cw.has_option('user', 'email') or not cw.get_value('user', 'email'):
+                    cw.set_value('user', 'email', 'chatbot@streamlit.app').release()
+                if not cw.has_option('user', 'name') or not cw.get_value('user', 'name'):
+                    cw.set_value('user', 'name', 'Streamlit Chatbot').release()
+            
+            repo_relative_inventory_path = self.data_path.relative_to(repo_path)
+            repo.index.add([str(repo_relative_inventory_path)])
+
+            repo.index.commit(commit_message)
+            print(f"Đã commit '{repo_relative_inventory_path}' với thông báo: {commit_message}")
+
+            remote_url = repo.remotes.origin.url
+            repo_url_with_auth = ""
+            if remote_url.startswith("git@github.com:"):
+                repo_path_no_git = remote_url.replace("git@github.com:", "").replace(".git", "")
+                repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{repo_path_no_git}"
+            elif remote_url.startswith("https://github.com/"):
+                parts = remote_url.split("https://github.com/")
+                repo_url_with_auth = f"https://oauth2:{github_token}@github.com/{parts[1]}"
+            else:
+                print(f"Lỗi: Định dạng URL remote không được hỗ trợ: {remote_url}")
+                return False
+
+            current_branch = repo.active_branch.name
+            import subprocess
+            push_command = [
+                'git', 'push',
+                repo_url_with_auth,
+                f'{current_branch}:{current_branch}'
+            ]
+            
+            print(f"Đang thực thi lệnh push cho inventory.json: {' '.join(push_command[:2])} *** (ẩn PAT) *** {' '.join(push_command[3:])}")
+            process = subprocess.run(push_command, capture_output=True, text=True, check=True)
+            print(f"Git Push stdout: {process.stdout}")
+            print(f"Git Push stderr: {process.stderr}")
+
+            print(f"Đã đẩy '{repo_relative_inventory_path}' lên GitHub thành công.")
+            return True
+
+        except git.InvalidGitRepositoryError:
+            print("Lỗi: Thư mục dự án không phải là một kho lưu trữ Git hợp lệ.")
+            return False
+        except git.GitCommandError as e:
+            print(f"Lỗi Git khi đẩy inventory lên GitHub: {e.stderr or e.stdout}")
+            return False
+        except Exception as e:
+            print(f"Lỗi không xác định khi đẩy inventory lên GitHub: {e}")
+            return False
+
     def upload_logs_to_github_on_startup(self, log_filepath):
         github_token = st.secrets.get("GITHUB_TOKEN")
 

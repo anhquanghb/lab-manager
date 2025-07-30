@@ -69,7 +69,8 @@ class ChatbotLogic:
         for index, row in results.iterrows():
             response += (f"- **{row['name']}** (ID: {row['id']}, Loại: {row['type']})\n"
                          f"  Số lượng: {row['quantity']} {row['unit']}, Vị trí: {row['location']}.\n"
-                         f"  Mô tả: {row['description']}\n\n")
+                         f"  Mô tả: {row['description']},\n"
+                         f"  Theo dõi: {row['tracking']}\n\n")
         return response.strip()
 
     def _log_interaction(self, user_query, chatbot_response_text, parsed_query, log_type="chat"):
