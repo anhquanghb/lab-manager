@@ -1,16 +1,27 @@
 import streamlit as st
 import pandas as pd
-from src.database_manager import DatabaseManager
+from src.database_manager import DatabaseManager # Import DatabaseManager cho các thao tác đọc
+from src.database_admin import AdminDatabaseManager # BỔ SUNG: Import AdminDatabaseManager cho các thao tác ghi
 import os
 from pathlib import Path
-from src.common_utils import remove_accents_and_normalize # BỔ SUNG: Import hàm chuẩn hóa
+from src.common_utils import remove_accents_and_normalize
 
-# --- Khởi tạo DatabaseManager (chỉ một lần) ---
+# --- Khởi tạo các Manager (chỉ một lần và được cache) ---
 @st.cache_resource
-def get_db_manager():
-    return DatabaseManager()
+def get_managers():
+    # Khởi tạo DatabaseManager (đọc dữ liệu)
+    db_instance = DatabaseManager()
+    # Khởi tạo AdminDatabaseManager (ghi dữ liệu), truyền db_instance vào
+    admin_db_instance = AdminDatabaseManager(db_instance)
+    return {
+        "db_manager": db_instance,
+        "admin_db_manager": admin_db_instance
+    }
 
-db_manager = get_db_manager()
+# BỔ SUNG: Khởi tạo và gán các manager
+managers = get_managers()
+db_manager = managers["db_manager"]
+admin_db_manager = managers["admin_db_manager"]
 
 # --- Lấy mật khẩu từ Streamlit secrets ---
 ADMIN_PASSWORD = st.secrets.get("ADMIN_PASSWORD")
@@ -43,7 +54,7 @@ def admin_dashboard():
 
     if search_button and item_id_to_find:
         st.session_state['admin_current_item_id'] = item_id_to_find
-        # get_by_id trong db_manager đã sử dụng hàm chuẩn hóa từ common_utils
+        # Sử dụng db_manager (đọc) cho tìm kiếm
         st.session_state['admin_search_results'] = db_manager.get_by_id(item_id_to_find) 
     
     # Hiển thị kết quả tìm kiếm và form cập nhật
@@ -59,6 +70,7 @@ def admin_dashboard():
         st.write(f"**Trạng thái/Nồng độ:** {item_data['state_or_concentration'] if pd.notna(item_data['state_or_concentration']) else 'N/A'}")
         st.write(f"**Tình trạng:** {item_data['status'] if pd.notna(item_data['status']) else 'N/A'}")
         st.write(f"**Mục đích:** {item_data['purpose'] if pd.notna(item_data['purpose']) else 'N/A'}")
+        st.write(f"**Theo dõi:** {item_data['tracking'] if pd.notna(item_data['tracking']) else 'N/A'}")
         
         st.markdown("---")
         st.subheader("Cập nhật Tracking")
@@ -71,22 +83,21 @@ def admin_dashboard():
         )
         
         if st.button("Lưu và Đẩy lên GitHub", key="update_tracking_button"):
-            # 1. Cập nhật trên bộ nhớ
+            # 1. Cập nhật trên bộ nhớ (vẫn qua db_manager vì đó là instance chứa DataFrame chính)
             idx_to_update = db_manager.inventory_data[db_manager.inventory_data['id'] == item_data['id']].index
             if not idx_to_update.empty:
                 db_manager.inventory_data.loc[idx_to_update, 'tracking'] = new_tracking_info
-                # GỌI HÀM CHUẨN HÓA TRỰC TIẾP TỪ common_utils
                 db_manager.inventory_data.loc[idx_to_update, 'tracking_normalized'] = remove_accents_and_normalize(new_tracking_info)
 
                 st.success(f"Thông tin theo dõi cho ID '{item_data['id']}' đã được cập nhật trên bộ nhớ.")
                 
-                # 2. Lưu vào file JSON
-                if db_manager.save_inventory_to_json():
+                # 2. Lưu vào file JSON (sử dụng admin_db_manager)
+                if admin_db_manager.save_inventory_to_json():
                     st.success("Đã lưu thay đổi vào file inventory.json.")
                     
-                    # 3. Đẩy lên GitHub
+                    # 3. Đẩy lên GitHub (sử dụng admin_db_manager)
                     commit_message = f"feat(admin): Update tracking for ID {item_data['id']} to '{new_tracking_info}'"
-                    if db_manager.push_inventory_to_github(commit_message):
+                    if admin_db_manager.push_inventory_to_github(commit_message):
                         st.success("Đã đẩy thay đổi lên GitHub thành công!")
                     else:
                         st.error("Lỗi: Không thể đẩy thay đổi lên GitHub. Vui lòng kiểm tra console log.")
