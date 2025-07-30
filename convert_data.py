@@ -115,8 +115,6 @@ for index, row in df_csv.iterrows():
         description_parts.append(f"Mô tả: {item_status}")
     if item_purpose:
         description_parts.append(f"Mục đích: {item_purpose}")
-    if item_tracking:
-        description_parts.append(f"Theo dõi: {item_tracking}")
 
     item_description_for_display = ", ".join(description_parts) if description_parts else "Không có mô tả."
 
