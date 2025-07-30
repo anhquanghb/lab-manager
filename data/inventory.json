@@ -8863,7 +8863,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na2CO3, CAS: 497-19-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: đã mở",
+    "description": "Công thức: Na2CO3, CAS: 497-19-8, Trạng thái/Nồng độ: rắn, Mô tả: hết, Theo dõi: hết",
     "iupac_name": "SODIUM CARBONATE ANHYDROUS",
     "vietnamese_name": null,
     "chemical_formula": "Na2CO3",
@@ -8871,7 +8871,7 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "hết"
   },
   {
     "id": "A114 -NC",
@@ -8880,7 +8880,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na2CO3, CAS: 497-19-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: đang mượn",
+    "description": "Công thức: Na2CO3, CAS: 497-19-8, Trạng thái/Nồng độ: rắn, Mô tả: hết, Theo dõi: hết",
     "iupac_name": "SODIUM CARBONATE ANHYDROUS",
     "vietnamese_name": null,
     "chemical_formula": "Na2CO3",
@@ -8888,7 +8888,7 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "hết"
   },
   {
     "id": "ITEM_524",
