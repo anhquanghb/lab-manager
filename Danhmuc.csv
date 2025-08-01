@@ -1,4 +1,4 @@
-Timestamp,Code,Loại,Tên hóa chất/Vật tư/Thiết bị,Tên Tiếng Anh/tên theo IUPAC,Công thức hóa chất,CAS,Nồng độ/Trạng thái,"Tình trạng chai, hộp",Vị trí,Email Address,Phân loại,Mục đích,Theo dõi,Người mượn
+Timestamp,Code,Loại,Tên hóa chất/Vật tư/Thiết bị,Tên Tiếng Anh/tên theo IUPAC,Công thức hóa chất,CAS,Nồng độ/Trạng thái,"Tình trạng chai, hộp",Vị trí,Email Address,Phân loại,Mục đích,Theo dõi,Ghi chú
 2/26/2025 14:34:49,A223E,Hóa chất,Ete dầu mỏ 30-60, Petroleum ether 30-60,N,8032-32-4 ,LỎNG,Còn nguyên,L,,,,,
 2/26/2025 14:35:42,A223E,Hóa chất,Ete dầu mỏ 30-61, Petroleum ether 30-60,N,8032-32-4 ,LỎNG,Còn nguyên,L,,,,,
 2/26/2025 14:36:31,A223F,Hóa chất,Ete dầu mỏ 30-62, Petroleum ether 30-60,N,8032-32-4,LỎNG,Còn nguyên,L,,,,,
@@ -520,8 +520,8 @@ PHE,A012B,Hóa chất,Dầu soi kính hiển vi,microscopy- certistain- crystal 
 11/28/2024 15:57:19,A125A,Hóa chất,Natri alginate,SODIUM ALGINATE,(C6H7NaO6)n,9005-38-3,RẮN,Còn nguyên,1C,,G,,,
 11/28/2024 15:56:39,A125B,Hóa chất,Natri alginate,Sodium alginate,(C6H7NaO6)n,9005-38-3,rắn,Còn nguyên,1C,,G,,,
 11/29/2024 9:45:45,A144,Hóa chất,,Sodium borohydride,NaBH4,16940-66-2,RẮN,Còn nguyên,,,B,,,
-11/29/2024 9:26:18,A114,Hóa chất,KHÔNG,SODIUM CARBONATE ANHYDROUS,Na2CO3,497-19-8,RẮN,Đã mở,1C,,G,,Đã mở,
-11/29/2024 9:26:18,A114 -NC,Hóa chất,KHÔNG,SODIUM CARBONATE ANHYDROUS,Na2CO3,497-19-8,RẮN,Đã mở,1C,,G,,Đang mượn,
+11/29/2024 9:26:18,A114,Hóa chất,KHÔNG,SODIUM CARBONATE ANHYDROUS,Na2CO3,497-19-8,RẮN,Đã mở,1C,,G,,Hết,
+11/29/2024 9:26:18,A114 -NC,Hóa chất,KHÔNG,SODIUM CARBONATE ANHYDROUS,Na2CO3,497-19-8,RẮN,Đã mở,1C,,G,,Hết,
 11/29/2024 9:46:51,,Hóa chất,Natri Clorua,Sodium Chloride,NaCl,0,RẮN,Đã mở,,,G,,,
 11/29/2024 10:50:01,,Hóa chất,KHÔNG,SODIUM CHLORIDE,NACL,7647-14-5,RẮN,Đã mở,,,G,,,
 11/29/2024 10:10:36,A126,Hóa chất,,SODIUM DEOXYCHOLATE,C24H39NaO4,,rắn,Đã mở,1C,,G,,,

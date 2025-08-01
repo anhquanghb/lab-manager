@@ -14,7 +14,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223E",
@@ -31,7 +32,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223F",
@@ -48,7 +50,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223G",
@@ -65,7 +68,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223H",
@@ -82,7 +86,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223I",
@@ -99,7 +104,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223K",
@@ -116,7 +122,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223L",
@@ -133,7 +140,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A001A",
@@ -150,7 +158,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A001B",
@@ -167,7 +176,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A002",
@@ -184,7 +194,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A155",
@@ -201,7 +212,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A150B",
@@ -218,7 +230,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A150B",
@@ -235,7 +248,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A009E",
@@ -252,7 +266,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A009D",
@@ -269,7 +284,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A009A",
@@ -286,7 +302,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A009B",
@@ -303,7 +320,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A009C",
@@ -320,7 +338,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A027",
@@ -337,7 +356,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A076",
@@ -354,7 +374,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_22",
@@ -371,7 +392,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A166",
@@ -388,7 +410,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A165A",
@@ -405,7 +428,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A165B",
@@ -422,7 +446,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A066-NC",
@@ -431,7 +456,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: Al(NO3)3.9H2O, CAS: 7784-27-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: Al(NO3)3.9H2O, CAS: 7784-27-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đang mượn",
     "iupac_name": "ALUMINIUM NITRATE NANOHYDRATE",
     "vietnamese_name": null,
     "chemical_formula": "Al(NO3)3.9H2O",
@@ -439,7 +464,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": null
   },
   {
     "id": "A098",
@@ -456,7 +482,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A138",
@@ -473,7 +500,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A216",
@@ -490,7 +518,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A044",
@@ -499,7 +528,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3A",
-    "description": "Công thức: AlCl3.6H2O, CAS: 7784-13-6, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: AlCl3.6H2O, CAS: 7784-13-6, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "ALUMINUM CHLORIDE",
     "vietnamese_name": null,
     "chemical_formula": "AlCl3.6H2O",
@@ -507,7 +536,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A071A",
@@ -524,7 +554,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A071B",
@@ -541,7 +572,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A071C",
@@ -558,7 +590,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A071D",
@@ -575,7 +608,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A071E",
@@ -592,7 +626,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A071F",
@@ -609,7 +644,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A071G",
@@ -626,7 +662,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A071H",
@@ -643,7 +680,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A071I",
@@ -660,7 +698,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A071J",
@@ -677,7 +716,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A071K",
@@ -694,7 +734,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A036",
@@ -711,7 +752,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A035A",
@@ -728,7 +770,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A035B",
@@ -745,7 +788,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A035C",
@@ -762,7 +806,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_46",
@@ -779,7 +824,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A037",
@@ -796,7 +842,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_48",
@@ -813,7 +860,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A039B",
@@ -830,7 +878,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A039A",
@@ -847,7 +896,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A039C",
@@ -864,7 +914,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A181A",
@@ -881,7 +932,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A181B",
@@ -898,7 +950,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A034A",
@@ -915,7 +968,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A034B",
@@ -932,7 +986,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A034C",
@@ -949,7 +1004,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A038",
@@ -966,7 +1022,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A038B",
@@ -983,7 +1040,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A175",
@@ -1000,7 +1058,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_60",
@@ -1017,7 +1076,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A018",
@@ -1034,7 +1094,8 @@
     "state_or_concentration": "que test",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A029",
@@ -1051,7 +1112,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A213",
@@ -1068,7 +1130,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A170A",
@@ -1085,7 +1148,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A170B",
@@ -1102,7 +1166,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A170C",
@@ -1119,7 +1184,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_67",
@@ -1136,7 +1202,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A182A",
@@ -1153,7 +1220,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A182B",
@@ -1170,7 +1238,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077A",
@@ -1187,7 +1256,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077B",
@@ -1204,7 +1274,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077C",
@@ -1221,7 +1292,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077D",
@@ -1238,7 +1310,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077F",
@@ -1255,7 +1328,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077G",
@@ -1272,7 +1346,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077H",
@@ -1289,7 +1364,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077I",
@@ -1306,7 +1382,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077J",
@@ -1323,7 +1400,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077K",
@@ -1340,7 +1418,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_80",
@@ -1357,7 +1436,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_81",
@@ -1374,7 +1454,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_82",
@@ -1391,7 +1472,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A077E",
@@ -1408,7 +1490,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A185A",
@@ -1425,7 +1508,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A185B",
@@ -1442,7 +1526,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A169A",
@@ -1459,7 +1544,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A169B",
@@ -1476,7 +1562,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A169BE",
@@ -1493,7 +1580,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A169C",
@@ -1510,7 +1598,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A169D",
@@ -1527,7 +1616,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A152",
@@ -1544,7 +1634,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A106",
@@ -1561,7 +1652,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A062",
@@ -1578,7 +1670,8 @@
     "state_or_concentration": "răn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A031A",
@@ -1595,7 +1688,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A031B",
@@ -1612,7 +1706,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A031C",
@@ -1629,7 +1724,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A031D",
@@ -1646,7 +1742,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A033",
@@ -1663,7 +1760,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A033B",
@@ -1680,7 +1778,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A033C",
@@ -1697,7 +1796,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_101",
@@ -1714,7 +1814,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A073",
@@ -1731,7 +1832,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A063C",
@@ -1748,7 +1850,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A063A",
@@ -1765,7 +1868,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A063B",
@@ -1782,7 +1886,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A205",
@@ -1799,7 +1904,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A032A",
@@ -1816,7 +1922,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A032B",
@@ -1833,7 +1940,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A222",
@@ -1850,7 +1958,8 @@
     "state_or_concentration": "lỏng",
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A173",
@@ -1867,7 +1976,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A173B",
@@ -1884,7 +1994,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A200A",
@@ -1901,7 +2012,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A200B",
@@ -1918,7 +2030,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A142A",
@@ -1935,7 +2048,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A142B",
@@ -1952,7 +2066,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A142C",
@@ -1969,7 +2084,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A006D",
@@ -1986,7 +2102,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A069A",
@@ -2003,7 +2120,8 @@
     "state_or_concentration": "rắn",
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A069B",
@@ -2020,7 +2138,8 @@
     "state_or_concentration": "rắn",
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A069C",
@@ -2037,7 +2156,8 @@
     "state_or_concentration": "rắn",
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A069D",
@@ -2054,7 +2174,8 @@
     "state_or_concentration": "rắn",
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A069E",
@@ -2071,7 +2192,8 @@
     "state_or_concentration": "rắn",
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A069F",
@@ -2088,7 +2210,8 @@
     "state_or_concentration": "rắn",
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A069G",
@@ -2105,7 +2228,8 @@
     "state_or_concentration": "rắn",
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A070",
@@ -2122,7 +2246,8 @@
     "state_or_concentration": "lỏng",
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A203A",
@@ -2139,7 +2264,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A203B",
@@ -2156,7 +2282,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A203C",
@@ -2173,7 +2300,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A198",
@@ -2190,7 +2318,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A052",
@@ -2207,7 +2336,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A147A",
@@ -2224,7 +2354,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A147B",
@@ -2241,7 +2372,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A147C",
@@ -2258,7 +2390,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A147D",
@@ -2275,7 +2408,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A147E",
@@ -2292,7 +2426,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A147F",
@@ -2309,7 +2444,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A147G",
@@ -2326,7 +2462,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A147H",
@@ -2343,7 +2480,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B11",
@@ -2360,7 +2498,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_140",
@@ -2377,7 +2516,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_141",
@@ -2394,7 +2534,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_142",
@@ -2411,7 +2552,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_143",
@@ -2428,7 +2570,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_144",
@@ -2445,7 +2588,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A080A",
@@ -2462,7 +2606,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A080B",
@@ -2479,7 +2624,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A080C",
@@ -2496,7 +2642,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A080D",
@@ -2513,7 +2660,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A080E",
@@ -2530,7 +2678,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A080F",
@@ -2547,7 +2696,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A080G",
@@ -2564,7 +2714,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A080H",
@@ -2581,7 +2732,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A080I",
@@ -2598,7 +2750,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A080J",
@@ -2615,7 +2768,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A023A",
@@ -2632,7 +2786,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A023B",
@@ -2649,7 +2804,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A023C",
@@ -2666,7 +2822,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A081A",
@@ -2683,7 +2840,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A081B",
@@ -2700,7 +2858,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A064C",
@@ -2717,7 +2876,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A064A",
@@ -2726,7 +2886,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1D",
-    "description": "Công thức: CUSO4.5H2O, CAS: 7758-99-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: CUSO4.5H2O, CAS: 7758-99-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Thất lạc",
     "iupac_name": "COPPER (II) SUNLFATE PENTAHYDRATE",
     "vietnamese_name": null,
     "chemical_formula": "CUSO4.5H2O",
@@ -2734,7 +2894,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "thất lạc"
+    "tracking": "Thất lạc",
+    "note": null
   },
   {
     "id": "A064B",
@@ -2743,7 +2904,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1D",
-    "description": "Công thức: CUSO4.5H2O, CAS: 7758-99-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: CUSO4.5H2O, CAS: 7758-99-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "COPPER (II) SUNLFATE PENTAHYDRATE",
     "vietnamese_name": null,
     "chemical_formula": "CUSO4.5H2O",
@@ -2751,7 +2912,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A064D",
@@ -2768,7 +2930,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A064E",
@@ -2785,7 +2948,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B12",
@@ -2802,7 +2966,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A093",
@@ -2819,7 +2984,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A197",
@@ -2836,7 +3002,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A172A",
@@ -2853,7 +3020,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A172B",
@@ -2870,7 +3038,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A164A",
@@ -2887,7 +3056,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A164B",
@@ -2904,7 +3074,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A164C",
@@ -2921,7 +3092,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A164D",
@@ -2938,7 +3110,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A164E",
@@ -2955,7 +3128,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A004A",
@@ -2972,7 +3146,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A004B",
@@ -2989,7 +3164,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A004C",
@@ -3006,7 +3182,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A004D",
@@ -3023,7 +3200,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A004E",
@@ -3040,7 +3218,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A004F",
@@ -3057,7 +3236,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A004G",
@@ -3074,7 +3254,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A004H",
@@ -3091,7 +3272,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A004I",
@@ -3108,7 +3290,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A004J",
@@ -3125,7 +3308,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A161A",
@@ -3142,7 +3326,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A161B",
@@ -3159,7 +3344,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A157B",
@@ -3176,7 +3362,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A157A",
@@ -3193,7 +3380,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A135A",
@@ -3210,7 +3398,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A135B",
@@ -3227,7 +3416,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A135C",
@@ -3244,7 +3434,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A135D",
@@ -3261,7 +3452,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A135E",
@@ -3278,7 +3470,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_194",
@@ -3295,7 +3488,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A122A",
@@ -3312,7 +3506,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A199",
@@ -3329,7 +3524,8 @@
     "state_or_concentration": null,
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A040",
@@ -3346,7 +3542,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A041A",
@@ -3363,7 +3560,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A041B",
@@ -3380,7 +3578,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A014",
@@ -3397,7 +3596,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A141",
@@ -3414,7 +3614,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_202",
@@ -3431,7 +3632,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A122B",
@@ -3448,7 +3650,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A122C",
@@ -3465,7 +3668,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A145",
@@ -3482,7 +3686,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A028",
@@ -3499,7 +3704,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A028B",
@@ -3516,7 +3722,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A028C",
@@ -3533,7 +3740,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A028D",
@@ -3550,7 +3758,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A126A",
@@ -3567,7 +3776,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A126B",
@@ -3584,7 +3794,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A126C",
@@ -3601,7 +3812,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A126D",
@@ -3618,7 +3830,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_214",
@@ -3635,7 +3848,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_215",
@@ -3652,7 +3866,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_216",
@@ -3669,7 +3884,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_217",
@@ -3686,7 +3902,8 @@
     "state_or_concentration": "rắn",
     "status": "huỷ",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_218",
@@ -3695,7 +3912,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "Không rõ",
-    "description": "Công thức: KHÔNG, CAS: KHÔNG, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: KHÔNG, CAS: KHÔNG, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "ENZYME PECTINASE",
     "vietnamese_name": null,
     "chemical_formula": "KHÔNG",
@@ -3703,7 +3920,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A183A",
@@ -3712,7 +3930,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "tủ L",
-    "description": "Tên Tiếng Việt: CỒN 98°, Công thức: C2H5OH, CAS: 64-17-5, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở",
+    "description": "Tên Tiếng Việt: CỒN 98°, Công thức: C2H5OH, CAS: 64-17-5, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở, Theo dõi: Đang mượn",
     "iupac_name": "ETHANOL 98°",
     "vietnamese_name": "CỒN 98°",
     "chemical_formula": "C2H5OH",
@@ -3720,7 +3938,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": null
   },
   {
     "id": "A183B",
@@ -3737,7 +3956,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A183C",
@@ -3754,7 +3974,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_222",
@@ -3771,7 +3992,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A153",
@@ -3788,7 +4010,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A123B",
@@ -3805,7 +4028,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A123A",
@@ -3822,7 +4046,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A123C",
@@ -3839,7 +4064,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A123D",
@@ -3856,7 +4082,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A123E",
@@ -3873,7 +4100,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A123F",
@@ -3890,7 +4118,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_230",
@@ -3907,7 +4136,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A022",
@@ -3924,7 +4154,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A100",
@@ -3941,7 +4172,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A129",
@@ -3958,7 +4190,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A184",
@@ -3975,7 +4208,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A016A",
@@ -3992,7 +4226,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A016B",
@@ -4009,7 +4244,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A016C",
@@ -4026,7 +4262,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A016D",
@@ -4043,7 +4280,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A201",
@@ -4060,7 +4298,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A159B",
@@ -4077,7 +4316,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A225",
@@ -4094,7 +4334,8 @@
     "state_or_concentration": "99%",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A192",
@@ -4111,7 +4352,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A043",
@@ -4128,7 +4370,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A177",
@@ -4145,7 +4388,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A006A",
@@ -4162,7 +4406,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A006B",
@@ -4179,7 +4424,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A006C",
@@ -4196,7 +4442,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A075A",
@@ -4205,7 +4452,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1D",
-    "description": "Công thức: HCL, CAS: 7647-01-0, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở",
+    "description": "Công thức: HCL, CAS: 7647-01-0, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "HYDROCHLORIC ACID",
     "vietnamese_name": null,
     "chemical_formula": "HCL",
@@ -4213,7 +4460,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "A075B",
@@ -4222,7 +4470,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1D",
-    "description": "Công thức: HCL, CAS: 7647-01-0, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở",
+    "description": "Công thức: HCL, CAS: 7647-01-0, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "HYDROCHLORIC ACID",
     "vietnamese_name": null,
     "chemical_formula": "HCL",
@@ -4230,7 +4478,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "A049",
@@ -4247,7 +4496,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A010A",
@@ -4264,7 +4514,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A010B",
@@ -4281,7 +4532,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A010C",
@@ -4298,7 +4550,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A010D",
@@ -4315,7 +4568,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A010E",
@@ -4332,7 +4586,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A010F",
@@ -4349,7 +4604,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A011A",
@@ -4358,7 +4614,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3C",
-    "description": "Công thức: C16H8N2Na208S2, CAS: 860-52-0, Trạng thái/Nồng độ: rắn (1 thùng 12 hộp), Mô tả: đã mở",
+    "description": "Công thức: C16H8N2Na208S2, CAS: 860-52-0, Trạng thái/Nồng độ: rắn (1 thùng 12 hộp), Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "INDIGO CARMINE",
     "vietnamese_name": null,
     "chemical_formula": "C16H8N2Na208S2",
@@ -4366,7 +4622,8 @@
     "state_or_concentration": "rắn (1 thùng 12 hộp)",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A011B",
@@ -4383,7 +4640,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A050A",
@@ -4392,7 +4650,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: I2, CAS: 7553-56-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: I2, CAS: 7553-56-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "iodine",
     "vietnamese_name": null,
     "chemical_formula": "I2",
@@ -4400,7 +4658,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A050B",
@@ -4417,7 +4676,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B15",
@@ -4434,7 +4694,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A090A",
@@ -4451,7 +4712,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A090B",
@@ -4468,7 +4730,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A090C",
@@ -4485,7 +4748,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_265",
@@ -4502,7 +4766,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_266",
@@ -4519,7 +4784,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A104",
@@ -4536,7 +4802,8 @@
     "state_or_concentration": "răns",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A101",
@@ -4553,7 +4820,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A065",
@@ -4570,7 +4838,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A202",
@@ -4587,7 +4856,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A091A",
@@ -4596,7 +4866,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2D",
-    "description": "Công thức: Fe2(SO4)3, CAS: 10028-22-5, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: Fe2(SO4)3, CAS: 10028-22-5, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "IRON (III) SULFATE",
     "vietnamese_name": null,
     "chemical_formula": "Fe2(SO4)3",
@@ -4604,7 +4874,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A091B",
@@ -4621,7 +4892,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A091C",
@@ -4638,7 +4910,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A091D",
@@ -4655,7 +4928,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B7",
@@ -4672,7 +4946,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B9",
@@ -4689,7 +4964,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B4",
@@ -4706,7 +4982,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_278",
@@ -4723,7 +5000,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_279",
@@ -4740,7 +5018,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146A",
@@ -4757,7 +5036,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146B",
@@ -4774,7 +5054,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146C",
@@ -4791,7 +5072,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146D",
@@ -4808,7 +5090,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146E",
@@ -4825,7 +5108,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146F",
@@ -4842,7 +5126,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146G",
@@ -4859,7 +5144,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146H",
@@ -4876,7 +5162,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146I",
@@ -4893,7 +5180,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146J",
@@ -4910,7 +5198,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146K",
@@ -4927,7 +5216,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A146L",
@@ -4944,7 +5234,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A025A",
@@ -4961,7 +5252,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A025B",
@@ -4978,7 +5270,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A024",
@@ -4995,7 +5288,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A026A",
@@ -5012,7 +5306,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A026B",
@@ -5029,7 +5324,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A026C",
@@ -5046,7 +5342,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A026D",
@@ -5063,7 +5360,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_299",
@@ -5080,7 +5378,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A005A",
@@ -5097,7 +5396,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A005B",
@@ -5114,7 +5414,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A005C",
@@ -5131,7 +5432,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A151A",
@@ -5148,7 +5450,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A151B",
@@ -5165,7 +5468,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_305",
@@ -5182,7 +5486,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_306",
@@ -5199,7 +5504,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_307",
@@ -5216,7 +5522,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_308",
@@ -5233,7 +5540,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A178",
@@ -5250,7 +5558,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A094",
@@ -5259,7 +5568,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2D",
-    "description": "Công thức: Pb(CH3COO)2.H2O, CAS: 6080-56-4, Trạng thái/Nồng độ: rắn, Mô tả: còn nguyên",
+    "description": "Công thức: Pb(CH3COO)2.H2O, CAS: 6080-56-4, Trạng thái/Nồng độ: rắn, Mô tả: còn nguyên, Theo dõi: Đã mở",
     "iupac_name": "LEAD (II) ACETATE TRIHYDRATE",
     "vietnamese_name": null,
     "chemical_formula": "Pb(CH3COO)2.H2O",
@@ -5267,7 +5576,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A092A",
@@ -5276,7 +5586,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2D",
-    "description": "Công thức: Pb(CH3COO)2.Pb(OH)2, CAS: 1335-32-6, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: Pb(CH3COO)2.Pb(OH)2, CAS: 1335-32-6, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "Lead(II) acetate basic",
     "vietnamese_name": null,
     "chemical_formula": "Pb(CH3COO)2.Pb(OH)2",
@@ -5284,7 +5594,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "A092B",
@@ -5293,7 +5604,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2D",
-    "description": "Công thức: Pb(CH3COO)2.Pb(OH)2, CAS: 1335-32-6, Trạng thái/Nồng độ: rắn, Mô tả: còn nguyên",
+    "description": "Công thức: Pb(CH3COO)2.Pb(OH)2, CAS: 1335-32-6, Trạng thái/Nồng độ: rắn, Mô tả: còn nguyên, Theo dõi: Đã mở",
     "iupac_name": "Lead(II) acetate basic",
     "vietnamese_name": null,
     "chemical_formula": "Pb(CH3COO)2.Pb(OH)2",
@@ -5301,7 +5612,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "B10",
@@ -5318,7 +5630,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A085",
@@ -5335,7 +5648,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A209",
@@ -5352,7 +5666,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A193",
@@ -5369,7 +5684,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_317",
@@ -5386,7 +5702,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A047",
@@ -5403,7 +5720,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A067-NC",
@@ -5412,7 +5730,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Công thức: Mg(NO3)2.6H2O, CAS: 13446-18-89, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: Mg(NO3)2.6H2O, CAS: 13446-18-89, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đang mượn",
     "iupac_name": "MAGNESIUM NITRATE AR",
     "vietnamese_name": null,
     "chemical_formula": "Mg(NO3)2.6H2O",
@@ -5420,7 +5738,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": null
   },
   {
     "id": "A045A",
@@ -5437,7 +5756,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A045B",
@@ -5454,7 +5774,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A046A",
@@ -5463,7 +5784,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3A",
-    "description": "Công thức: MgSO4.7H20, CAS: 10034-99-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: MgSO4.7H20, CAS: 10034-99-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "MAGNESIUM SULFATE HEPTAHYDRATE",
     "vietnamese_name": null,
     "chemical_formula": "MgSO4.7H20",
@@ -5471,7 +5792,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A046B",
@@ -5488,7 +5810,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A046C",
@@ -5505,7 +5828,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A046D",
@@ -5522,7 +5846,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A046E",
@@ -5539,7 +5864,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A096",
@@ -5556,7 +5882,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A048A",
@@ -5573,7 +5900,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A048B",
@@ -5590,7 +5918,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A048C - NC",
@@ -5599,7 +5928,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2C",
-    "description": "Công thức: MnSO4.H20, CAS: 10034-96-5, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: MnSO4.H20, CAS: 10034-96-5, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đang mượn",
     "iupac_name": "MANGENESE SULFATE MONOHYDRATE",
     "vietnamese_name": null,
     "chemical_formula": "MnSO4.H20",
@@ -5607,7 +5936,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": null
   },
   {
     "id": "A048D",
@@ -5616,7 +5946,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3A",
-    "description": "Công thức: MnSO4.H2O, CAS: 10034-96-5, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: MnSO4.H2O, CAS: 10034-96-5, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đang mượn",
     "iupac_name": "MANGENESE SULFATE MONOHYDRATE",
     "vietnamese_name": null,
     "chemical_formula": "MnSO4.H2O",
@@ -5624,7 +5954,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": null
   },
   {
     "id": "A048E",
@@ -5641,7 +5972,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_333",
@@ -5658,7 +5990,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A179A",
@@ -5675,7 +6008,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A179B",
@@ -5692,7 +6026,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A013",
@@ -5709,7 +6044,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A103",
@@ -5726,7 +6062,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A083A",
@@ -5735,7 +6072,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2C",
-    "description": "Công thức: HgSO4, CAS: 7783-35-9, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: HgSO4, CAS: 7783-35-9, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "MERCURY(II) SULFATE",
     "vietnamese_name": null,
     "chemical_formula": "HgSO4",
@@ -5743,7 +6080,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A083B",
@@ -5760,7 +6098,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A083C",
@@ -5777,7 +6116,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B18",
@@ -5794,7 +6134,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A210",
@@ -5811,7 +6152,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A220",
@@ -5820,7 +6162,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "Tủ L",
-    "description": "Công thức: CH3OH, CAS: 67-56-1, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở",
+    "description": "Công thức: CH3OH, CAS: 67-56-1, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "Methanol",
     "vietnamese_name": null,
     "chemical_formula": "CH3OH",
@@ -5828,7 +6170,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "A017A",
@@ -5845,7 +6188,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A017B",
@@ -5862,7 +6206,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A020",
@@ -5879,7 +6224,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A008A",
@@ -5888,7 +6234,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "3C",
-    "description": "Công thức: C16H18CIN3S.3H2O, CAS: 7220-79-3, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: C16H18CIN3S.3H2O, CAS: 7220-79-3, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Thất lạc",
     "iupac_name": "Methylene blue trihydrate",
     "vietnamese_name": null,
     "chemical_formula": "C16H18CIN3S.3H2O",
@@ -5896,7 +6242,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "thất lạc"
+    "tracking": "Thất lạc",
+    "note": null
   },
   {
     "id": "A008C",
@@ -5913,7 +6260,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A008B",
@@ -5930,7 +6278,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A008C",
@@ -5947,7 +6296,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A008D",
@@ -5964,7 +6314,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A008E",
@@ -5981,7 +6332,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A012",
@@ -5998,7 +6350,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A012B",
@@ -6015,7 +6368,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A196",
@@ -6032,7 +6386,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A087A",
@@ -6049,7 +6404,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A087B",
@@ -6066,7 +6422,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A007",
@@ -6083,7 +6440,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A007B",
@@ -6100,7 +6458,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A007C",
@@ -6117,7 +6476,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A194A",
@@ -6134,7 +6494,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A194B",
@@ -6151,7 +6512,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A219",
@@ -6168,7 +6530,8 @@
     "state_or_concentration": "lỏng",
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A221",
@@ -6185,7 +6548,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A226",
@@ -6202,7 +6566,8 @@
     "state_or_concentration": "99.50%",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A130",
@@ -6219,7 +6584,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A118A",
@@ -6236,7 +6602,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A118B",
@@ -6253,7 +6620,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A118C",
@@ -6270,7 +6638,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A118D",
@@ -6287,7 +6656,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A118E",
@@ -6304,7 +6674,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A118F",
@@ -6321,7 +6692,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A003A",
@@ -6338,7 +6710,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A003B",
@@ -6355,7 +6728,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A003C",
@@ -6372,7 +6746,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A003D",
@@ -6389,7 +6764,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A003E",
@@ -6406,7 +6782,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A099A",
@@ -6423,7 +6800,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A099B",
@@ -6440,7 +6818,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A172",
@@ -6457,7 +6836,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A051A",
@@ -6474,7 +6854,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A051B",
@@ -6491,7 +6872,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A051C",
@@ -6508,7 +6890,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A051D",
@@ -6525,7 +6908,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A051E",
@@ -6542,7 +6926,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A195",
@@ -6551,7 +6936,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "4A",
-    "description": "Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "nutrient agar",
     "vietnamese_name": null,
     "chemical_formula": null,
@@ -6559,7 +6944,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A030",
@@ -6576,7 +6962,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_388",
@@ -6593,7 +6980,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A149A",
@@ -6610,7 +6998,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A149B",
@@ -6627,7 +7016,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A149C",
@@ -6644,7 +7034,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B17",
@@ -6661,7 +7052,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_393",
@@ -6678,7 +7070,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162A",
@@ -6695,7 +7088,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162B",
@@ -6712,7 +7106,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162C",
@@ -6729,7 +7124,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162E",
@@ -6746,7 +7142,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162F",
@@ -6763,7 +7160,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162G",
@@ -6780,7 +7178,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162H",
@@ -6797,7 +7196,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162I",
@@ -6814,7 +7214,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162J",
@@ -6831,7 +7232,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162K",
@@ -6848,7 +7250,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_404",
@@ -6865,7 +7268,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_405",
@@ -6882,7 +7286,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162L",
@@ -6899,7 +7304,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A162D",
@@ -6916,7 +7322,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A187",
@@ -6933,7 +7340,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A217",
@@ -6950,7 +7358,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223A",
@@ -6967,7 +7376,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223B",
@@ -6984,7 +7394,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223C",
@@ -7001,7 +7412,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223D",
@@ -7018,7 +7430,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A223M",
@@ -7035,7 +7448,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A168A",
@@ -7052,7 +7466,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A168B",
@@ -7069,7 +7484,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A168C",
@@ -7086,7 +7502,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A015A",
@@ -7103,7 +7520,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A015B",
@@ -7120,7 +7538,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A015C",
@@ -7137,7 +7556,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A015D",
@@ -7154,7 +7574,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B1",
@@ -7171,7 +7592,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A078A",
@@ -7188,7 +7610,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A078B",
@@ -7205,7 +7628,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A078C",
@@ -7222,7 +7646,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A171",
@@ -7239,7 +7664,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A056",
@@ -7256,7 +7682,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A139",
@@ -7273,7 +7700,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A137A",
@@ -7290,7 +7718,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A137B",
@@ -7307,7 +7736,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A137C",
@@ -7324,7 +7754,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A137D",
@@ -7341,7 +7772,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A137E",
@@ -7358,7 +7790,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A054A",
@@ -7375,7 +7808,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A054B",
@@ -7392,7 +7826,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A053A",
@@ -7409,7 +7844,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A053B",
@@ -7426,7 +7862,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A053C",
@@ -7443,7 +7880,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B16",
@@ -7460,7 +7898,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A133B",
@@ -7477,7 +7916,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A133C",
@@ -7494,7 +7934,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A133A",
@@ -7503,7 +7944,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Tên Tiếng Việt: Kali dibiphosphat, Công thức: KH2PO4, CAS: 7778-77-0, Trạng thái/Nồng độ: rắn, Mô tả: còn nguyên",
+    "description": "Tên Tiếng Việt: Kali dibiphosphat, Công thức: KH2PO4, CAS: 7778-77-0, Trạng thái/Nồng độ: rắn, Mô tả: còn nguyên, Theo dõi: Đã mở",
     "iupac_name": "POTASSIUM DUHYDROGEN PHOSPHATE",
     "vietnamese_name": "Kali dibiphosphat",
     "chemical_formula": "KH2PO4",
@@ -7511,7 +7952,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A131A",
@@ -7520,7 +7962,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Tên Tiếng Việt: Kali ferricyanide, Công thức: K3[Fe(CN)6], CAS: 13746-66-2, Trạng thái/Nồng độ: rắn, Mô tả: còn nguyên",
+    "description": "Tên Tiếng Việt: Kali ferricyanide, Công thức: K3[Fe(CN)6], CAS: 13746-66-2, Trạng thái/Nồng độ: rắn, Mô tả: còn nguyên, Theo dõi: Đã mở",
     "iupac_name": "POTASSIUM FERRICYANIDE",
     "vietnamese_name": "Kali ferricyanide",
     "chemical_formula": "K3[Fe(CN)6]",
@@ -7528,7 +7970,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A131B",
@@ -7545,7 +7988,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A131C",
@@ -7562,7 +8006,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A132A",
@@ -7579,7 +8024,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A132B",
@@ -7596,7 +8042,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A132C",
@@ -7613,7 +8060,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A134A",
@@ -7630,7 +8078,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A134B",
@@ -7647,7 +8096,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A072A",
@@ -7664,7 +8114,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A072B",
@@ -7681,7 +8132,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A072C",
@@ -7698,7 +8150,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A072D",
@@ -7715,7 +8168,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A072E",
@@ -7724,7 +8178,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Tên Tiếng Việt: Kali Hydroxit, Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Tên Tiếng Việt: Kali Hydroxit, Công thức: KOH, CAS: 1310-58-3, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đang mượn, Ghi chú: 2025-10",
     "iupac_name": "POTASSIUM HYDROXIDE",
     "vietnamese_name": "Kali Hydroxit",
     "chemical_formula": "KOH",
@@ -7732,7 +8186,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": "2025-10"
   },
   {
     "id": "A072F",
@@ -7749,7 +8204,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A055A",
@@ -7766,7 +8222,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A055B",
@@ -7783,7 +8240,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A055C",
@@ -7800,7 +8258,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A055D",
@@ -7817,7 +8276,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A055E",
@@ -7834,7 +8294,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A055F",
@@ -7851,7 +8312,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_463",
@@ -7868,7 +8330,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A086A",
@@ -7877,7 +8340,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Công thức: KI, CAS: 7681-11-0, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: KI, CAS: 7681-11-0, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "POTASSIUM IODIDE",
     "vietnamese_name": null,
     "chemical_formula": "KI",
@@ -7885,7 +8348,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A086B",
@@ -7902,7 +8366,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A086C",
@@ -7919,7 +8384,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A086D",
@@ -7936,7 +8402,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B8",
@@ -7953,7 +8420,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A057A",
@@ -7970,7 +8438,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A057B",
@@ -7987,7 +8456,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A057C",
@@ -8004,7 +8474,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A136",
@@ -8021,7 +8492,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A061A",
@@ -8030,7 +8502,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2B",
-    "description": "Tên Tiếng Việt: Kali pemanganat, Công thức: KMnO4, CAS: 7722-64-7, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Tên Tiếng Việt: Kali pemanganat, Công thức: KMnO4, CAS: 7722-64-7, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "POTASSIUM PERMANGANATE",
     "vietnamese_name": "Kali pemanganat",
     "chemical_formula": "KMnO4",
@@ -8038,7 +8510,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A061B",
@@ -8055,7 +8528,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A061C",
@@ -8072,7 +8546,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A061D",
@@ -8089,7 +8564,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A060A",
@@ -8106,7 +8582,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A060B",
@@ -8123,7 +8600,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A060C",
@@ -8140,7 +8618,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A060D",
@@ -8157,7 +8636,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A111D",
@@ -8166,7 +8646,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: C4H4O6KNa.4H2O, CAS: 6381-59-5, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: C4H4O6KNa.4H2O, CAS: 6381-59-5, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "POTASSIUM SODIUM TARTRATE TETRAHYDRATE",
     "vietnamese_name": null,
     "chemical_formula": "C4H4O6KNa.4H2O",
@@ -8174,7 +8654,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A111E",
@@ -8191,7 +8672,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A111F",
@@ -8208,7 +8690,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A111G",
@@ -8225,7 +8708,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A111A",
@@ -8242,7 +8726,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A111B",
@@ -8259,7 +8744,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A111C",
@@ -8276,7 +8762,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A140A",
@@ -8285,7 +8772,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1A",
-    "description": "Tên Tiếng Việt: Kali sunfat, Công thức: K2SO4, CAS: 7778-80-5, Trạng thái/Nồng độ: rắn, Mô tả: còn nguyên",
+    "description": "Tên Tiếng Việt: Kali sunfat, Công thức: K2SO4, CAS: 7778-80-5, Trạng thái/Nồng độ: rắn, Mô tả: còn nguyên, Theo dõi: Đang mượn",
     "iupac_name": "Potassium sulfate",
     "vietnamese_name": "Kali sunfat",
     "chemical_formula": "K2SO4",
@@ -8293,7 +8780,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": null
   },
   {
     "id": "A140B",
@@ -8310,7 +8798,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A140C",
@@ -8327,7 +8816,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A140D",
@@ -8344,7 +8834,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A188",
@@ -8361,7 +8852,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B13",
@@ -8378,7 +8870,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A176",
@@ -8395,7 +8888,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A156",
@@ -8412,7 +8906,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A189",
@@ -8429,7 +8924,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A148",
@@ -8446,7 +8942,8 @@
     "state_or_concentration": "rắn",
     "status": "không xác định",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A214",
@@ -8463,7 +8960,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A207A",
@@ -8480,7 +8978,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A207B",
@@ -8497,7 +8996,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_501",
@@ -8514,7 +9014,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A207C",
@@ -8531,7 +9032,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_503",
@@ -8548,7 +9050,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_504",
@@ -8565,7 +9068,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A082",
@@ -8582,7 +9086,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_506",
@@ -8599,7 +9104,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A019B",
@@ -8616,7 +9122,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A019A",
@@ -8633,7 +9140,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B14",
@@ -8650,7 +9158,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A108B",
@@ -8667,7 +9176,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A212",
@@ -8684,7 +9194,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A206A",
@@ -8701,7 +9212,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A206B",
@@ -8718,7 +9230,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A206C",
@@ -8735,7 +9248,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A112A",
@@ -8752,7 +9266,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A112B",
@@ -8769,7 +9284,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A112C",
@@ -8786,7 +9302,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B3",
@@ -8803,7 +9320,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A125A",
@@ -8820,7 +9338,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A125B",
@@ -8837,7 +9356,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A144",
@@ -8854,7 +9374,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A114",
@@ -8863,7 +9384,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na2CO3, CAS: 497-19-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: Na2CO3, CAS: 497-19-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "SODIUM CARBONATE ANHYDROUS",
     "vietnamese_name": null,
     "chemical_formula": "Na2CO3",
@@ -8871,7 +9392,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "Hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "A114 -NC",
@@ -8880,7 +9402,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: Na2CO3, CAS: 497-19-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: Na2CO3, CAS: 497-19-8, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "SODIUM CARBONATE ANHYDROUS",
     "vietnamese_name": null,
     "chemical_formula": "Na2CO3",
@@ -8888,7 +9410,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "Hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "ITEM_524",
@@ -8905,7 +9428,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_525",
@@ -8922,7 +9446,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A126",
@@ -8939,7 +9464,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127L",
@@ -8956,7 +9482,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127M",
@@ -8973,7 +9500,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127N",
@@ -8990,7 +9518,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127O",
@@ -9007,7 +9536,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127P",
@@ -9024,7 +9554,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127Q",
@@ -9041,7 +9572,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127A",
@@ -9058,7 +9590,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127B",
@@ -9075,7 +9608,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127C",
@@ -9092,7 +9626,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127D",
@@ -9109,7 +9644,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127E",
@@ -9126,7 +9662,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127F",
@@ -9143,7 +9680,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127G",
@@ -9160,7 +9698,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127H",
@@ -9177,7 +9716,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127I",
@@ -9194,7 +9734,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127J",
@@ -9211,7 +9752,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A127K",
@@ -9228,7 +9770,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A124",
@@ -9245,7 +9788,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A124B",
@@ -9262,7 +9806,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A204",
@@ -9279,7 +9824,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A109 -NC",
@@ -9296,7 +9842,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A109A",
@@ -9313,7 +9860,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A109B",
@@ -9330,7 +9878,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A109C",
@@ -9347,7 +9896,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A109D",
@@ -9364,7 +9914,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A109F",
@@ -9381,7 +9932,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A211",
@@ -9398,7 +9950,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A074A",
@@ -9407,7 +9960,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: NAOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: NAOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "SODIUM HYDROXIDE",
     "vietnamese_name": null,
     "chemical_formula": "NAOH",
@@ -9415,7 +9968,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "A074B",
@@ -9432,7 +9986,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A074C",
@@ -9449,7 +10004,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A074D",
@@ -9458,7 +10014,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: NaOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: NaOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "SODIUM HYDROXIDE",
     "vietnamese_name": null,
     "chemical_formula": "NaOH",
@@ -9466,7 +10022,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "A074E",
@@ -9475,7 +10032,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: NaOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: NaOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đang mượn",
     "iupac_name": "SODIUM HYDROXIDE",
     "vietnamese_name": null,
     "chemical_formula": "NaOH",
@@ -9483,7 +10040,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": null
   },
   {
     "id": "A074F - NC",
@@ -9492,7 +10050,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: NaOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: không xác định",
+    "description": "Công thức: NaOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: không xác định, Theo dõi: Đang mượn",
     "iupac_name": "SODIUM HYDROXIDE",
     "vietnamese_name": null,
     "chemical_formula": "NaOH",
@@ -9500,7 +10058,8 @@
     "state_or_concentration": "rắn",
     "status": "không xác định",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": null
   },
   {
     "id": "A074G",
@@ -9509,7 +10068,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: NaOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: NaOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "SODIUM HYDROXIDE",
     "vietnamese_name": null,
     "chemical_formula": "NaOH",
@@ -9517,7 +10076,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "A074H",
@@ -9526,7 +10086,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "2A",
-    "description": "Công thức: NAOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: NAOH, CAS: 1310-73-2, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "SODIUM HYDROXIDE",
     "vietnamese_name": null,
     "chemical_formula": "NAOH",
@@ -9534,7 +10094,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "A128",
@@ -9551,7 +10112,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A208",
@@ -9568,7 +10130,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A115A",
@@ -9585,7 +10148,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A115B",
@@ -9602,7 +10166,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A115C",
@@ -9619,7 +10184,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_567",
@@ -9636,7 +10202,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A059",
@@ -9653,7 +10220,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A058A",
@@ -9670,7 +10238,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A058B",
@@ -9687,7 +10256,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A058C",
@@ -9704,7 +10274,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B2",
@@ -9721,7 +10292,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A121",
@@ -9738,7 +10310,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A110B",
@@ -9755,7 +10328,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A110A",
@@ -9772,7 +10346,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A107",
@@ -9789,7 +10364,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A113A",
@@ -9806,7 +10382,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A113B",
@@ -9823,7 +10400,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A119A",
@@ -9832,7 +10410,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NA2SO4, CAS: 7757-82-6, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: NA2SO4, CAS: 7757-82-6, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "SODIUM SUNFATE ANHYDROUS",
     "vietnamese_name": null,
     "chemical_formula": "NA2SO4",
@@ -9840,7 +10418,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "A119B",
@@ -9849,7 +10428,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1C",
-    "description": "Công thức: NA2SO4, CAS: 7757-82-6, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: NA2SO4, CAS: 7757-82-6, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Hết",
     "iupac_name": "SODIUM SUNFATE ANHYDROUS",
     "vietnamese_name": null,
     "chemical_formula": "NA2SO4",
@@ -9857,7 +10436,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "hết"
+    "tracking": "Hết",
+    "note": null
   },
   {
     "id": "B5",
@@ -9874,7 +10454,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A143",
@@ -9891,7 +10472,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A108",
@@ -9908,7 +10490,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_584",
@@ -9925,7 +10508,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163A",
@@ -9942,7 +10526,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163B",
@@ -9951,7 +10536,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "4D",
-    "description": "Công thức: (C6H10O5)n, CAS: 9005-84-9, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: (C6H10O5)n, CAS: 9005-84-9, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "STARCH SOLUBLE",
     "vietnamese_name": null,
     "chemical_formula": "(C6H10O5)n",
@@ -9959,7 +10544,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A163C",
@@ -9976,7 +10562,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163D",
@@ -9993,7 +10580,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163E",
@@ -10010,7 +10598,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163F",
@@ -10027,7 +10616,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163G",
@@ -10044,7 +10634,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163H",
@@ -10061,7 +10652,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163I",
@@ -10078,7 +10670,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163J",
@@ -10095,7 +10688,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163K",
@@ -10112,7 +10706,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163L",
@@ -10129,7 +10724,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163M",
@@ -10146,7 +10742,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163N",
@@ -10163,7 +10760,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163O",
@@ -10180,7 +10778,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163P",
@@ -10197,7 +10796,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163Q",
@@ -10214,7 +10814,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163R",
@@ -10231,7 +10832,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A163S",
@@ -10248,7 +10850,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "B6",
@@ -10265,7 +10868,8 @@
     "state_or_concentration": null,
     "status": null,
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_605",
@@ -10282,7 +10886,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_606",
@@ -10299,7 +10904,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_607",
@@ -10316,7 +10922,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_608",
@@ -10333,7 +10940,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_609",
@@ -10350,7 +10958,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_610",
@@ -10367,7 +10976,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A160A",
@@ -10384,7 +10994,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A160B",
@@ -10401,7 +11012,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A160C",
@@ -10418,7 +11030,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A160D",
@@ -10435,7 +11048,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A160E",
@@ -10452,7 +11066,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A079A",
@@ -10461,7 +11076,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1B",
-    "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: lỏng, Mô tả: còn nguyên",
+    "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: lỏng, Mô tả: còn nguyên, Theo dõi: Đang mượn",
     "iupac_name": "SULFURIC ACID",
     "vietnamese_name": null,
     "chemical_formula": "H2SO4",
@@ -10469,7 +11084,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": null
   },
   {
     "id": "A079B",
@@ -10478,7 +11094,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1B",
-    "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: lỏng, Mô tả: còn nguyên",
+    "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: lỏng, Mô tả: còn nguyên, Theo dõi: Đã mở",
     "iupac_name": "SULFURIC ACID",
     "vietnamese_name": null,
     "chemical_formula": "H2SO4",
@@ -10486,7 +11102,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "A079C",
@@ -10495,7 +11112,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1B",
-    "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: lỏng, Mô tả: còn nguyên",
+    "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: lỏng, Mô tả: còn nguyên, Theo dõi: Đang mượn, Ghi chú: 2025-10",
     "iupac_name": "SULFURIC ACID",
     "vietnamese_name": null,
     "chemical_formula": "H2SO4",
@@ -10503,7 +11120,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": "2025-10"
   },
   {
     "id": "A079D",
@@ -10520,7 +11138,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A079E",
@@ -10537,7 +11156,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A079F",
@@ -10554,7 +11174,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A079G",
@@ -10571,7 +11192,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A079H",
@@ -10580,7 +11202,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "1B",
-    "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở",
+    "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở, Theo dõi: Đang mượn",
     "iupac_name": "SULFURIC ACID",
     "vietnamese_name": null,
     "chemical_formula": "H2SO4",
@@ -10588,7 +11210,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đang mượn"
+    "tracking": "Đang mượn",
+    "note": null
   },
   {
     "id": "A079I",
@@ -10605,7 +11228,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A079J",
@@ -10622,7 +11246,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A079K",
@@ -10639,7 +11264,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A079L",
@@ -10656,7 +11282,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A079M",
@@ -10673,7 +11300,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "Còn nguyên - Note: Thử kiểm tra - 01/08/2025"
+    "tracking": "Không rõ",
+    "note": "- 01/08/2025"
   },
   {
     "id": "ITEM_629",
@@ -10690,7 +11318,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A190",
@@ -10707,7 +11336,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A224",
@@ -10724,7 +11354,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_632",
@@ -10741,7 +11372,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A021",
@@ -10758,7 +11390,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A095",
@@ -10775,7 +11408,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A097",
@@ -10792,7 +11426,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A042A",
@@ -10809,7 +11444,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A042B",
@@ -10826,7 +11462,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A154",
@@ -10835,7 +11472,7 @@
     "quantity": 1,
     "unit": "đơn vị",
     "location": "Không rõ",
-    "description": "Công thức: CCL3COOH, CAS: 76-03-9, Trạng thái/Nồng độ: rắn, Mô tả: đã mở",
+    "description": "Công thức: CCL3COOH, CAS: 76-03-9, Trạng thái/Nồng độ: rắn, Mô tả: đã mở, Theo dõi: Đã mở",
     "iupac_name": "TRICHCLOROACETIC ACID",
     "vietnamese_name": null,
     "chemical_formula": "CCL3COOH",
@@ -10843,7 +11480,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": "đã mở"
+    "tracking": "Đã mở",
+    "note": null
   },
   {
     "id": "ITEM_639",
@@ -10860,7 +11498,8 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A158A",
@@ -10877,7 +11516,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A158B",
@@ -10894,7 +11534,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_642",
@@ -10911,7 +11552,8 @@
     "state_or_concentration": "rawns",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A117A",
@@ -10928,7 +11570,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A117B",
@@ -10945,7 +11588,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A116A",
@@ -10962,7 +11606,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A116B",
@@ -10979,7 +11624,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A167",
@@ -10996,7 +11642,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A186",
@@ -11013,7 +11660,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A191",
@@ -11030,7 +11678,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A218A",
@@ -11047,7 +11696,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A218B",
@@ -11064,7 +11714,8 @@
     "state_or_concentration": "lỏng",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A215A",
@@ -11081,7 +11732,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A215B",
@@ -11098,7 +11750,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A084",
@@ -11115,7 +11768,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A174A",
@@ -11132,7 +11786,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A174B",
@@ -11149,7 +11804,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A174C",
@@ -11166,7 +11822,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A105B",
@@ -11183,7 +11840,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A105A",
@@ -11200,7 +11858,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A089A",
@@ -11217,7 +11876,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A089B",
@@ -11234,7 +11894,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A102",
@@ -11251,7 +11912,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "ITEM_663",
@@ -11268,7 +11930,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A088A",
@@ -11285,7 +11948,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A088B",
@@ -11302,7 +11966,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A088C",
@@ -11319,7 +11984,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A088D",
@@ -11336,7 +12002,8 @@
     "state_or_concentration": "rắn",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A088E",
@@ -11353,7 +12020,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A088F",
@@ -11370,7 +12038,8 @@
     "state_or_concentration": "rắn",
     "status": "còn nguyên",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   },
   {
     "id": "A159A",
@@ -11387,6 +12056,7 @@
     "state_or_concentration": "lỏng",
     "status": "đã mở",
     "purpose": null,
-    "tracking": null
+    "tracking": "Không rõ",
+    "note": null
   }
 ]

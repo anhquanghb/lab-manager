@@ -5,8 +5,8 @@ from src.database_admin import AdminDatabaseManager
 import os
 from pathlib import Path
 from src.common_utils import remove_accents_and_normalize
-from datetime import datetime # Import datetime
-import re # Import re for regex operations
+from datetime import datetime
+import re
 
 # --- Khởi tạo các Manager (chỉ một lần và được cache) ---
 @st.cache_resource
@@ -20,7 +20,6 @@ def get_managers():
         "admin_db_manager": admin_db_instance
     }
 
-# Khởi tạo và gán các manager
 managers = get_managers()
 db_manager = managers["db_manager"]
 admin_db_manager = managers["admin_db_manager"]
@@ -37,7 +36,7 @@ VALID_TRACKING_STATUSES = [
     "Thất lạc",
     "Hư hỏng",
     "Đang gửi/sửa",
-    "Không rõ" # Thêm tùy chọn không rõ nếu tracking ban đầu rỗng
+    "Không rõ"
 ]
 
 def admin_login_form():
@@ -53,7 +52,7 @@ def admin_login_form():
 
 def admin_dashboard():
     """Hiển thị nội dung chính của trang Admin sau khi đăng nhập thành công."""
-    st.title("⚙️ Trang Admin - Quản lý Vật tư & Hóa chất")
+    st.title("⚙️ Trang Theo dõi - Quản lý Vật tư & Hóa chất")
 
     if st.button("Đăng xuất Admin"):
         st.session_state["admin_logged_in"] = False
@@ -68,7 +67,6 @@ def admin_dashboard():
 
     if search_button and item_id_to_find:
         st.session_state['admin_current_item_id'] = item_id_to_find
-        # Sử dụng db_manager (đọc) cho tìm kiếm
         st.session_state['admin_search_results'] = db_manager.get_by_id(item_id_to_find) 
     
     # Hiển thị kết quả tìm kiếm và form cập nhật
@@ -84,66 +82,58 @@ def admin_dashboard():
         st.write(f"**Trạng thái/Nồng độ:** {item_data['state_or_concentration'] if pd.notna(item_data['state_or_concentration']) else 'N/A'}")
         st.write(f"**Tình trạng:** {item_data['status'] if pd.notna(item_data['status']) else 'N/A'}")
         st.write(f"**Mục đích:** {item_data['purpose'] if pd.notna(item_data['purpose']) else 'N/A'}")
-        st.write(f"**Theo dõi:** {item_data['tracking'] if pd.notna(item_data['tracking']) else 'N/A'}")
+        st.write(f"**Theo dõi (Trạng thái):** {item_data['tracking'] if pd.notna(item_data['tracking']) else 'N/A'}")
+        st.write(f"**Ghi chú:** {item_data['note'] if pd.notna(item_data['note']) else 'N/A'}")
         
         st.markdown("---")
         st.subheader("Cập nhật Tracking")
 
-        # Lấy trạng thái tracking hiện tại hoặc gán "Không rõ" nếu trống
-        current_tracking_value = item_data['tracking'] if pd.notna(item_data['tracking']) else "Không rõ"
-        # Tìm chỉ mục của trạng thái hiện tại trong danh sách để đặt làm mặc định cho selectbox
+        current_tracking_status = item_data['tracking'] if pd.notna(item_data['tracking']) else "Không rõ"
         try:
-            default_index = VALID_TRACKING_STATUSES.index(current_tracking_value.split(" - Note:")[0].strip()) # Chỉ lấy phần trạng thái chính
+            default_index_status = VALID_TRACKING_STATUSES.index(current_tracking_status)
         except ValueError:
-            default_index = VALID_TRACKING_STATUSES.index("Không rõ") # Nếu giá trị hiện tại không hợp lệ, mặc định là "Không rõ"
+            default_index_status = VALID_TRACKING_STATUSES.index("Không rõ")
 
-        # BỔ SUNG: Selectbox cho trạng thái Tracking
         selected_tracking_status = st.selectbox(
             f"Chọn trạng thái Theo dõi cho ID '{item_data['id']}'",
             options=VALID_TRACKING_STATUSES,
-            index=default_index,
+            index=default_index_status,
             key="selected_tracking_status_selectbox"
         )
 
-        # BỔ SUNG: Input cho ghi chú
-        current_note = ""
-        # Trích xuất ghi chú từ trường tracking hiện tại nếu có
-        # Điều chỉnh regex để chỉ lấy phần ghi chú mà không bao gồm ngày tháng
-        if "Note: " in current_tracking_value:
-            note_match = re.search(r"Note: (.+?)(?: - \d{2}/\d{2}/\d{4})?$", current_tracking_value) # Điều chỉnh regex
-            if note_match:
-                current_note = note_match.group(1).strip()
+        current_note_value = item_data['note'] if pd.notna(item_data['note']) else ""
         
-        note_input = st.text_input(
-            "Thêm ghi chú (tùy chọn):",
-            value=current_note,
+        new_note_input = st.text_area(
+            "Thêm ghi chú:", # Bỏ chữ "tùy chọn" vì nó sẽ luôn có ngày
+            value=current_note_value,
             key="tracking_note_input"
         )
         
         if st.button("Lưu và Đẩy lên GitHub", key="update_tracking_button"):
-            # Tạo chuỗi tracking mới dựa trên lựa chọn và ghi chú
-            new_tracking_info = selected_tracking_status
-            if note_input:
-                # Định dạng ngày tháng năm
-                current_date = datetime.now().strftime("%d/%m/%Y") # ĐÃ SỬA LỖI: %Y thay vì %XY
-                new_tracking_info += f" - Note: {note_input} - {current_date}"
+            current_date = datetime.now().strftime("%d/%m/%Y")
+            
+            # Thay đổi logic này: note sẽ luôn có ngày tháng, ngay cả khi new_note_input rỗng
+            # Nếu new_note_input rỗng, note sẽ chỉ là "- DD/MM/YYYY"
+            # Nếu new_note_input có giá trị, note sẽ là "[giá_trị] - DD/MM/YYYY"
+            final_note_value = f"{new_note_input.strip()} - {current_date}" if new_note_input.strip() else f"- {current_date}"
+            # Bạn có thể cân nhắc nếu muốn ghi chú rỗng hoàn toàn thì không có ngày:
+            # final_note_value = f"{new_note_input.strip()} - {current_date}" if new_note_input.strip() else None
 
-            # 1. Cập nhật trên bộ nhớ (vẫn qua db_manager vì đó là instance chứa DataFrame chính)
+
             idx_to_update = db_manager.inventory_data[db_manager.inventory_data['id'] == item_data['id']].index
         
             if not idx_to_update.empty:
-                db_manager.inventory_data.loc[idx_to_update, 'tracking'] = new_tracking_info
-                # Cập nhật lại cột normalized
-                db_manager.inventory_data.loc[idx_to_update, 'tracking_normalized'] = remove_accents_and_normalize(new_tracking_info)
+                db_manager.inventory_data.loc[idx_to_update, 'tracking'] = selected_tracking_status
+                db_manager.inventory_data.loc[idx_to_update, 'tracking_normalized'] = remove_accents_and_normalize(selected_tracking_status)
+                db_manager.inventory_data.loc[idx_to_update, 'note'] = final_note_value
+                db_manager.inventory_data.loc[idx_to_update, 'note_normalized'] = remove_accents_and_normalize(final_note_value)
 
-                st.success(f"Thông tin theo dõi cho ID '{item_data['id']}' đã được cập nhật trên bộ nhớ.")
+                st.success(f"Thông tin theo dõi và ghi chú cho ID '{item_data['id']}' đã được cập nhật trên bộ nhớ.")
                 
-                # 2. Lưu vào file JSON (sử dụng admin_db_manager)
                 if admin_db_manager.save_inventory_to_json():
                     st.success("Đã lưu thay đổi vào file inventory.json.")
                     
-                    # 3. Đẩy lên GitHub (sử dụng admin_db_manager)
-                    commit_message = f"feat(admin): Update tracking for ID {item_data['id']} to '{new_tracking_info}'"
+                    commit_message = f"feat(admin): Update tracking and note for ID {item_data['id']}"
                     if admin_db_manager.push_inventory_to_github(commit_message):
                         st.success("Đã đẩy thay đổi lên GitHub thành công!")
                     else:
@@ -151,7 +141,6 @@ def admin_dashboard():
                 else:
                     st.error("Lỗi: Không thể lưu thay đổi vào file inventory.json.")
                 
-                # Cập nhật lại kết quả tìm kiếm để hiển thị thông tin mới (và kích hoạt rerun)
                 st.session_state['admin_search_results'] = db_manager.get_by_id(item_data['id'])
                 st.rerun() 
             else:

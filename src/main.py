@@ -1,48 +1,46 @@
+# src/main.py
+
 import streamlit as st
 import sys
 import os
-from pathlib import Path # BỔ SUNG: Import Path
+from pathlib import Path
 
 # Thêm thư mục gốc của dự án vào Python path
-project_root = Path(__file__).parent.parent # Sửa lỗi: Sử dụng pathlib
+project_root = Path(__file__).parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 from src.chatbot_logic import ChatbotLogic
 from src.database_manager import DatabaseManager
-from src.admin_page import admin_page # Import trang admin mới tạo
+from src.admin_page import admin_page # Import trang admin
+from src.statistics_page import statistics_page # BỔ SUNG: Import trang thống kê mới
 
 # Khởi tạo chatbot logic và database manager một lần duy nhất
 @st.cache_resource
 def get_chatbot_logic():
     # Khởi tạo DatabaseManager trước để có thể dùng cho việc upload log
-    db_manager_instance = DatabaseManager() 
+    db_manager_instance = DatabaseManager()
     
     # Để có đường dẫn đầy đủ đến file log, chúng ta cần một instance của ChatbotLogic
     # (hoặc ít nhất là biết logic xây dựng đường dẫn của nó).
     # Chúng ta sẽ tạo một instance tạm thời để lấy đường dẫn log đầy đủ.
     # ChatbotLogic sẽ được khởi tạo lại (hoặc trả về instance đã cache) ở dòng return cuối.
-    temp_chatbot_logic_instance = ChatbotLogic() 
+    temp_chatbot_logic_instance = ChatbotLogic()
     log_file_full_path = temp_chatbot_logic_instance.log_filepath # Lấy đường dẫn đầy đủ (Path object)
 
     print("Bắt đầu kiểm tra và tải nhật ký tự động khi ứng dụng khởi động...")
     # Sửa lỗi: Truyền đường dẫn đầy đủ (dưới dạng string) đến hàm upload
-    if db_manager_instance.upload_logs_to_github_on_startup(str(log_file_full_path)): 
+    if db_manager_instance.upload_logs_to_github_on_startup(str(log_file_full_path)):
          print("Tải nhật ký tự động hoàn tất (hoặc không có log để tải).")
     else:
          print("Tải nhật nhật ký tự động thất bại hoặc có lỗi xảy ra.")
     
     # Trả về instance của ChatbotLogic để Streamlit cache và sử dụng
-    return temp_chatbot_logic_instance 
+    return temp_chatbot_logic_instance
 
 # Hàm chứa logic của trang Chatbot
 def chatbot_page():
-    # st.set_page_config ở đây sẽ gây cảnh báo nếu chạy nhiều lần. 
-    # Tốt nhất nên đặt 1 lần ở main_app nếu có các trang khác nhau.
-    # Tuy nhiên, nếu bạn muốn mỗi "trang" có config riêng, có thể giữ.
-    # Để Streamlit không cảnh báo, thường chỉ gọi một lần ở điểm vào chính.
-    # Hoặc xóa nếu st.sidebar.radio không thay đổi page_title.
-    st.set_page_config(page_title="Lab Chatbot - Duy Tan University", layout="centered") 
+    st.set_page_config(page_title="Lab Chatbot - Duy Tan University", layout="centered")
     st.title("🧪 Lab Chatbot - Duy Tan University")
     st.write("Chào bạn! Tôi là trợ lý ảo giúp bạn tra cứu, thống kê vật tư và hóa chất trong phòng thí nghiệm được thiết kế bởi Khoa Môi trường và Khoa học tự nhiên phục vụ công tác nội bộ. Bạn muốn tìm kiếm hóa chất hoặc vật tư? Hãy cho tôi biết! Hoặc nếu bạn muốn tôi hướng dẫn tìm kiếm, hãy gõ Hướng dẫn...")
 
@@ -76,7 +74,8 @@ def chatbot_page():
 # Hàm chính để điều khiển các trang
 def main_app():
     st.sidebar.title("Điều hướng")
-    page_selection = st.sidebar.radio("Chọn trang:", ["Chatbot", "Admin"])
+    # BỔ SUNG/SỬA ĐỔI: Thêm "Thống kê" và đổi tên "Admin" thành "Theo dõi"
+    page_selection = st.sidebar.radio("Chọn trang:", ["Chatbot", "Thống kê", "Theo dõi"])
 
     # BỔ SUNG: Nút để xóa cache toàn cục
     if st.sidebar.button("Xóa Cache 🗑️"):
@@ -86,7 +85,9 @@ def main_app():
 
     if page_selection == "Chatbot":
         chatbot_page()
-    elif page_selection == "Admin":
+    elif page_selection == "Thống kê": # BỔ SUNG: Điều kiện cho trang Thống kê
+        statistics_page()
+    elif page_selection == "Theo dõi": # ĐÃ ĐỔI TÊN: "Theo dõi" thay vì "Admin"
         admin_page()
 
 if __name__ == "__main__":

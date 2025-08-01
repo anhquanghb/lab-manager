@@ -1,13 +1,13 @@
 import pandas as pd
 import json
 import os
-import unicodedata # Giữ lại nếu có các hàm xử lý unicode khác được dùng, nếu không có thể xóa
-import re # Giữ lại nếu có các hàm regex khác được dùng, nếu không có thể xóa
+import unicodedata 
+import re 
 from pathlib import Path
-import git # Vẫn cần cho upload_logs_to_github_on_startup
-from datetime import datetime # Vẫn cần cho upload_logs_to_github_on_startup
-import streamlit as st # Vẫn cần cho upload_logs_to_github_on_startup
-from src.common_utils import remove_accents_and_normalize # Import hàm chuẩn hóa từ common_utils
+import git 
+from datetime import datetime 
+import streamlit as st 
+from src.common_utils import remove_accents_and_normalize 
 
 class DatabaseManager:
     def __init__(self, data_path='data/inventory.json'):
@@ -44,6 +44,13 @@ class DatabaseManager:
             df['vietnamese_name_normalized'] = df['vietnamese_name'].apply(remove_accents_and_normalize)
             
             df['description_normalized'] = df['description'].apply(remove_accents_and_normalize)
+            # BỔ SUNG: Chuẩn hóa cột 'note' mới
+            # Cần đảm bảo cột 'note' tồn tại trước khi áp dụng .apply()
+            if 'note' in df.columns: 
+                df['note_normalized'] = df['note'].apply(remove_accents_and_normalize)
+            else:
+                df['note'] = None # Tạo cột 'note' nếu nó chưa tồn tại (cho dữ liệu cũ)
+                df['note_normalized'] = None # Và cột normalized của nó
 
             return df
         except json.JSONDecodeError:
@@ -63,11 +70,15 @@ class DatabaseManager:
             'id_normalized', 'name_normalized', 'type_normalized', 
             'location_normalized', 'description_normalized', 
             'chemical_formula_normalized', 'cas_number_normalized',
-            'iupac_name_normalized', 'vietnamese_name_normalized'
+            'iupac_name_normalized', 'vietnamese_name_normalized',
+            'note_normalized' # BỔ SUNG: Thêm cột note vào tìm kiếm
         ]
+        
+        # Lọc ra chỉ các cột thực sự tồn tại trong DataFrame
+        existing_search_cols = [col for col in search_cols if col in self.inventory_data.columns]
 
-        mask = self.inventory_data[search_cols].apply(
-            lambda col: col.fillna('').str.contains(query_normalized, na=False)
+        mask = self.inventory_data[existing_search_cols].apply(
+            lambda col: col.fillna('').astype(str).str.contains(query_normalized, na=False)
         ).any(axis=1)
 
         results = self.inventory_data[mask]
@@ -202,9 +213,6 @@ class DatabaseManager:
         results = self.inventory_data[self.inventory_data['cas_number_normalized'] == cas_number_normalized]
         return results
 
-    # Hàm save_inventory_to_json đã được di chuyển sang database_admin.py
-    # Hàm push_inventory_to_github đã được di chuyển sang database_admin.py
-    
     def upload_logs_to_github_on_startup(self, log_filepath):
         github_token = st.secrets.get("GITHUB_TOKEN")
 
