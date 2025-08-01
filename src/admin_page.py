@@ -1,10 +1,12 @@
 import streamlit as st
 import pandas as pd
-from src.database_manager import DatabaseManager # Import DatabaseManager cho các thao tác đọc
-from src.database_admin import AdminDatabaseManager # BỔ SUNG: Import AdminDatabaseManager cho các thao tác ghi
+from src.database_manager import DatabaseManager
+from src.database_admin import AdminDatabaseManager
 import os
 from pathlib import Path
 from src.common_utils import remove_accents_and_normalize
+from datetime import datetime # Import datetime
+import re # Import re for regex operations
 
 # --- Khởi tạo các Manager (chỉ một lần và được cache) ---
 @st.cache_resource
@@ -18,13 +20,25 @@ def get_managers():
         "admin_db_manager": admin_db_instance
     }
 
-# BỔ SUNG: Khởi tạo và gán các manager
+# Khởi tạo và gán các manager
 managers = get_managers()
 db_manager = managers["db_manager"]
 admin_db_manager = managers["admin_db_manager"]
 
 # --- Lấy mật khẩu từ Streamlit secrets ---
 ADMIN_PASSWORD = st.secrets.get("ADMIN_PASSWORD")
+
+# Danh sách các trạng thái Tracking hợp lệ
+VALID_TRACKING_STATUSES = [
+    "Còn nguyên",
+    "Đã mở",
+    "Đang mượn",
+    "Hết",
+    "Thất lạc",
+    "Hư hỏng",
+    "Đang gửi/sửa",
+    "Không rõ" # Thêm tùy chọn không rõ nếu tracking ban đầu rỗng
+]
 
 def admin_login_form():
     """Hiển thị form đăng nhập Admin."""
@@ -75,18 +89,51 @@ def admin_dashboard():
         st.markdown("---")
         st.subheader("Cập nhật Tracking")
 
-        current_tracking = item_data['tracking'] if pd.notna(item_data['tracking']) else ""
-        new_tracking_info = st.text_area(
-            f"Cập nhật thông tin Theo dõi cho ID '{item_data['id']}' (hiện tại: '{current_tracking}')",
-            value=current_tracking,
-            key="new_tracking_info_textarea"
+        # Lấy trạng thái tracking hiện tại hoặc gán "Không rõ" nếu trống
+        current_tracking_value = item_data['tracking'] if pd.notna(item_data['tracking']) else "Không rõ"
+        # Tìm chỉ mục của trạng thái hiện tại trong danh sách để đặt làm mặc định cho selectbox
+        try:
+            default_index = VALID_TRACKING_STATUSES.index(current_tracking_value.split(" - Note:")[0].strip()) # Chỉ lấy phần trạng thái chính
+        except ValueError:
+            default_index = VALID_TRACKING_STATUSES.index("Không rõ") # Nếu giá trị hiện tại không hợp lệ, mặc định là "Không rõ"
+
+        # BỔ SUNG: Selectbox cho trạng thái Tracking
+        selected_tracking_status = st.selectbox(
+            f"Chọn trạng thái Theo dõi cho ID '{item_data['id']}'",
+            options=VALID_TRACKING_STATUSES,
+            index=default_index,
+            key="selected_tracking_status_selectbox"
+        )
+
+        # BỔ SUNG: Input cho ghi chú
+        current_note = ""
+        # Trích xuất ghi chú từ trường tracking hiện tại nếu có
+        # Điều chỉnh regex để chỉ lấy phần ghi chú mà không bao gồm ngày tháng
+        if "Note: " in current_tracking_value:
+            note_match = re.search(r"Note: (.+?)(?: - \d{2}/\d{2}/\d{4})?$", current_tracking_value) # Điều chỉnh regex
+            if note_match:
+                current_note = note_match.group(1).strip()
+        
+        note_input = st.text_input(
+            "Thêm ghi chú (tùy chọn):",
+            value=current_note,
+            key="tracking_note_input"
         )
         
         if st.button("Lưu và Đẩy lên GitHub", key="update_tracking_button"):
+            # Tạo chuỗi tracking mới dựa trên lựa chọn và ghi chú
+            new_tracking_info = selected_tracking_status
+            if note_input:
+                # Định dạng ngày tháng năm
+                current_date = datetime.now().strftime("%d/%m/%Y") # ĐÃ SỬA LỖI: %Y thay vì %XY
+                new_tracking_info += f" - Note: {note_input} - {current_date}"
+
             # 1. Cập nhật trên bộ nhớ (vẫn qua db_manager vì đó là instance chứa DataFrame chính)
             idx_to_update = db_manager.inventory_data[db_manager.inventory_data['id'] == item_data['id']].index
+        
             if not idx_to_update.empty:
                 db_manager.inventory_data.loc[idx_to_update, 'tracking'] = new_tracking_info
+                # Cập nhật lại cột normalized
                 db_manager.inventory_data.loc[idx_to_update, 'tracking_normalized'] = remove_accents_and_normalize(new_tracking_info)
 
                 st.success(f"Thông tin theo dõi cho ID '{item_data['id']}' đã được cập nhật trên bộ nhớ.")
