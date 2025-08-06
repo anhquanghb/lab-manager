@@ -6,10 +6,9 @@
   ],
   "units": [
     "chai",
-    "hộp",
     "gram",
+    "hộp",
     "kg",
-    "ml",
     "lít"
   ],
   "statuses": [
