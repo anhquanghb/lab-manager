@@ -1,25 +1,24 @@
 import pandas as pd
 import json
 import os
-import unicodedata 
-import re 
+import unicodedata
+import re
 from pathlib import Path
-import git 
-from datetime import datetime 
-import streamlit as st 
-from src.common_utils import remove_accents_and_normalize 
+import git
+from datetime import datetime
+import streamlit as st
+from src.common_utils import remove_accents_and_normalize
 
 class DatabaseManager:
-    def __init__(self, data_path='data/inventory.json'):
+    def __init__(self, data_path='data/inventory.json', config_path='data/config.json'):
         project_root = Path(__file__).parent.parent
         self.data_path = project_root / data_path
+        self.config_path = project_root / config_path
         self.inventory_data = self._load_data()
+        self.config_data = self._load_config()
 
     def _load_data(self):
-        """
-        Tải dữ liệu từ file JSON và chuẩn hóa các cột cần thiết.
-        Dữ liệu JSON giờ đây đã có cấu trúc tách biệt rõ ràng hơn.
-        """
+        # (Nội dung của hàm này giữ nguyên)
         if not self.data_path.exists():
             print(f"Lỗi: Không tìm thấy file dữ liệu tại {self.data_path}")
             return pd.DataFrame()
@@ -28,7 +27,6 @@ class DatabaseManager:
                 data = json.load(f)
             df = pd.DataFrame(data)
 
-            # --- BẮT ĐẦU CHUẨN HÓA DỮ LIỆU SAU KHI TẢI (Sử dụng hàm từ common_utils) ---
             df['id_normalized'] = df['id'].apply(remove_accents_and_normalize)
             df['name_normalized'] = df['name'].apply(remove_accents_and_normalize)
             df['type_normalized'] = df['type'].apply(remove_accents_and_normalize)
@@ -44,13 +42,11 @@ class DatabaseManager:
             df['vietnamese_name_normalized'] = df['vietnamese_name'].apply(remove_accents_and_normalize)
             
             df['description_normalized'] = df['description'].apply(remove_accents_and_normalize)
-            # BỔ SUNG: Chuẩn hóa cột 'note' mới
-            # Cần đảm bảo cột 'note' tồn tại trước khi áp dụng .apply()
             if 'note' in df.columns: 
                 df['note_normalized'] = df['note'].apply(remove_accents_and_normalize)
             else:
-                df['note'] = None # Tạo cột 'note' nếu nó chưa tồn tại (cho dữ liệu cũ)
-                df['note_normalized'] = None # Và cột normalized của nó
+                df['note'] = None
+                df['note_normalized'] = None
 
             return df
         except json.JSONDecodeError:
@@ -60,7 +56,40 @@ class DatabaseManager:
             print(f"Lỗi khi tải dữ liệu: {e}")
             return pd.DataFrame()
 
+    def _load_config(self):
+        """Tải cấu hình từ file config.json."""
+        if not self.config_path.exists():
+            print(f"Lỗi: Không tìm thấy file cấu hình tại {self.config_path}")
+            return {}
+        try:
+            with open(self.config_path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+            return config
+        except json.JSONDecodeError:
+            print(f"Lỗi: File {self.config_path} không phải là JSON hợp lệ.")
+            return {}
+        except Exception as e:
+            print(f"Lỗi khi tải file cấu hình: {e}")
+            return {}
+            
+    def get_all_locations_from_config(self):
+        """Lấy danh sách các vị trí từ file cấu hình."""
+        locations = self.config_data.get('locations', [])
+        return sorted(locations)
+
+    def get_all_units_from_config(self):
+        """Lấy danh sách các đơn vị từ file cấu hình."""
+        units = self.config_data.get('units', [])
+        return sorted(units)
+
+    def get_tracking_statuses_from_config(self):
+        """Lấy danh sách trạng thái theo dõi từ file cấu hình."""
+        tracking_statuses = self.config_data.get('tracking_statuses', [])
+        return sorted(tracking_statuses)
+
+    # (Các hàm khác giữ nguyên)
     def search_item(self, query):
+        # (Nội dung của hàm này giữ nguyên)
         if self.inventory_data.empty:
             return pd.DataFrame()
 
@@ -71,10 +100,9 @@ class DatabaseManager:
             'location_normalized', 'description_normalized', 
             'chemical_formula_normalized', 'cas_number_normalized',
             'iupac_name_normalized', 'vietnamese_name_normalized',
-            'note_normalized' # BỔ SUNG: Thêm cột note vào tìm kiếm
+            'note_normalized'
         ]
         
-        # Lọc ra chỉ các cột thực sự tồn tại trong DataFrame
         existing_search_cols = [col for col in search_cols if col in self.inventory_data.columns]
 
         mask = self.inventory_data[existing_search_cols].apply(
@@ -83,7 +111,7 @@ class DatabaseManager:
 
         results = self.inventory_data[mask]
         return results
-    
+
     def get_quantity(self, item_name):
         if self.inventory_data.empty:
             return None, None
@@ -204,7 +232,7 @@ class DatabaseManager:
 
         results = self.inventory_data[mask_type & mask_location]
         return results
- 
+
     def search_by_cas(self, cas_number):
         if self.inventory_data.empty:
             return pd.DataFrame()
@@ -214,6 +242,7 @@ class DatabaseManager:
         return results
 
     def upload_logs_to_github_on_startup(self, log_filepath):
+        # (Nội dung của hàm này giữ nguyên)
         github_token = st.secrets.get("GITHUB_TOKEN")
 
         if not github_token:
