@@ -71,10 +71,9 @@ def display_gemini_api_setting(db_manager: DatabaseManager, admin_db_manager: Ad
     
     # Hiển thị và chọn tên mô hình
     current_model_name = db_manager.config_data.get('gemini_model_name', 'gemini-1.5-flash')
-    model_options = ['gemini-1.5-flash', 'gemini-1.5-pro']
-    new_model_name = st.selectbox("Chọn mô hình Gemini:", 
-                                  options=model_options, 
-                                  index=model_options.index(current_model_name) if current_model_name in model_options else 0)
+    new_model_name = st.text_input("Nhập tên mô hình Gemini:", 
+                                   value=current_model_name,
+                                   key="gemini_model_name_input")
     
     # Hiển thị và chỉnh sửa Full Prompt
     current_prompt = db_manager.config_data.get('ai_full_prompt', '')
@@ -82,7 +81,7 @@ def display_gemini_api_setting(db_manager: DatabaseManager, admin_db_manager: Ad
 
     if st.button("Lưu cài đặt và Đẩy lên GitHub", key="save_gemini_settings_button"):
         db_manager.config_data['gemini_api_key'] = new_gemini_api_key.strip()
-        db_manager.config_data['gemini_model_name'] = new_model_name
+        db_manager.config_data['gemini_model_name'] = new_model_name.strip()
         db_manager.config_data['ai_full_prompt'] = new_prompt.strip()
 
         if admin_db_manager.save_config_to_json():
