@@ -63,6 +63,8 @@ class ChatbotLogic:
     - Liệt kê theo Loại và Vị trí: `liệt kê [Loại] trong tủ [Vị trí]`.
 
     Nếu bạn cần hướng dẫn này bất cứ lúc nào, chỉ chỉ cần hỏi "hướng dẫn" hoặc "cách tìm kiếm".
+
+    Nếu bạn cần làm việc với Trợ lý AI, hãy gọi trợ lý AI ở thanh điều hướng >> phía trên hoặc bên trái màn hình.
     """
 
     def _format_results(self, results, query_context=""):

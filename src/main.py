@@ -45,7 +45,8 @@ def get_managers():
 def chatbot_page():
     st.set_page_config(page_title="Lab Chatbot - Duy Tan University", layout="centered")
     st.title("🧪 Lab Chatbot - Duy Tan University")
-    st.write("Chào bạn! Tôi là trợ lý ảo giúp bạn tra cứu, thống kê vật tư và hóa chất trong phòng thí nghiệm được thiết kế bởi Khoa Môi trường và Khoa học tự nhiên phục vụ công tác nội bộ. Bạn muốn tìm kiếm hóa chất hoặc vật tư? Hãy cho tôi biết! Hoặc nếu bạn muốn tôi hướng dẫn tìm kiếm, hãy gõ Hướng dẫn...")
+    st.write("Chào bạn! Tôi là trợ lý ảo giúp bạn tra cứu, thống kê vật tư và hóa chất trong phòng thí nghiệm được thiết kế bởi Khoa Môi trường và Khoa học tự nhiên phục vụ công tác nội bộ. Bạn muốn tìm kiếm hóa chất hoặc vật tư? Hãy cho tôi biết! Hoặc nếu bạn muốn tôi hướng dẫn tìm kiếm, hãy gõ Hướng dẫn... " \
+    "Nếu bạn cần làm việc với Trợ lý AI, hãy gọi trợ lý AI ở thanh điều hướng >> phía trên hoặc bên trái màn hình.")
 
     chatbot = get_chatbot_logic()
 
