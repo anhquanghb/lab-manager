@@ -1,3 +1,5 @@
+# src/admin_page.py
+
 import streamlit as st
 import pandas as pd
 from src.database_manager import DatabaseManager
@@ -23,7 +25,12 @@ admin_db_manager = managers["admin_db_manager"]
 
 ADMIN_PASSWORD = st.secrets.get("ADMIN_PASSWORD")
 
-# BỎ DÒNG NÀY: VALID_TRACKING_STATUSES = [...] và lấy từ db_manager.config_data
+def sort_options(options):
+    if not options:
+        return []
+    special_values = [v for v in ["Không rõ", "Không xác định"] if v in options]
+    other_values = sorted([v for v in options if v not in special_values and v.strip() != ""])
+    return special_values + other_values
 
 def admin_login_form():
     st.title("🔐 Đăng nhập Admin")
@@ -113,16 +120,17 @@ def update_tracking_form(item_data):
     st.markdown("##### Cập nhật trạng thái Theo dõi")
     
     tracking_statuses = db_manager.config_data.get('tracking_statuses', [])
+    sorted_tracking_statuses = sort_options(tracking_statuses)
     current_tracking_status = item_data['tracking'] if pd.notna(item_data['tracking']) else "Không rõ"
     
     try:
-        default_index_status = tracking_statuses.index(current_tracking_status)
+        default_index_status = sorted_tracking_statuses.index(current_tracking_status)
     except ValueError:
-        default_index_status = tracking_statuses.index("Không rõ")
+        default_index_status = 0 # Mặc định là "Không rõ"
 
     selected_tracking_status = st.selectbox(
         f"Chọn trạng thái Theo dõi cho ID '{item_data['id']}'",
-        options=tracking_statuses,
+        options=sorted_tracking_statuses,
         index=default_index_status,
         key="selected_tracking_status_selectbox"
     )
@@ -172,12 +180,18 @@ def update_location_form(item_data):
     st.markdown("##### Cập nhật Vị trí")
     
     locations = db_manager.config_data.get('locations', [])
-    current_location = item_data['location'] if pd.notna(item_data['location']) else ""
+    sorted_locations = sort_options(locations)
+    current_location = item_data['location'] if pd.notna(item_data['location']) else "Không rõ"
     
+    try:
+        default_index_location = sorted_locations.index(current_location)
+    except ValueError:
+        default_index_location = 0
+
     selected_location = st.selectbox(
         f"Chọn Vị trí mới cho ID '{item_data['id']}'",
-        options=locations,
-        index=locations.index(current_location) if current_location in locations else 0, # Sửa lỗi nếu location không có trong list
+        options=sorted_locations,
+        index=default_index_location,
         key="new_location_select"
     )
 
@@ -189,8 +203,8 @@ def update_location_form(item_data):
     )
 
     if st.button("Lưu và Đẩy lên GitHub", key="update_location_button_form"):
-        if not selected_location:
-            st.error("Vị trí không được để trống.")
+        if not selected_location or selected_location in ["Không rõ", "Không xác định"]:
+            st.error("Vị trí không được để trống hoặc là giá trị mặc định.")
         else:
             old_note = item_data['note'] if pd.notna(item_data['note']) else ""
             default_note = f"{datetime.now().strftime('%d/%m/%Y')}: Vị trí thay đổi từ '{current_location}' sang '{selected_location}'."
@@ -229,8 +243,9 @@ def update_quantity_form(item_data):
     st.markdown("##### Cập nhật Số lượng")
     
     units = db_manager.config_data.get('units', [])
+    sorted_units = sort_options(units)
     current_quantity = item_data['quantity'] if pd.notna(item_data['quantity']) else 0
-    current_unit = item_data['unit'] if pd.notna(item_data['unit']) else ""
+    current_unit = item_data['unit'] if pd.notna(item_data['unit']) else "đơn vị"
 
     new_quantity = st.number_input(
         f"Nhập Số lượng mới cho ID '{item_data['id']}'",
@@ -240,10 +255,15 @@ def update_quantity_form(item_data):
         key="new_quantity_input"
     )
 
+    try:
+        default_index_unit = sorted_units.index(current_unit)
+    except ValueError:
+        default_index_unit = 0
+
     selected_unit = st.selectbox(
         f"Chọn Đơn vị mới cho ID '{item_data['id']}'",
-        options=units,
-        index=units.index(current_unit) if current_unit in units else 0, # Sửa lỗi nếu unit không có trong list
+        options=sorted_units,
+        index=default_index_unit,
         key="new_unit_select"
     )
 

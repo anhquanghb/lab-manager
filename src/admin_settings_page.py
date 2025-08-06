@@ -1,3 +1,5 @@
+# src/admin_settings_page.py
+
 import streamlit as st
 import pandas as pd
 from src.database_manager import DatabaseManager
@@ -6,12 +8,18 @@ from src.common_utils import remove_accents_and_normalize
 from src.admin_page import admin_login_form
 import json
 
+def sort_options(options):
+    if not options:
+        return []
+    special_values = [v for v in ["Không rõ", "Không xác định"] if v in options]
+    other_values = sorted([v for v in options if v not in special_values and v.strip() != ""])
+    return special_values + other_values
+
 def display_settings_dashboard(db_manager: DatabaseManager, admin_db_manager: AdminDatabaseManager):
     st.title("🛠️ Cài đặt hệ thống")
     st.write("Quản lý các danh sách cấu hình hệ thống.")
 
     def save_settings_and_push(config_key, new_list):
-        """Hàm trợ giúp để lưu và đẩy cấu hình."""
         db_manager.config_data[config_key] = new_list
         if admin_db_manager.save_config_to_json():
             st.success("Đã lưu thay đổi vào file config.json.")
@@ -46,13 +54,11 @@ def display_settings_dashboard(db_manager: DatabaseManager, admin_db_manager: Ad
         st.markdown(f"**Xóa mục khỏi danh sách '{title}'**")
         item_to_remove = st.selectbox("Chọn mục để xóa:", options=[""] + current_list, key=f"remove_{config_key}_select")
         if item_to_remove and st.button("Xóa", key=f"remove_{config_key}_button"):
-            # --- BẮT ĐẦU LOGIC KIỂM TRA MỚI ---
             if config_key == "locations":
                 items_in_location = db_manager.inventory_data[db_manager.inventory_data['location'] == item_to_remove]
                 if not items_in_location.empty:
                     st.error(f"Lỗi: Không thể xóa vị trí '{item_to_remove}' vì còn {len(items_in_location)} mục đang được gán tại đây. Vui lòng thay đổi vị trí của các mục này trước khi xóa.")
-                    return # Dừng hàm, không cho phép xóa
-            # --- KẾT THÚC LOGIC KIỂM TRA MỚI ---
+                    return
             
             new_list = [item for item in current_list if item != item_to_remove]
             save_settings_and_push(config_key, sorted(new_list))
@@ -73,7 +79,7 @@ def admin_settings_page(db_manager: DatabaseManager, admin_db_manager: AdminData
         st.session_state["admin_logged_in"] = False
 
     if not st.session_state["admin_logged_in"]:
-        from src.admin_page import admin_login_form 
+        from src.admin_page import admin_login_form
         admin_login_form()
     else:
         display_settings_dashboard(db_manager, admin_db_manager)

@@ -2,9 +2,9 @@
 
 import streamlit as st
 import pandas as pd
-from src.database_manager import DatabaseManager # Import DatabaseManager
+from src.database_manager import DatabaseManager
 
-# --- Khởi tạo DatabaseManager (chỉ một lần và được cache) ---
+# Khởi tạo DatabaseManager (chỉ một lần và được cache)
 @st.cache_resource
 def get_db_manager():
     return DatabaseManager()
@@ -19,22 +19,33 @@ def statistics_page():
         st.warning("Không có dữ liệu tồn kho để hiển thị thống kê.")
         return
 
-    # Lấy danh sách các giá trị duy nhất cho các bộ lọc
-    all_types = ['Tất cả'] + db_manager.inventory_data['type'].dropna().unique().tolist()
-    all_locations = ['Tất cả'] + db_manager.get_all_locations() # Sử dụng hàm có sẵn
-    all_tracking_statuses_raw = db_manager.inventory_data['tracking'].dropna().unique().tolist()
-    
-    # Trích xuất các trạng thái chính từ cột tracking (trước " - Note: ")
-    unique_tracking_statuses = set()
-    for status_entry in all_tracking_statuses_raw:
-        main_status = status_entry.split(" - Note:")[0].strip()
-        unique_tracking_statuses.add(main_status)
-    all_tracking_statuses = ['Tất cả'] + sorted(list(unique_tracking_statuses))
+    # Lấy danh sách các giá trị duy nhất từ file config.json
+    all_types = db_manager.config_data.get('types', [])
+    all_locations = db_manager.config_data.get('locations', [])
+    all_purposes = db_manager.config_data.get('purposes', [])
+    all_statuses = db_manager.config_data.get('statuses', [])
+    all_tracking_statuses = db_manager.config_data.get('tracking_statuses', [])
+
+    # Bổ sung các giá trị từ inventory_data nếu chúng chưa có trong config
+    all_types_from_data = db_manager.inventory_data['type'].fillna('').unique().tolist()
+    all_types.extend([t for t in all_types_from_data if t not in all_types and t])
+    all_locations_from_data = db_manager.inventory_data['location'].fillna('').unique().tolist()
+    all_locations.extend([l for l in all_locations_from_data if l not in all_locations and l])
+
+    # Sắp xếp và đặt "Tất cả" và "Không rõ" ở đầu
+    def sort_options(options):
+        if not options:
+            return ["Tất cả"]
+        special_values = [v for v in ["Không rõ", "Không xác định"] if v in options]
+        other_values = sorted([v for v in options if v not in special_values and v.strip() != ""])
+        return ["Tất cả"] + special_values + other_values
 
     # Bộ lọc
-    selected_type = st.selectbox("Lọc theo Loại:", options=all_types)
-    selected_location = st.selectbox("Lọc theo Vị trí:", options=all_locations)
-    selected_tracking = st.selectbox("Lọc theo Theo dõi:", options=all_tracking_statuses)
+    selected_type = st.selectbox("Lọc theo Loại:", options=sort_options(all_types))
+    selected_location = st.selectbox("Lọc theo Vị trí:", options=sort_options(all_locations))
+    selected_purpose = st.selectbox("Lọc theo Mục đích:", options=sort_options(all_purposes))
+    selected_status = st.selectbox("Lọc theo Trạng thái ban đầu:", options=sort_options(all_statuses))
+    selected_tracking = st.selectbox("Lọc theo Trạng thái theo dõi:", options=sort_options(all_tracking_statuses))
 
     filtered_df = db_manager.inventory_data.copy()
 
@@ -45,8 +56,13 @@ def statistics_page():
     if selected_location != 'Tất cả':
         filtered_df = filtered_df[filtered_df['location'] == selected_location]
 
+    if selected_purpose != 'Tất cả':
+        filtered_df = filtered_df[filtered_df['purpose'] == selected_purpose]
+        
+    if selected_status != 'Tất cả':
+        filtered_df = filtered_df[filtered_df['status'] == selected_status]
+
     if selected_tracking != 'Tất cả':
-        # Đối với tracking, cần kiểm tra phần đầu của chuỗi (trước " - Note: ")
         filtered_df = filtered_df[
             filtered_df['tracking'].fillna('').apply(lambda x: x.split(" - Note:")[0].strip() == selected_tracking)
         ]
@@ -59,33 +75,32 @@ def statistics_page():
     else:
         st.write(f"Tìm thấy **{len(filtered_df)}** mục phù hợp:")
         
-        # Hiển thị DataFrame
         st.dataframe(filtered_df[[
             'id', 'name', 'type', 'quantity', 'unit', 'location', 
-            'status', 'tracking', 'description'
+            'status', 'tracking', 'note', 'description'
         ]])
 
         st.markdown("---")
         st.subheader("Tổng quan nhanh")
 
-        # Thống kê số lượng theo loại
         st.write("##### Số lượng theo loại:")
         type_counts = filtered_df['type'].value_counts().reset_index()
         type_counts.columns = ['Loại', 'Số lượng']
         st.table(type_counts)
 
-        # Thống kê số lượng theo trạng thái
-        st.write("##### Số lượng theo trạng thái:")
-        # Cần chuẩn hóa lại trạng thái cho thống kê nếu cột tracking chứa ghi chú
-        temp_status_col = filtered_df['tracking'].fillna('').apply(lambda x: x.split(" - Note:")[0].strip())
-        status_counts = temp_status_col.value_counts().reset_index()
-        status_counts.columns = ['Trạng thái Theo dõi', 'Số lượng']
-        st.table(status_counts)
+        st.write("##### Số lượng theo trạng thái theo dõi:")
+        temp_tracking_status_col = filtered_df['tracking'].fillna('').apply(lambda x: x.split(" - Note:")[0].strip())
+        tracking_status_counts = temp_tracking_status_col.value_counts().reset_index()
+        tracking_status_counts.columns = ['Trạng thái Theo dõi', 'Số lượng']
+        st.table(tracking_status_counts)
 
-        # Tổng số lượng vật tư/hóa chất (nếu có trường số lượng và đơn vị)
+        st.write("##### Số lượng theo vị trí:")
+        location_counts = filtered_df['location'].value_counts().reset_index()
+        location_counts.columns = ['Vị trí', 'Số lượng']
+        st.table(location_counts)
+
         if 'quantity' in filtered_df.columns and 'unit' in filtered_df.columns:
             st.write("##### Tổng số lượng:")
-            # Group by unit and sum quantities
             total_quantities = filtered_df.groupby('unit')['quantity'].sum().reset_index()
             total_quantities.columns = ['Đơn vị', 'Tổng số lượng']
             st.table(total_quantities)
