@@ -22,45 +22,42 @@
   ],
   "units": [
     "chai",
-    "cuộn",
-    "g",
+    "gram",
     "hộp",
     "kg",
-    "l",
-    "viên",
-    "đơn vị"
+    "lít"
   ],
   "statuses": [
     "còn nguyên",
     "đã mở",
-    "đã sử dụng",
-    "hết hạn",
-    "còn hạn",
-    "còn",
     "hết",
-    "đang sử dụng",
     "đang mượn",
     "thất lạc",
-    "huỷ",
+    "hư hỏng",
+    "đang gửi/sửa",
     "không xác định"
-  ],
-  "purposes": [
-    "Thí nghiệm",
-    "Giảng dạy",
-    "Nghiên cứu",
-    "Kho lưu trữ",
-    "Vệ sinh",
-    "Không rõ"
   ],
   "tracking_statuses": [
     "Còn nguyên",
-    "Đã mở",
-    "Đang mượn",
-    "Hết",
-    "Thất lạc",
     "Hư hỏng",
+    "Hết",
+    "Không rõ",
+    "Quản lý đã cập nhật",
+    "Thất lạc",
     "Đang gửi/sửa",
-    "Không rõ"
+    "Đang mượn",
+    "Đã mở"
+  ],
+  "purposes": [
+    "Nghiên cứu",
+    "Giảng dạy",
+    "Thực hành",
+    "Thí nghiệm"
+  ],
+  "item_types": [
+    "Hóa chất",
+    "Vật tư",
+    "Thiết bị",
+    "Không xác định"
   ]
-
 }
