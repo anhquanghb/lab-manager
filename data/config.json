@@ -1,25 +1,56 @@
 {
   "locations": [
-    "Phòng 2A",
-    "Tủ 1A",
-    "Tủ 1B"
+    "Không rõ",
+    "305 - G",
+    "Tủ 1A-304B",
+    "Tủ 1B-304B",
+    "Tủ 1C-304B",
+    "Tủ 1D-304B",
+    "Tủ 2A-304B",
+    "Tủ 2B-304B",
+    "Tủ 2C-304B",
+    "Tủ 2D-304B",
+    "Tủ 3A-304B",
+    "Tủ 3B-304B",
+    "Tủ 3C-304B",
+    "Tủ 3D-304B",
+    "Tủ 4A-305B",
+    "Tủ 4B-305B",
+    "Tủ 4C-305B",
+    "Tủ 4D-305B",
+    "Tủ L-304B"
   ],
   "units": [
     "chai",
-    "gram",
+    "cuộn",
+    "g",
     "hộp",
     "kg",
-    "lít"
+    "l",
+    "viên",
+    "đơn vị"
   ],
   "statuses": [
     "còn nguyên",
     "đã mở",
+    "đã sử dụng",
+    "hết hạn",
+    "còn hạn",
+    "còn",
     "hết",
+    "đang sử dụng",
     "đang mượn",
     "thất lạc",
-    "hư hỏng",
-    "đang gửi/sửa",
+    "huỷ",
     "không xác định"
+  ],
+  "purposes": [
+    "Thí nghiệm",
+    "Giảng dạy",
+    "Nghiên cứu",
+    "Kho lưu trữ",
+    "Vệ sinh",
+    "Không rõ"
   ],
   "tracking_statuses": [
     "Còn nguyên",
@@ -30,17 +61,5 @@
     "Hư hỏng",
     "Đang gửi/sửa",
     "Không rõ"
-  ],
-  "purposes": [
-    "Nghiên cứu",
-    "Giảng dạy",
-    "Thực hành",
-    "Thí nghiệm"
-  ],
-  "item_types": [
-    "Hóa chất",
-    "Vật tư",
-    "Thiết bị",
-    "Không xác định"
   ]
 }
