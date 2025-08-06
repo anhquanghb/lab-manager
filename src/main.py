@@ -18,10 +18,8 @@ from src.admin_settings_page import admin_settings_page
 # Khởi tạo chatbot logic một lần duy nhất
 @st.cache_resource
 def get_chatbot_logic():
-    # Khởi tạo DatabaseManager trước để có thể dùng cho việc upload log
     db_manager_instance = DatabaseManager()
     
-    # Để có đường dẫn đầy đủ đến file log, chúng ta cần một instance của ChatbotLogic
     temp_chatbot_logic_instance = ChatbotLogic()
     log_file_full_path = temp_chatbot_logic_instance.log_filepath
 
@@ -43,7 +41,6 @@ def get_managers():
         "admin_db_manager": admin_db_instance
     }
     
-# Hàm chứa logic của trang Chatbot
 def chatbot_page():
     st.set_page_config(page_title="Lab Chatbot - Duy Tan University", layout="centered")
     st.title("🧪 Lab Chatbot - Duy Tan University")
@@ -70,12 +67,10 @@ def chatbot_page():
         with st.chat_message("assistant"):
             st.markdown(response)
 
-# Hàm chính để điều khiển các trang
 def main_app():
     st.sidebar.title("Điều hướng")
     page_selection = st.sidebar.radio("Chọn trang:", ["Chatbot", "Thống kê", "Theo dõi", "Cài đặt"])
 
-    # BỔ SUNG: Khởi tạo managers ở đây để dùng chung
     managers = get_managers()
 
     if st.sidebar.button("Xóa Cache 🗑️"):
