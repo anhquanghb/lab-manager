@@ -27,8 +27,7 @@
     "hộp",
     "kg",
     "l",
-    "viên",
-    "đơn vị"
+    "viên"
   ],
   "statuses": [
     "còn nguyên",
@@ -62,5 +61,4 @@
     "Đang gửi/sửa",
     "Không rõ"
   ]
-
 }
