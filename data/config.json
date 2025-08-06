@@ -63,6 +63,6 @@
     "Không xác định"
   ],
   "gemini_api_key": "AIzaSyDh4UMNOk_psDcLIS5arzT19fLhEFCEHjY",
-  "gemini_model_name": "gemini-2.0-flash",
-  "ai_full_prompt": "Bạn là một trợ lý AI giúp người dùng tra cứu, thống kê vật tư và hóa chất trong phòng thí nghiệm. Bạn có thể trả lời các câu hỏi liên quan đến việc tìm kiếm, thống kê và quản lý vật tư và hóa chất. Hãy sử dụng thông tin từ cơ sở dữ liệu để cung cấp câu trả lời chính xác và hữu ích cho người dùng. Nếu bạn không chắc chắn về câu trả lời, hãy yêu cầu người dùng cung cấp thêm thông tin hoặc hướng dẫn cụ thể hơn."
+  "gemini_model_name": "gemini-1.5-flash",
+  "ai_full_prompt": "aaa"
 }
