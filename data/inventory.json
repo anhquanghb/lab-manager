@@ -11181,9 +11181,9 @@
     "id": "A079G",
     "name": "SULFURIC ACID",
     "type": "Hóa chất",
-    "quantity": 1,
-    "unit": "đơn vị",
-    "location": "1B",
+    "quantity": 2,
+    "unit": "chai",
+    "location": "1C",
     "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: lỏng, Mô tả: còn nguyên",
     "iupac_name": "SULFURIC ACID",
     "vietnamese_name": null,
@@ -11193,7 +11193,7 @@
     "status": "còn nguyên",
     "purpose": null,
     "tracking": "Không rõ",
-    "note": null
+    "note": "06/08/2025: Test."
   },
   {
     "id": "A079H",
@@ -11291,7 +11291,7 @@
     "type": "Hóa chất",
     "quantity": 1,
     "unit": "đơn vị",
-    "location": "1B",
+    "location": "Tủ 1B",
     "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: lỏng, Mô tả: đã mở",
     "iupac_name": "SULFURIC ACID",
     "vietnamese_name": null,
@@ -11301,7 +11301,7 @@
     "status": "đã mở",
     "purpose": null,
     "tracking": "Không rõ",
-    "note": "- 01/08/2025"
+    "note": "- 01/08/2025\nThử kiểm tra - 06/08/2025\n06/08/2025: Thử kiểm tra.\n06/08/2025: Vị trí thay đổi.\n06/08/2025: Test vị trí.\n06/08/2025: Vị trí thay đổi từ '1B' sang 'Tủ 1B'."
   },
   {
     "id": "ITEM_629",
