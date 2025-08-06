@@ -72,6 +72,7 @@ class ChatbotLogic:
         if results.empty:
             return_message = f"Xin lỗi, tôi không tìm thấy vật tư/hóa chất nào liên quan đến '*{query_context}*'." if query_context else "Xin lỗi, tôi không tìm thấy kết quả nào phù hợp."
             return_message += "\n\nHãy thử tìm kiếm bằng công thức hoặc tên tiếng Anh hoặc sử dụng từ khóa khác ngắn hơn. Hãy nói tôi hướng dẫn nếu bạn cần chi tiết hơn."
+            "Nếu muốn hỏi về quy trình hoặc hướng dẫn thí nghiệm, hãy sử dụng trợ lý AI trong menu điều hướng bên trái hoặc mũi tên >> ở trên cùng."
             return return_message
         
         response = f"Tôi tìm thấy **{len(results)}** kết quả:\n\n"
