@@ -1,0 +1,47 @@
+{
+  "locations": [
+    "Phòng 2A",
+    "Tủ 1A",
+    "Tủ 1B"
+  ],
+  "units": [
+    "chai",
+    "hộp",
+    "gram",
+    "kg",
+    "ml",
+    "lít"
+  ],
+  "statuses": [
+    "còn nguyên",
+    "đã mở",
+    "hết",
+    "đang mượn",
+    "thất lạc",
+    "hư hỏng",
+    "đang gửi/sửa",
+    "không xác định"
+  ],
+  "tracking_statuses": [
+    "Còn nguyên",
+    "Đã mở",
+    "Đang mượn",
+    "Hết",
+    "Thất lạc",
+    "Hư hỏng",
+    "Đang gửi/sửa",
+    "Không rõ"
+  ],
+  "purposes": [
+    "Nghiên cứu",
+    "Giảng dạy",
+    "Thực hành",
+    "Thí nghiệm"
+  ],
+  "item_types": [
+    "Hóa chất",
+    "Vật tư",
+    "Thiết bị",
+    "Không xác định"
+  ]
+}
