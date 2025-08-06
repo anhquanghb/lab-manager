@@ -8,6 +8,32 @@ from src.common_utils import remove_accents_and_normalize
 from src.admin_page import admin_login_form
 import json
 
+def display_gemini_api_setting(db_manager: DatabaseManager, admin_db_manager: AdminDatabaseManager):
+    st.header("🔑 Cài đặt API Gemini")
+    
+    current_gemini_api_key = db_manager.config_data.get('gemini_api_key', '')
+    
+    new_gemini_api_key = st.text_input(
+        "Nhập Gemini API Key (để trống nếu muốn người dùng tự nhập):", 
+        value=current_gemini_api_key, 
+        type="password", 
+        key="gemini_api_key_input"
+    )
+    
+    if st.button("Lưu API Key Gemini và Đẩy lên GitHub", key="save_gemini_api_button"):
+        db_manager.config_data['gemini_api_key'] = new_gemini_api_key.strip()
+        if admin_db_manager.save_config_to_json():
+            st.success("Đã lưu Gemini API Key vào file config.json.")
+            commit_message = f"feat(config): Update Gemini API key"
+            if admin_db_manager.push_to_github(admin_db_manager.config_path, commit_message):
+                st.success("Đã đẩy thay đổi cấu hình lên GitHub thành công!")
+                st.cache_resource.clear()
+                st.rerun()
+            else:
+                st.error("Lỗi: Không thể đẩy thay đổi lên GitHub.")
+        else:
+            st.error("Lỗi: Không thể lưu thay đổi vào file config.json.")
+
 def sort_options(options):
     if not options:
         return []
@@ -73,6 +99,29 @@ def display_settings_dashboard(db_manager: DatabaseManager, admin_db_manager: Ad
     display_list_editor("Mục đích", "purposes", db_manager.config_data.get('purposes', []))
     st.markdown("---")
     display_list_editor("Tình trạng", "statuses", db_manager.config_data.get('statuses', []))
+    
+    st.markdown("---")
+    st.header("🔑 Cài đặt API Gemini")
+    current_gemini_api_key = db_manager.config_data.get('gemini_api_key', '')
+
+    new_gemini_api_key = st.text_input("Nhập Gemini API Key (để trống nếu muốn người dùng tự nhập):", 
+                                    value=current_gemini_api_key, 
+                                    type="password", 
+                                    key="gemini_api_key_input")
+
+    if st.button("Lưu API Key Gemini và Đẩy lên GitHub", key="save_gemini_api_button"):
+        db_manager.config_data['gemini_api_key'] = new_gemini_api_key.strip()
+        if admin_db_manager.save_config_to_json():
+            st.success("Đã lưu Gemini API Key vào file config.json.")
+            commit_message = f"feat(config): Update Gemini API key"
+            if admin_db_manager.push_to_github(admin_db_manager.config_path, commit_message):
+                st.success("Đã đẩy thay đổi cấu hình lên GitHub thành công!")
+                st.cache_resource.clear()
+                st.rerun()
+            else:
+                st.error("Lỗi: Không thể đẩy thay đổi lên GitHub.")
+        else:
+            st.error("Lỗi: Không thể lưu thay đổi vào file config.json.")
 
 def admin_settings_page(db_manager: DatabaseManager, admin_db_manager: AdminDatabaseManager):
     if "admin_logged_in" not in st.session_state:

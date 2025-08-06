@@ -4,6 +4,7 @@ from src.nlp_processor import NLPProcessor
 import re
 import os
 import json
+from src.gemini_chatbot import GeminiChatbot # Thêm import mới
 
 class ChatbotLogic:
     LOG_FILE = "chat_log.jsonl"
@@ -12,7 +13,7 @@ class ChatbotLogic:
     def __init__(self):
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
-        
+        self.gemini_api_key = self.db_manager.config_data.get('gemini_api_key', '')
         self.logs_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'logs'))
         if not os.path.exists(self.logs_base_dir):
             os.makedirs(self.logs_base_dir)
@@ -23,6 +24,12 @@ class ChatbotLogic:
         if not os.path.exists(self.ISSUE_LOG_DIR):
             os.makedirs(self.ISSUE_LOG_DIR)
 
+        # Lấy API key từ config và khởi tạo GeminiChatbot
+        self.gemini_api_key = self.db_manager.config_data.get('gemini_api_key', '')
+        if self.gemini_api_key:
+            self.gemini_chatbot = GeminiChatbot(self.gemini_api_key)
+        else:
+            self.gemini_chatbot = None 
 
     GUIDANCE_MESSAGE = """
     Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm.
@@ -116,6 +123,29 @@ class ChatbotLogic:
         # --- Xử lý ý định HƯỚNG DẪN ---
         elif intent == "request_guidance":
             final_response = self.GUIDANCE_MESSAGE
+        # --- Xử lý ý định TẠO API (request_api_guidance) ---
+        elif intent == "request_api_guidance":
+            if self.gemini_api_key:
+                final_response = "Trợ lý AI đã được cấu hình với API chung. Bạn không cần phải nhập API riêng."
+            else:
+                final_response = """
+                Chào bạn! Để sử dụng trợ lý AI, bạn cần có Gemini API Key.
+                Bạn có thể lấy API Key miễn phí tại đây: [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
+                Sau khi có API, vui lòng nhập vào ô tương ứng trong giao diện Trợ lý AI.
+                """
+
+        # --- Thêm logic kiểm tra API Key trước khi gọi Gemini API ---
+        elif intent == "ai_assistance_request": # Giả sử đây là intent cho các yêu cầu AI
+            if not self.gemini_api_key:
+                final_response = """
+                Xin lỗi, Trợ lý AI chưa được cấu hình với API chung. Vui lòng cung cấp API Key của bạn để tiếp tục.
+                Bạn có thể lấy API Key miễn phí tại đây: [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
+                """
+            else:
+                # Logic gọi Gemini API với self.gemini_api_key
+                # ... (Phần này sẽ được xây dựng sau)
+                final_response = "Đây là phản hồi từ Gemini API."
+
         # --- Xử lý ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ (report_issue) ---
         elif intent == "report_issue":
             reported_id = parsed_query.get("reported_id")

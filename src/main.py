@@ -14,6 +14,7 @@ from src.database_admin import AdminDatabaseManager
 from src.admin_page import admin_page
 from src.statistics_page import statistics_page
 from src.admin_settings_page import admin_settings_page
+from src.ai_assistant_page import ai_assistant_page
 
 # Khởi tạo chatbot logic một lần duy nhất
 @st.cache_resource
@@ -69,7 +70,7 @@ def chatbot_page():
 
 def main_app():
     st.sidebar.title("Điều hướng")
-    page_selection = st.sidebar.radio("Chọn trang:", ["Chatbot", "Thống kê", "Theo dõi", "Cài đặt"])
+    page_selection = st.sidebar.radio("Chọn trang:", ["Chatbot", "Trợ lý AI", "Thống kê", "Theo dõi", "Cài đặt"])
 
     managers = get_managers()
 
@@ -80,6 +81,8 @@ def main_app():
 
     if page_selection == "Chatbot":
         chatbot_page()
+    elif page_selection == "Trợ lý AI":
+        ai_assistant_page()
     elif page_selection == "Thống kê":
         statistics_page()
     elif page_selection == "Theo dõi":

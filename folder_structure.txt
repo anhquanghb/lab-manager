@@ -4,11 +4,11 @@ C:.
 ¦   .gitignore
 ¦   convert_data.py
 ¦   Danhmuc.csv
+¦   folder_structure.txt
 ¦   git
 ¦   LICENSE
 ¦   README.md
 ¦   requirements.txt
-¦   tree_structure.txt
 ¦   
 +---.devcontainer
 ¦       devcontainer.json
@@ -17,6 +17,7 @@ C:.
 ¦       secrets.toml
 ¦       
 +---data
+¦       config.json
 ¦       inventory.json
 ¦       
 +---logs
@@ -51,27 +52,47 @@ C:.
 ¦   ¦       chat_log_archive_20250730_155735.jsonl
 ¦   ¦       chat_log_archive_20250730_155920.jsonl
 ¦   ¦       chat_log_archive_20250730_160012.jsonl
+¦   ¦       chat_log_archive_20250801_080141.jsonl
+¦   ¦       chat_log_archive_20250801_140200.jsonl
+¦   ¦       chat_log_archive_20250801_142625.jsonl
+¦   ¦       chat_log_archive_20250801_142759.jsonl
+¦   ¦       chat_log_archive_20250801_143853.jsonl
+¦   ¦       chat_log_archive_20250801_145457.jsonl
+¦   ¦       chat_log_archive_20250801_145642.jsonl
+¦   ¦       chat_log_archive_20250802_043214.jsonl
+¦   ¦       chat_log_archive_20250802_044037.jsonl
+¦   ¦       chat_log_archive_20250806_112847.jsonl
+¦   ¦       chat_log_archive_20250806_113124.jsonl
+¦   ¦       chat_log_archive_20250806_120124.jsonl
+¦   ¦       chat_log_archive_20250806_130644.jsonl
 ¦   ¦       
 ¦   +---issues
 +---src
 ¦   ¦   admin_page.py
-¦   ¦   admin_page.txt
+¦   ¦   admin_settings_page.py
+¦   ¦   ai_assistant_page.py
 ¦   ¦   chatbot_logic.py
 ¦   ¦   common_utils.py
 ¦   ¦   database_admin.py
 ¦   ¦   database_manager.py
+¦   ¦   gemini_chatbot.py
 ¦   ¦   main.py
 ¦   ¦   nlp_processor.py
 ¦   ¦   nlp_processor_admin.py
+¦   ¦   statistics_page.py
 ¦   ¦   __init__.py
 ¦   ¦   
 ¦   +---__pycache__
 ¦           admin_page.cpython-313.pyc
+¦           admin_settings_page.cpython-313.pyc
+¦           ai_assistant_page.cpython-313.pyc
 ¦           chatbot_logic.cpython-313.pyc
 ¦           common_utils.cpython-313.pyc
 ¦           database_admin.cpython-313.pyc
 ¦           database_manager.cpython-313.pyc
+¦           gemini_chatbot.cpython-313.pyc
 ¦           nlp_processor.cpython-313.pyc
+¦           statistics_page.cpython-313.pyc
 ¦           __init__.cpython-313.pyc
 ¦           
 +---venv
