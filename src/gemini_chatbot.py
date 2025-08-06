@@ -1,3 +1,5 @@
+# Trong file src/gemini_chatbot.py
+
 import google.generativeai as genai
 import pandas as pd
 from src.database_manager import DatabaseManager
@@ -11,21 +13,16 @@ class GeminiChatbot:
         
         self.api_key = api_key
         genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('gemini-2.0-flash') # Sử dụng mô hình bạn đã chọn
         
         self.db_manager = DatabaseManager()
-
-        self.full_prompt = self.db_manager.config_data.get('ai_full_prompt', '')
-
+        
+        model_name = self.db_manager.config_data.get('gemini_model_name', 'gemini-1.5-flash')
+        self.model = genai.GenerativeModel(model_name)
+        
     def process_user_query(self, user_query, chat_history):
-        # Tạo lại đối tượng chat từ lịch sử đã lưu
+        # Tạo đối tượng chat từ lịch sử đã lưu
         chat_session = self.model.start_chat(history=chat_history)
         
-        # Bổ sung prompt đầy đủ vào message đầu tiên
-        # Lần đầu tiên chat, lịch sử sẽ trống, ta thêm prompt vào
-        if not chat_session.history:
-             chat_session.send_message(self.full_prompt)
-
         # Gửi tin nhắn của người dùng vào phiên chat
         try:
             response = chat_session.send_message(user_query)

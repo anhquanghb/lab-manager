@@ -46,18 +46,22 @@ def ai_assistant_page():
 
     gemini_chatbot = get_gemini_chatbot(final_api_key)
     if gemini_chatbot is None:
-        return
+        return 
 
     # Khởi tạo lịch sử chat trong session state
     if "gemini_messages" not in st.session_state:
-        st.session_state.gemini_messages = []
+        st.session_state.gemini_messages = [] 
+
+        # LẤY PROMPT TỪ CONFIG VÀ GỬI LẦN ĐẦU
+        full_prompt = db_manager.config_data.get('ai_full_prompt', '')
+        st.session_state.gemini_messages.append({"role": "user", "content": full_prompt})
         
-        # Thêm lời chào ban đầu để hiển thị cho người dùng
+        # Thêm lời chào ban đầu cho người dùng
         initial_greeting = "Tôi là Trợ lý Phòng thí nghiệm AI. Hãy cho tôi biết bạn cần gì."
         st.session_state.gemini_messages.append({"role": "assistant", "content": initial_greeting})
 
     # Hiển thị tất cả tin nhắn từ lịch sử chat
-    for message in st.session_state.gemini_messages:
+    for message in st.session_state.gemini_messages[1:]: # Bỏ qua prompt đầu tiên trong hiển thị
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
@@ -68,11 +72,10 @@ def ai_assistant_page():
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # Tạo lịch sử chat để gửi cho Gemini
-        # Lưu ý: Gemini API cần lịch sử chat ở định dạng riêng
+        # Tạo lịch sử chat để gửi cho Gemini, bao gồm cả full_prompt
         history_for_gemini = [
             {"role": "user", "parts": [part["content"]]} if part["role"] == "user"
-            else {"role": "model", "parts": [part["content"]]} for part in st.session_state.gemini_messages[1:]
+            else {"role": "model", "parts": [part["content"]]} for part in st.session_state.gemini_messages
         ]
         
         with st.spinner("Đang xử lý..."):
