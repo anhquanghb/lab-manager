@@ -1,4 +1,4 @@
-# Trong file src/gemini_chatbot.py
+# src/gemini_chatbot.py
 
 import google.generativeai as genai
 import pandas as pd
@@ -16,6 +16,7 @@ class GeminiChatbot:
         
         self.db_manager = DatabaseManager()
         
+        # Lấy tên mô hình từ config, mặc định là 'gemini-1.5-flash'
         model_name = self.db_manager.config_data.get('gemini_model_name', 'gemini-1.5-flash')
         self.model = genai.GenerativeModel(model_name)
         

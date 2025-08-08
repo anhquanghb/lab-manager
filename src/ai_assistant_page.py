@@ -20,7 +20,14 @@ def get_gemini_chatbot(api_key):
         return None
 
 def ai_assistant_page():
-    st.title("🤖 Trợ Lý AI Pha Chế Hóa Chất")
+    # --- KIỂM TRA QUYỀN TRUY CẬP ---
+    user_role = st.session_state.get("user_role")
+    if user_role not in ["registered", "user", "moderator", "administrator"]:
+        st.warning("Bạn cần đăng nhập để sử dụng tính năng Trợ lý AI.")
+        st.stop()
+    # -------------------------------
+
+    st.title("🤖 Trợ Lý AI Lab")
     st.write("Sử dụng Trợ lý AI để thiết kế thí nghiệm, tính toán hóa chất và nhiều hơn nữa. Bạn không thể tìm vị trí hoặc thông tin về vật tư ở đây. Hãy hỏi Chatbot trong menu điều hướng bên trái hoặc mũi tên >> ở trên cùng.")
 
     # Lấy API Key từ config.json hoặc session state

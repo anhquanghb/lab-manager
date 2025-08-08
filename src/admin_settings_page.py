@@ -1,11 +1,9 @@
 # src/admin_settings_page.py
-
 import streamlit as st
 import pandas as pd
 from src.database_manager import DatabaseManager
 from src.database_admin import AdminDatabaseManager
 from src.common_utils import remove_accents_and_normalize
-from src.admin_page import admin_login_form
 import json
 
 def sort_options(options):
@@ -62,20 +60,17 @@ def save_settings_and_push(config_key, new_list, admin_db_manager, db_manager):
 def display_gemini_api_setting(db_manager: DatabaseManager, admin_db_manager: AdminDatabaseManager):
     st.header("🔑 Cài đặt API Gemini & Prompt")
 
-    # Hiển thị và chỉnh sửa Gemini API Key
     current_gemini_api_key = db_manager.config_data.get('gemini_api_key', '')
     new_gemini_api_key = st.text_input("Nhập Gemini API Key (để trống nếu muốn người dùng tự nhập):", 
                                      value=current_gemini_api_key, 
                                      type="password", 
                                      key="gemini_api_key_input")
     
-    # Hiển thị và chọn tên mô hình
     current_model_name = db_manager.config_data.get('gemini_model_name', 'gemini-1.5-flash')
     new_model_name = st.text_input("Nhập tên mô hình Gemini:", 
                                    value=current_model_name,
                                    key="gemini_model_name_input")
     
-    # Hiển thị và chỉnh sửa Full Prompt
     current_prompt = db_manager.config_data.get('ai_full_prompt', '')
     new_prompt = st.text_area("Chỉnh sửa Full Prompt của Trợ lý AI:", value=current_prompt, height=400)
 
@@ -114,11 +109,11 @@ def display_settings_dashboard(db_manager: DatabaseManager, admin_db_manager: Ad
     display_gemini_api_setting(db_manager, admin_db_manager)
 
 def admin_settings_page(db_manager: DatabaseManager, admin_db_manager: AdminDatabaseManager):
-    if "admin_logged_in" not in st.session_state:
-        st.session_state["admin_logged_in"] = False
-
-    if not st.session_state["admin_logged_in"]:
-        from src.admin_page import admin_login_form
-        admin_login_form()
-    else:
-        display_settings_dashboard(db_manager, admin_db_manager)
+    # --- KIỂM TRA QUYỀN TRUY CẬP ---
+    user_role = st.session_state.get("user_role")
+    if user_role != "administrator":
+        st.warning("Bạn không có quyền truy cập trang này. Vui lòng đăng nhập với tài khoản Administrator.")
+        st.stop()
+    # -------------------------------
+    
+    display_settings_dashboard(db_manager, admin_db_manager)

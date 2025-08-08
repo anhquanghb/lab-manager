@@ -1,40 +1,29 @@
+# src/chatbot_logic.py (đã cập nhật)
 import pandas as pd
 from src.database_manager import DatabaseManager
 from src.nlp_processor import NLPProcessor
 import re
 import os
 import json
-from src.gemini_chatbot import GeminiChatbot # Thêm import mới
+from src.gemini_chatbot import GeminiChatbot
+import streamlit as st
 
 class ChatbotLogic:
     LOG_FILE = "chat_log.jsonl"
-    ISSUE_LOG_DIR = "logs/issues" # Thư mục riêng cho log sự cố
     
     def __init__(self):
         self.db_manager = DatabaseManager()
         self.nlp_processor = NLPProcessor()
-        self.gemini_api_key = self.db_manager.config_data.get('gemini_api_key', '')
         self.logs_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'logs'))
+        
         if not os.path.exists(self.logs_base_dir):
             os.makedirs(self.logs_base_dir)
         
         self.log_filepath = os.path.join(self.logs_base_dir, self.LOG_FILE)
 
-        # Đảm bảo thư mục logs/issues tồn tại
-        if not os.path.exists(self.ISSUE_LOG_DIR):
-            os.makedirs(self.ISSUE_LOG_DIR)
-
-        # Lấy API key từ config và khởi tạo GeminiChatbot
-        self.gemini_api_key = self.db_manager.config_data.get('gemini_api_key', '')
-        if self.gemini_api_key:
-            self.gemini_chatbot = GeminiChatbot(self.gemini_api_key)
-        else:
-            self.gemini_chatbot = None 
-
     GUIDANCE_MESSAGE = """
-    Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm.
-    Dưới đây là các loại câu lệnh bạn có thể sử dụng:
-
+    Chào bạn! Tôi có thể giúp bạn tra cứu vật tư và hóa chất trong phòng thí nghiệm. Dưới đây là các loại câu lệnh bạn có thể sử dụng:
+    
     **1. Tìm kiếm chung:**
     - Tìm kiếm theo tên (Tiếng Việt hoặc Tiếng Anh), công thức, hoặc từ khóa trong mô tả.
     - **Cấu trúc:** `[Từ khóa]`, `tìm [Từ khóa]`, `hãy tìm [Từ khóa]`, `tra cứu [Từ khóa]`.
@@ -51,20 +40,16 @@ class ChatbotLogic:
     **4. Hỏi tình trạng:**
     - **Cấu trúc:** `tình trạng [Tên/Mã/Loại]`, `trạng thái [Tên/Mã/Loại]`.
     - **Ví dụ:** `tình trạng Axeton`, `trạng thái Hóa chất đã mở`.
-
+    
     **5. Báo cáo Tình trạng/Vấn đề:**
     - **Cấu trúc:** Báo cáo [Vấn đề].
     - **Ví dụ:** `Báo cáo không thấy H2SO4`, `Báo cáo HCl đã hết`, `Báo cáo tủ sấy bị hư hỏng`.
-
+    
     **6. Các lệnh khác:**
     - Tìm kiếm theo Mã ID: `tìm mã [ID]`.
     - Tìm kiếm theo số CAS: `tìm CAS [Số SỐ]`.
-    - Liệt kê theo Loại: `liệt kê [Loại]`.
-    - Liệt kê theo Loại và Vị trí: `liệt kê [Loại] trong tủ [Vị trí]`.
-
-    Nếu bạn cần hướng dẫn này bất cứ lúc nào, chỉ chỉ cần hỏi "hướng dẫn" hoặc "cách tìm kiếm".
-
-    Nếu bạn cần làm việc với Trợ lý AI, hãy gọi trợ lý AI ở thanh điều hướng >> phía trên hoặc bên trái màn hình.
+    
+    Nếu bạn cần hướng dẫn này bất cứ lúc nào, chỉ cần hỏi "hướng dẫn" hoặc "cách tìm kiếm".
     """
 
     def _format_results(self, results, query_context=""):
@@ -84,10 +69,7 @@ class ChatbotLogic:
         return response.strip()
 
     def _log_interaction(self, user_query, chatbot_response_text, parsed_query, log_type="chat"):
-        """
-        Ghi lại tương tác của người dùng và phản hồi của chatbot vào file log.
-        log_type: "chat" hoặc "issue"
-        """
+        """Ghi lại tương tác của người dùng và phản hồi của chatbot vào file log."""
         log_entry = {
             "timestamp": pd.Timestamp.now().isoformat(),
             "user_query": user_query,
@@ -99,18 +81,16 @@ class ChatbotLogic:
         log_file = self.LOG_FILE
         
         if log_type == "issue":
-            log_dir = os.path.join(self.logs_base_dir, "issues") # Thư mục riêng cho issue logs
+            log_dir = os.path.join(self.logs_base_dir, "issues")
             if not os.path.exists(log_dir):
                 os.makedirs(log_dir)
-            # Tên file cho issue log sẽ là timestamped
             timestamp_str = pd.Timestamp.now().strftime("%Y%m%d_%H%M%S")
             log_file = f"log_issue_{timestamp_str}.jsonl"
 
         full_log_filepath = os.path.join(log_dir, log_file)
 
         try:
-            # Ghi vào file log chính nếu là chat, ghi vào file timestamped nếu là issue
-            mode = 'a' if log_type == 'chat' else 'w' # 'w' cho issue log để tạo file mới mỗi lần
+            mode = 'a' if log_type == 'chat' else 'w'
             with open(full_log_filepath, mode, encoding='utf-8') as f:
                 f.write(json.dumps(log_entry, ensure_ascii=False) + '\n')
         except Exception as e:
@@ -120,36 +100,9 @@ class ChatbotLogic:
         parsed_query = self.nlp_processor.process_query(user_query)
         intent = parsed_query.get("intent")
         
-        # --- Xử lý ý định CHÀO HỎI (Ưu tiên cao nhất) ---
-        if intent == "greeting":
+        if intent in ["greeting", "request_guidance"]:
             final_response = self.GUIDANCE_MESSAGE
-        # --- Xử lý ý định HƯỚNG DẪN ---
-        elif intent == "request_guidance":
-            final_response = self.GUIDANCE_MESSAGE
-        # --- Xử lý ý định TẠO API (request_api_guidance) ---
-        elif intent == "request_api_guidance":
-            if self.gemini_api_key:
-                final_response = "Trợ lý AI đã được cấu hình với API chung. Bạn không cần phải nhập API riêng."
-            else:
-                final_response = """
-                Chào bạn! Để sử dụng trợ lý AI, bạn cần có Gemini API Key.
-                Bạn có thể lấy API Key miễn phí tại đây: [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
-                Sau khi có API, vui lòng nhập vào ô tương ứng trong giao diện Trợ lý AI.
-                """
-
-        # --- Thêm logic kiểm tra API Key trước khi gọi Gemini API ---
-        elif intent == "ai_assistance_request": # Giả sử đây là intent cho các yêu cầu AI
-            if not self.gemini_api_key:
-                final_response = """
-                Xin lỗi, Trợ lý AI chưa được cấu hình với API chung. Vui lòng cung cấp API Key của bạn để tiếp tục.
-                Bạn có thể lấy API Key miễn phí tại đây: [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
-                """
-            else:
-                # Logic gọi Gemini API với self.gemini_api_key
-                # ... (Phần này sẽ được xây dựng sau)
-                final_response = "Đây là phản hồi từ Gemini API."
-
-        # --- Xử lý ý định BÁO CÁO TÌNH TRẠNG/VẤN ĐỀ (report_issue) ---
+        
         elif intent == "report_issue":
             reported_id = parsed_query.get("reported_id")
             reported_item_name = parsed_query.get("reported_item_name")
@@ -166,38 +119,29 @@ class ChatbotLogic:
             
             final_response = f"Phản ánh về {context_info} (vấn đề: '{problem_description}') đã được ghi nhận. Cám ơn bạn đã phản hồi về tình trạng này."
             
-            # Ghi log riêng cho sự cố
             self._log_interaction(user_query, final_response, parsed_query, log_type="issue")
-            return final_response # Trả lời ngay và không ghi log chung ở cuối hàm
+            return final_response
         
-        # --- Xử lý các ý định DỰA TRÊN TỪ KHÓA LỆNH (được nhận diện bởi nlp_processor mới) ---
-        
-        # Ý định: Lệnh Vị trí (get_location)
         elif intent == "get_location":
             item_name = parsed_query.get("item_name")
             if not item_name:
                 final_response = "Bạn muốn hỏi vị trí của vật tư/hóa chất nào?"
             else:
-                location = self.db_manager.get_location(item_name) # Hàm này tìm kiếm chính xác
+                location = self.db_manager.get_location(item_name)
                 if location:
                     final_response = f"**{item_name.capitalize()}** được đặt tại: **{location}**."
-                    # No, this is where it needs to find the exact location of the item, not just list it.
                 else:
-                    # Nếu tìm kiếm chính xác theo tên không ra, thử tìm kiếm rộng hơn
                     results_general = self.db_manager.search_item(item_name)
                     if not results_general.empty:
-                        # Nếu tìm kiếm rộng hơn có kết quả, trả về chi tiết các mục đó
                         final_response = self._format_results(results_general, f"có thể liên quan đến '{item_name}' (và vị trí)")
                     else:
-                        final_response = self._format_results(pd.DataFrame(), item_name) # Không tìm thấy, gợi ý hướng dẫn
+                        final_response = self._format_results(pd.DataFrame(), item_name)
 
-        # Ý định: Lệnh Thống kê/Số lượng (get_quantity)
         elif intent == "get_quantity":
             item_name = parsed_query.get("item_name")
             if not item_name:
                 final_response = "Bạn muốn hỏi số lượng của vật tư/hóa chất nào?"
             else:
-                # get_quantity trong db_manager tìm chính xác, nếu không có, dùng search_item
                 qty, unit = self.db_manager.get_quantity(item_name)
                 if qty is not None:
                     final_response = f"Số lượng **{item_name.capitalize()}** hiện có là **{qty} {unit}**."
@@ -208,13 +152,11 @@ class ChatbotLogic:
                     else:
                         final_response = self._format_results(pd.DataFrame(), item_name)
 
-        # Ý định: Lệnh Tình trạng (get_status)
         elif intent == "get_status":
             item_name = parsed_query.get("item_name")
             if not item_name:
                 final_response = "Bạn muốn hỏi tình trạng của vật tư/hóa chất nào?"
             else:
-                # Lấy tất cả các mục liên quan đến tên để hiển thị tình trạng
                 results = self.db_manager.search_item(item_name)
                 if not results.empty:
                     response_parts = [f"Tôi tìm thấy các mục liên quan đến **{item_name.capitalize()}** với tình trạng:\n\n"]
@@ -224,8 +166,7 @@ class ChatbotLogic:
                 else:
                     final_response = self._format_results(pd.DataFrame(), item_name)
         
-        # Ý định: Lệnh Tìm kiếm (search_item) - Cho các từ khóa lệnh tìm kiếm chung
-        elif intent == "search_item": # Đây là intent cho các câu hỏi bắt đầu bằng "tìm", "tra cứu"
+        elif intent == "search_item":
             query_text = parsed_query.get("query")
             if not query_text or len(query_text.strip()) < 2:
                 final_response = "Bạn muốn tôi tìm kiếm thông tin gì? Vui lòng nhập từ khóa cụ thể hơn."
@@ -233,11 +174,9 @@ class ChatbotLogic:
                 results = self.db_manager.search_item(query_text)
                 final_response = self._format_results(results, query_text)
 
-        # --- Fallback cho các ý định phức tạp hơn hoặc không khớp ---
         else:
             final_response = "Tôi không hiểu yêu cầu của bạn."
             final_response += "\n\nBạn muốn tôi hướng dẫn tìm kiếm không?"
         
-        # Ghi log chung (chỉ cho loại "chat")
         self._log_interaction(user_query, final_response, parsed_query, log_type="chat")
         return final_response

@@ -1,5 +1,4 @@
 # src/statistics_page.py
-
 import streamlit as st
 import pandas as pd
 from src.database_manager import DatabaseManager
@@ -12,6 +11,13 @@ def get_db_manager():
 db_manager = get_db_manager()
 
 def statistics_page():
+    # --- KIỂM TRA QUYỀN TRUY CẬP ---
+    user_role = st.session_state.get("user_role")
+    if user_role not in ["moderator", "administrator"]:
+        st.warning("Bạn không có quyền truy cập trang này. Vui lòng đăng nhập với tài khoản có quyền quản trị.")
+        st.stop()
+    # -------------------------------
+
     st.title("📊 Thống kê Vật tư & Hóa chất")
     st.write("Xem thống kê và lọc dữ liệu tồn kho theo loại, vị trí hoặc trạng thái theo dõi.")
 

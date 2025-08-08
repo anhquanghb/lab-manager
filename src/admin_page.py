@@ -1,15 +1,13 @@
 # src/admin_page.py
-
 import streamlit as st
 import pandas as pd
 from src.database_manager import DatabaseManager
 from src.database_admin import AdminDatabaseManager
-import os
-from pathlib import Path
 from src.common_utils import remove_accents_and_normalize
 from datetime import datetime
 import re
 
+# Khởi tạo DatabaseManager và AdminDatabaseManager một lần duy nhất và cache lại
 @st.cache_resource
 def get_managers():
     db_instance = DatabaseManager()
@@ -23,8 +21,6 @@ managers = get_managers()
 db_manager = managers["db_manager"]
 admin_db_manager = managers["admin_db_manager"]
 
-ADMIN_PASSWORD = st.secrets.get("ADMIN_PASSWORD")
-
 def sort_options(options):
     if not options:
         return []
@@ -32,25 +28,21 @@ def sort_options(options):
     other_values = sorted([v for v in options if v not in special_values and v.strip() != ""])
     return special_values + other_values
 
-def admin_login_form():
-    st.title("🔐 Đăng nhập Admin")
-    password = st.text_input("Nhập mật khẩu:", type="password")
-    if st.button("Đăng nhập"):
-        if password == ADMIN_PASSWORD:
-            st.session_state["admin_logged_in"] = True
-            st.rerun()
-        else:
-            st.error("Mật khẩu không đúng. Vui lòng thử lại.")
+def admin_page():
+    # --- KIỂM TRA QUYỀN TRUY CẬP ---
+    user_role = st.session_state.get("user_role")
+    if user_role not in ["moderator", "administrator"]:
+        st.warning("Bạn không có quyền truy cập trang này. Vui lòng đăng nhập với tài khoản có quyền quản trị.")
+        st.stop()
+    # -------------------------------
 
-def admin_dashboard():
     st.title("⚙️ Trang Theo dõi - Quản lý Vật tư & Hóa chất")
 
     if "admin_update_mode" not in st.session_state:
         st.session_state["admin_update_mode"] = "none"
 
-    if st.button("Đăng xuất Admin"):
-        st.session_state["admin_logged_in"] = False
-        st.rerun()
+    # Nút đăng xuất admin (chỉ cần đăng xuất Google chung)
+    # st.button("Đăng xuất Admin") không còn cần thiết
 
     st.markdown("---")
     st.header("Tìm kiếm và Cập nhật")
@@ -63,6 +55,7 @@ def admin_dashboard():
         st.session_state['admin_current_item_id'] = item_id_to_find
         st.session_state['admin_search_results'] = db_manager.get_by_id(item_id_to_find)
         st.session_state['admin_update_mode'] = "none"
+        st.rerun()
 
     if 'admin_search_results' in st.session_state and not st.session_state['admin_search_results'].empty:
         item_data = st.session_state['admin_search_results'].iloc[0]
@@ -126,8 +119,8 @@ def update_tracking_form(item_data):
     try:
         default_index_status = sorted_tracking_statuses.index(current_tracking_status)
     except ValueError:
-        default_index_status = 0 # Mặc định là "Không rõ"
-
+        default_index_status = 0
+    
     selected_tracking_status = st.selectbox(
         f"Chọn trạng thái Theo dõi cho ID '{item_data['id']}'",
         options=sorted_tracking_statuses,
@@ -310,13 +303,3 @@ def update_quantity_form(item_data):
                 st.rerun()
             else:
                 st.error("Không tìm thấy mục để cập nhật.")
-
-
-def admin_page():
-    if "admin_logged_in" not in st.session_state:
-        st.session_state["admin_logged_in"] = False
-
-    if not st.session_state["admin_logged_in"]:
-        admin_login_form()
-    else:
-        admin_dashboard()

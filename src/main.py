@@ -1,95 +1,133 @@
+# src/main.py
+
 import streamlit as st
 import sys
-import os
 from pathlib import Path
 
-# Thêm thư mục gốc của dự án vào Python path
+# Thêm thư mục gốc của dự án vào Python path nếu chưa có
 project_root = Path(__file__).parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from src.chatbot_logic import ChatbotLogic
+# Import các module và trang của ứng dụng
+from src.auth import get_user_info, logout
+from src.user_manager import UserManager
 from src.database_manager import DatabaseManager
 from src.database_admin import AdminDatabaseManager
+from src.home_page import home_page
 from src.admin_page import admin_page
-from src.statistics_page import statistics_page
 from src.admin_settings_page import admin_settings_page
 from src.ai_assistant_page import ai_assistant_page
+from src.statistics_page import statistics_page
+from src.user_management_page import user_management_page
+from src.chatbot_page import chatbot_page
 
-# Khởi tạo chatbot logic một lần duy nhất
-@st.cache_resource
-def get_chatbot_logic():
-    db_manager_instance = DatabaseManager()
+# Cấu hình trang
+st.set_page_config(page_title="Hệ thống Quản lý Lab", layout="wide", initial_sidebar_state="expanded")
+
+# Khởi tạo các manager
+user_manager = UserManager()
+db_manager = DatabaseManager()
+
+def setup_sidebar(user_info):
+    """Thiết lập và hiển thị thanh bên (sidebar) dựa trên trạng thái đăng nhập."""
+    st.sidebar.title("Menu")
     
-    temp_chatbot_logic_instance = ChatbotLogic()
-    log_file_full_path = temp_chatbot_logic_instance.log_filepath
-
-    print("Bắt đầu kiểm tra và tải nhật ký tự động khi ứng dụng khởi động...")
-    if db_manager_instance.upload_logs_to_github_on_startup(str(log_file_full_path)):
-         print("Tải nhật ký tự động hoàn tất (hoặc không có log để tải).")
+    if user_info:
+        # Nếu đã đăng nhập, hiển thị thông tin người dùng và nút đăng xuất
+        user_role = st.session_state.get('user_role', 'guest')
+        st.sidebar.write(f"**Xin chào, {user_info.get('given_name', user_info.get('name', 'bạn'))}!**")
+        st.sidebar.write(f"Vai trò: {user_role.capitalize()}")
+        st.sidebar.button("Đăng xuất", on_click=logout, key="sidebar_logout")
     else:
-         print("Tải nhật ký tự động thất bại hoặc có lỗi xảy ra.")
-    
-    return temp_chatbot_logic_instance
+        # Nếu chưa đăng nhập, hiển thị thông báo
+        st.sidebar.info("Vui lòng đăng nhập để sử dụng các tính năng.")
 
-# KHỞI TẠO CÁC MANAGER (ĐỂ SỬ DỤNG CHO CẢ CÁC TRANG ADMIN VÀ CÀI ĐẶT)
-@st.cache_resource
-def get_managers():
-    db_instance = DatabaseManager()
-    admin_db_instance = AdminDatabaseManager(db_instance)
-    return {
-        "db_manager": db_instance,
-        "admin_db_manager": admin_db_instance
+def show_pages_by_role(user_role):
+    """
+    Hiển thị các trang chức năng trong sidebar dựa trên vai trò của người dùng.
+    Phiên bản này đã được đơn giản hóa để khắc phục lỗi "click hai lần".
+    """
+    admin_db_manager = AdminDatabaseManager()
+    page_dependencies = {
+        "user_manager": user_manager,
+        "db_manager": db_manager,
+        "admin_db_manager": admin_db_manager
     }
+
+    PAGES = {
+        "Trang chủ": {"func": home_page, "roles": ["guest", "user", "registered", "moderator", "administrator"], "args": {}},
+        "Chatbot": {"func": chatbot_page, "roles": ["guest", "user", "registered", "moderator", "administrator"], "args": {}},
+        "Trợ lý AI": {"func": ai_assistant_page, "roles": ["user", "registered", "moderator", "administrator"], "args": {}},
+        "Quản lý": {"func": admin_page, "roles": ["moderator", "administrator"], "args": {}},
+        "Thống kê": {"func": statistics_page, "roles": ["moderator", "administrator"], "args": {}},
+        "Quản lý người dùng": {"func": user_management_page, "roles": ["administrator"], "args": {"user_manager": page_dependencies["user_manager"]}},
+        "Cài đặt Admin": {
+            "func": admin_settings_page,
+            "roles": ["administrator"],
+            "args": {
+                "db_manager": page_dependencies["db_manager"],
+                "admin_db_manager": page_dependencies["admin_db_manager"]
+            }
+        },
+    }
+
+    allowed_pages = [name for name, details in PAGES.items() if user_role in details["roles"]]
+
+    if not allowed_pages:
+        st.warning("Bạn không có quyền truy cập vào bất kỳ trang nào.")
+        return
+
+    # --- THAY ĐỔI CHÍNH Ở ĐÂY ---
+    # Chúng ta không cần quản lý state 'page' hay 'index' một cách thủ công nữa.
+    # st.radio sẽ tự động ghi nhớ lựa chọn cuối cùng của người dùng.
+    selected_page_name = st.sidebar.radio(
+        "Điều hướng",
+        options=allowed_pages,
+        # Không cần tham số 'index' nữa
+    )
+
+    # Lấy thông tin và gọi hàm của trang được chọn
+    page_details = PAGES[selected_page_name]
+    page_function = page_details["func"]
+    page_args = page_details["args"]
+    page_function(**page_args)
+
+
+def main():
+    """Hàm chính điều khiển luồng của ứng dụng."""
     
-def chatbot_page():
-    st.set_page_config(page_title="Lab Chatbot - Duy Tan University", layout="centered")
-    st.title("🧪 Lab Chatbot - Duy Tan University")
-    st.write("Chào bạn! Tôi là trợ lý ảo giúp bạn tra cứu, thống kê vật tư và hóa chất trong phòng thí nghiệm được thiết kế bởi Khoa Môi trường và Khoa học tự nhiên phục vụ công tác nội bộ. Bạn muốn tìm kiếm hóa chất hoặc vật tư? Hãy cho tôi biết! Hoặc nếu bạn muốn tôi hướng dẫn tìm kiếm, hãy gõ Hướng dẫn... " \
-    "Nếu bạn cần làm việc với Trợ lý AI, hãy gọi trợ lý AI ở thanh điều hướng >> phía trên hoặc bên trái màn hình.")
-
-    chatbot = get_chatbot_logic()
-
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-
-    if prompt := st.chat_input("Nhập câu hỏi của bạn..."):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        with st.spinner("Đang xử lý..."):
-            response = chatbot.get_response(prompt)
+    # Bước 1: Luôn gọi hàm get_user_info() ở đầu.
+    # Hàm này sẽ tự xử lý việc hiển thị nút đăng nhập nếu cần.
+    user_info = get_user_info()
+    
+    # Bước 2: Dựa vào kết quả của get_user_info() để xử lý logic
+    if user_info:
+        # Nếu người dùng đã đăng nhập:
         
-        st.session_state.messages.append({"role": "assistant", "content": response})
-        with st.chat_message("assistant"):
-            st.markdown(response)
+        # a. Xác định vai trò của họ NGAY LẬP TỨC và lưu vào session.
+        # Chúng ta kiểm tra để chỉ tính toán lại vai trò khi cần thiết.
+        user_email = user_info.get('email')
+        if 'user_role' not in st.session_state or st.session_state.get('user_email') != user_email:
+            st.session_state.user_email = user_email # Lưu email để so sánh
+            st.session_state.user_role = user_manager.get_user_role(user_email)
 
-def main_app():
-    st.sidebar.title("Điều hướng")
-    page_selection = st.sidebar.radio("Chọn trang:", ["Chatbot", "Trợ lý AI", "Thống kê", "Theo dõi", "Cài đặt"])
+        # b. SAU KHI đã có vai trò, bây giờ mới vẽ thanh điều hướng.
+        setup_sidebar(user_info)
+        
+        # c. Hiển thị các trang được phép truy cập.
+        show_pages_by_role(st.session_state.user_role)
+    else:
+        # Nếu người dùng chưa đăng nhập:
+        
+        # a. Vẽ thanh điều hướng ở trạng thái chưa đăng nhập.
+        setup_sidebar(None)
+        
+        # b. Hiển thị trang chào mừng.
+        st.title("Chào mừng đến với Hệ thống Quản lý Lab")
+        st.write("Vui lòng chọn 'Đăng nhập bằng Google' ở thanh bên để bắt đầu.")
+        st.info("Chức năng Chatbot có thể sử dụng mà không cần đăng nhập. Vui lòng chọn trên thanh điều hướng.")
 
-    managers = get_managers()
-
-    if st.sidebar.button("Xóa Cache 🗑️"):
-        st.cache_resource.clear()
-        st.success("Đã xóa toàn bộ cache!")
-        st.rerun()
-
-    if page_selection == "Chatbot":
-        chatbot_page()
-    elif page_selection == "Trợ lý AI":
-        ai_assistant_page()
-    elif page_selection == "Thống kê":
-        statistics_page()
-    elif page_selection == "Theo dõi":
-        admin_page()
-    elif page_selection == "Cài đặt":
-        admin_settings_page(managers['db_manager'], managers['admin_db_manager'])
 
 if __name__ == "__main__":
-    main_app()
+    main()
