@@ -28,39 +28,38 @@ def initialize_oauth_component():
 
 oauth2 = initialize_oauth_component()
 
-def get_user_info():
-    """Hàm chính xử lý toàn bộ logic đăng nhập."""
+def get_user_info(redirect_uri): # <-- SỬA: Thêm tham số redirect_uri
+    """
+    Hàm chính xử lý toàn bộ logic đăng nhập.
+    """
     if not oauth2:
         return None
 
+    # Nếu token đã tồn tại trong session, người dùng đã đăng nhập
     if 'token' in st.session_state:
         token = st.session_state['token']
         id_token = token.get('id_token')
         
-        # --- THAY ĐỔI LỚN Ở ĐÂY ---
-        # Kiểm tra và giải mã id_token để lấy thông tin người dùng
         if id_token:
             try:
-                # Giải mã id_token. 
-                # Bỏ qua bước xác thực chữ ký vì chúng ta nhận token trực tiếp 
-                # từ Google qua kênh bảo mật.
+                # Giải mã id_token để lấy thông tin người dùng
                 user_info = jwt.decode(id_token, options={"verify_signature": False})
                 st.session_state.user_info = user_info
                 return user_info
             except Exception as e:
                 st.error(f"Lỗi khi giải mã token: {e}")
                 return None
-        # --- KẾT THÚC THAY ĐỔI ---
 
     # Nếu chưa có token, hiển thị nút đăng nhập
     result = oauth2.authorize_button(
         name="Đăng nhập bằng Google",
         icon="https://www.google.com/favicon.ico",
-        redirect_uri="https://dtu-lab-manager.streamlit.app",
+        redirect_uri=redirect_uri, # <-- SỬA: Sử dụng tham số redirect_uri đã được truyền vào
         scope="openid email profile",
         key="google_login"
     )
 
+    # Sau khi người dùng nhấp và xác thực, 'result' sẽ chứa token
     if result and "token" in result:
         st.session_state.token = result.get('token')
         st.rerun()
