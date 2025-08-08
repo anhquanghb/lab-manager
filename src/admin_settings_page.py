@@ -4,6 +4,8 @@ import streamlit as st
 from src.database_manager import DatabaseManager
 from src.database_admin import AdminDatabaseManager
 
+
+
 # --- CÁC HÀM TRỢ GIÚP ---
 
 def save_settings_and_push(config_key, new_value, admin_db_manager, db_manager, is_list=True):
@@ -126,3 +128,83 @@ def admin_settings_page(db_manager: DatabaseManager, admin_db_manager: AdminData
     display_list_editor("Mục đích", "purposes", db_manager.config_data.get('purposes', []), db_manager, admin_db_manager)
     st.markdown("---")
     display_list_editor("Tình trạng", "statuses", db_manager.config_data.get('statuses', []), db_manager, admin_db_manager)
+
+# --- TÍNH NĂNG MỚI: KHU VỰC NHẬP/XUẤT DỮ LIỆU ---
+def display_data_import_export(db_manager: DatabaseManager, admin_db_manager: AdminDatabaseManager):
+    st.header("📦 Nhập & Xuất dữ liệu hàng loạt (CSV)")
+
+    st.info(
+        "Chức năng này cho phép bạn xuất toàn bộ dữ liệu kho ra file CSV, "
+        "chỉnh sửa hàng loạt bằng Excel/Google Sheets, sau đó nhập lại để cập nhật hệ thống."
+    )
+
+    # --- CHỨC NĂNG XUẤT (EXPORT) ---
+    st.subheader("1. Xuất dữ liệu ra file CSV")
+    
+    # Lấy dữ liệu dataframe gốc (không có các cột _normalized)
+    original_cols = [
+        'id', 'name', 'type', 'quantity', 'unit', 'location', 'description',
+        'iupac_name', 'vietnamese_name', 'chemical_formula', 'cas_number',
+        'state_or_concentration', 'status', 'purpose', 'tracking', 'note'
+    ]
+    cols_to_export = [col for col in original_cols if col in db_manager.inventory_data.columns]
+    df_to_export = db_manager.inventory_data[cols_to_export]
+    
+    # Chuyển đổi dataframe thành dữ liệu CSV
+    csv_data = df_to_export.to_csv(index=False).encode('utf-8')
+    
+    st.download_button(
+        label="📥 Tải xuống Danhmuc.csv",
+        data=csv_data,
+        file_name='Danhmuc.csv',
+        mime='text/csv',
+    )
+    
+    st.markdown("---")
+
+    # --- CHỨC NĂNG NHẬP (IMPORT) ---
+    st.subheader("2. Nhập dữ liệu từ file CSV")
+    st.warning(
+        "**QUAN TRỌNG:** Chức năng này sẽ **GHI ĐÈ** toàn bộ dữ liệu kho hiện tại của bạn. "
+        "Hãy chắc chắn về nội dung file bạn tải lên."
+    )
+    
+    uploaded_file = st.file_uploader(
+        "Kéo và thả hoặc chọn file Danhmuc.csv đã chỉnh sửa của bạn vào đây",
+        type=['csv']
+    )
+    
+    if uploaded_file is not None:
+        try:
+            new_df = pd.read_csv(uploaded_file)
+            
+            # Kiểm tra các cột tối thiểu phải có
+            required_cols = {'id', 'name'}
+            if not required_cols.issubset(new_df.columns):
+                st.error(f"Lỗi: File CSV phải chứa ít nhất các cột: {', '.join(required_cols)}")
+            else:
+                st.write("Xem trước 5 dòng đầu của dữ liệu mới:")
+                st.dataframe(new_df.head())
+                
+                if st.button("XÁC NHẬN VÀ GHI ĐÈ DỮ LIỆU"):
+                    with st.spinner("Đang xử lý..."):
+                        # Ghi đè dữ liệu trong bộ nhớ
+                        admin_db_manager.inventory_data = new_df
+                        
+                        # Lưu file inventory.json mới
+                        if admin_db_manager.save_inventory_to_json():
+                            st.success("Đã ghi đè và lưu file inventory.json thành công.")
+                            
+                            # Push file mới lên GitHub
+                            commit_message = "feat(data): Cập nhật dữ liệu kho từ file CSV"
+                            if admin_db_manager.push_to_github(admin_db_manager.data_path, commit_message):
+                                st.success("Đã đẩy dữ liệu mới lên GitHub! Ứng dụng sẽ tải lại.")
+                                st.cache_resource.clear()
+                                st.rerun()
+                            else:
+                                st.error("Đẩy file inventory.json lên GitHub thất bại.")
+                        else:
+                            st.error("Lưu file inventory.json thất bại.")
+
+        except Exception as e:
+            st.error(f"Đã xảy ra lỗi khi đọc file CSV: {e}")
