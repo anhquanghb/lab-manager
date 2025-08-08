@@ -4,7 +4,6 @@ import json
 import os
 import git
 import streamlit as st
-from pathlib import Path 
 
 # Import lớp cha để kế thừa
 from src.database_manager import DatabaseManager
@@ -15,7 +14,8 @@ class AdminDatabaseManager(DatabaseManager):
     từ DatabaseManager và bổ sung các phương thức ghi.
     """
     def __init__(self, data_path='data/inventory.json', config_path='data/config.json'):
-        # Gọi hàm __init__ của lớp cha (DatabaseManager) để tải dữ liệu
+        # Gọi hàm __init__ của lớp cha (DatabaseManager) để tải dữ liệu.
+        # Cấu trúc này không cần nhận db_manager_instance nữa.
         super().__init__(data_path, config_path)
 
     def save_inventory_to_json(self):
@@ -34,7 +34,7 @@ class AdminDatabaseManager(DatabaseManager):
         data_to_save = self.inventory_data[cols_to_save].to_dict(orient='records')
 
         try:
-            # SỬA: Dùng os.makedirs để tạo thư mục, đảm bảo tương thích cloud
+            # Dùng os.makedirs để tạo thư mục, đảm bảo tương thích cloud
             dir_name = os.path.dirname(self.data_path)
             if dir_name:
                 os.makedirs(dir_name, exist_ok=True)
@@ -51,7 +51,7 @@ class AdminDatabaseManager(DatabaseManager):
     def save_config_to_json(self):
         """Lưu cấu hình hiện tại vào file config.json."""
         try:
-            # SỬA: Dùng os.makedirs để đảm bảo thư mục tồn tại
+            # Dùng os.makedirs để đảm bảo thư mục tồn tại
             dir_name = os.path.dirname(self.config_path)
             if dir_name:
                 os.makedirs(dir_name, exist_ok=True)
@@ -66,7 +66,7 @@ class AdminDatabaseManager(DatabaseManager):
             return False
 
     def push_to_github(self, file_path_to_push, commit_message):
-        """Thực hiện git add, commit và push cho một file cụ thể."""
+        """Thực hiện git add, commit và git push cho một file cụ thể."""
         github_token = st.secrets.get("GITHUB_TOKEN")
 
         if not github_token:
@@ -74,7 +74,7 @@ class AdminDatabaseManager(DatabaseManager):
             return False
         
         try:
-            # CẢI TIẾN: Giả định thư mục hiện tại là gốc của repo khi chạy trên cloud
+            # Giả định thư mục hiện tại là gốc của repo khi chạy trên cloud
             repo_path = "."
             repo = git.Repo(repo_path)
             
@@ -88,7 +88,7 @@ class AdminDatabaseManager(DatabaseManager):
             repo.index.commit(commit_message)
             print(f"Đã commit '{file_path_to_push}' với thông báo: {commit_message}")
 
-            # CẢI TIẾN: Dùng phương thức push của GitPython thay vì subprocess
+            # Dùng phương thức push của GitPython thay vì subprocess
             remote = repo.remote(name='origin')
             original_url = remote.url
             
@@ -105,7 +105,7 @@ class AdminDatabaseManager(DatabaseManager):
                 remote.push(repo.active_branch.name)
                 print(f"Đã đẩy '{file_path_to_push}' lên GitHub thành công.")
             finally:
-                remote.set_url(original_url)
+                remote.set_url(original_url) # Khôi phục URL gốc
 
             return True
 

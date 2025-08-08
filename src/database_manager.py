@@ -9,9 +9,11 @@ import streamlit as st
 import subprocess
 from src.common_utils import remove_accents_and_normalize
 
+# (Dòng "from src.database_manager import DatabaseManager" đã được xóa để sửa lỗi import vòng lặp)
+
 class DatabaseManager:
     def __init__(self, data_path='data/inventory.json', config_path='data/config.json'):
-        # SỬA: Sử dụng trực tiếp string path để tương thích cloud
+        # Sử dụng trực tiếp string path để tương thích cloud
         self.data_path = data_path
         self.config_path = config_path
         
@@ -19,7 +21,7 @@ class DatabaseManager:
         self.config_data = self._load_config()
 
     def _load_data(self):
-        # SỬA: Dùng os.path.exists để kiểm tra file
+        # Dùng os.path.exists để kiểm tra file
         if not os.path.exists(self.data_path):
             print(f"Lỗi: Không tìm thấy file dữ liệu tại {self.data_path}")
             return pd.DataFrame()
@@ -54,7 +56,7 @@ class DatabaseManager:
 
     def _load_config(self):
         """Tải cấu hình từ file config.json."""
-        # SỬA: Dùng os.path.exists để kiểm tra file
+        # Dùng os.path.exists để kiểm tra file
         if not os.path.exists(self.config_path):
             print(f"Lỗi: Không tìm thấy file cấu hình tại {self.config_path}")
             return {}
@@ -144,9 +146,6 @@ class DatabaseManager:
             return ", ".join(unique_locations)
         return None
 
-    # --- Các hàm khác không thay đổi ---
-    # ... (Bạn có thể giữ các hàm list_by_location, list_by_type, ... ở đây) ...
-
     # --- Hàm xử lý Git ---
     def upload_logs_to_github_on_startup(self, log_filepath):
         github_token = st.secrets.get("GITHUB_TOKEN")
@@ -159,10 +158,9 @@ class DatabaseManager:
             repo_path = "." 
             repo = git.Repo(repo_path)
 
-            # ... (Phần logic Git còn lại có thể giữ nguyên) ...
-            # Tuy nhiên, cần lưu ý việc git push từ môi trường Streamlit Cloud
-            # có thể cần cấu hình phức tạp hơn (SSH keys).
-            # Logic push hiện tại có thể không hoạt động như mong đợi trên cloud.
+            # Lưu ý: Logic git push từ môi trường Streamlit Cloud có thể cần
+            # cấu hình phức tạp hơn (SSH keys). Chức năng này có thể không
+            # hoạt động như mong đợi trên cloud mà không có thiết lập bổ sung.
             print("Chức năng upload log lên GitHub đang được xem xét lại cho môi trường cloud.")
             return True # Tạm thời trả về True để không chặn ứng dụng
 
