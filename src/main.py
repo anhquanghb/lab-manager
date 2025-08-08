@@ -97,37 +97,38 @@ def show_pages_by_role(user_role):
 def main():
     """Hàm chính điều khiển luồng của ứng dụng."""
     
-    # Bước 1: Luôn gọi hàm get_user_info() ở đầu.
-    # Hàm này sẽ tự xử lý việc hiển thị nút đăng nhập nếu cần.
-    user_info = get_user_info()
+    # --- THAY ĐỔI: Đọc redirect_uri từ file config ---
+    # Cung cấp giá trị mặc định để chạy lokal nếu không tìm thấy trong config
+    redirect_uri = db_manager.config_data.get("site_url", "http://localhost:8501")
     
-    # Bước 2: Dựa vào kết quả của get_user_info() để xử lý logic
+    # Truyền redirect_uri vào hàm get_user_info
+    user_info = get_user_info(redirect_uri=redirect_uri)
+    # --- KẾT THÚC THAY ĐỔI ---
+    
     if user_info:
         # Nếu người dùng đã đăng nhập:
-        
-        # a. Xác định vai trò của họ NGAY LẬP TỨC và lưu vào session.
-        # Chúng ta kiểm tra để chỉ tính toán lại vai trò khi cần thiết.
         user_email = user_info.get('email')
-        if 'user_role' not in st.session_state or st.session_state.get('user_email') != user_email:
-            st.session_state.user_email = user_email # Lưu email để so sánh
-            st.session_state.user_role = user_manager.get_user_role(user_email)
-
-        # b. SAU KHI đã có vai trò, bây giờ mới vẽ thanh điều hướng.
-        setup_sidebar(user_info)
         
-        # c. Hiển thị các trang được phép truy cập.
+        current_role = user_manager.get_user_role(user_email)
+        
+        if current_role == "guest":
+            user_manager.add_or_update_user(user_email, "registered")
+            st.session_state.user_role = "registered"
+            print(f"Người dùng mới '{user_email}' đã được tự động đăng ký.")
+        else:
+            if 'user_role' not in st.session_state or st.session_state.get('user_email') != user_email:
+                st.session_state.user_role = current_role
+
+        st.session_state.user_email = user_email
+        setup_sidebar(user_info)
         show_pages_by_role(st.session_state.user_role)
     else:
         # Nếu người dùng chưa đăng nhập:
-        
-        # a. Vẽ thanh điều hướng ở trạng thái chưa đăng nhập.
         setup_sidebar(None)
         
-        # b. Hiển thị trang chào mừng.
         st.title("Chào mừng đến với Hệ thống Quản lý Lab")
         st.write("Vui lòng chọn 'Đăng nhập bằng Google' ở thanh bên để bắt đầu.")
         st.info("Chức năng Chatbot có thể sử dụng mà không cần đăng nhập. Vui lòng chọn trên thanh điều hướng.")
-
 
 if __name__ == "__main__":
     main()

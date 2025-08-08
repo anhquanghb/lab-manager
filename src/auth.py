@@ -56,7 +56,7 @@ def get_user_info():
     result = oauth2.authorize_button(
         name="Đăng nhập bằng Google",
         icon="https://www.google.com/favicon.ico",
-        redirect_uri="http://localhost:8501",
+        redirect_uri="https://dtu-lab-manager.streamlit.app",
         scope="openid email profile",
         key="google_login"
     )
