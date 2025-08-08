@@ -6,8 +6,11 @@ import streamlit as st
 
 class UserManager:
     def __init__(self, users_file='data/users.json'):
-        project_root = Path(__file__).parent.parent
-        self.users_file = project_root / users_file
+        # --- THAY ĐỔI Ở ĐÂY ---
+        # Sử dụng đường dẫn tương đối trực tiếp
+        self.users_file = Path(users_file)
+        # --- KẾT THÚC THAY ĐỔI ---
+
         self.users_data = self._load_users()
 
     def _load_users(self):

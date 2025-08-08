@@ -11,9 +11,13 @@ from src.common_utils import remove_accents_and_normalize
 
 class DatabaseManager:
     def __init__(self, data_path='data/inventory.json', config_path='data/config.json'):
-        project_root = Path(__file__).parent.parent
-        self.data_path = project_root / data_path
-        self.config_path = project_root / config_path
+        # --- THAY ĐỔI Ở ĐÂY ---
+        # Bỏ đi phần tính toán project_root phức tạp.
+        # Streamlit Cloud sẽ tự hiểu đường dẫn tương đối từ gốc repository.
+        self.data_path = Path(data_path)
+        self.config_path = Path(config_path)
+        # --- KẾT THÚC THAY ĐỔI ---
+        
         self.inventory_data = self._load_data()
         self.config_data = self._load_config()
 
