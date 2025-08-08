@@ -102,7 +102,7 @@ def main():
     redirect_uri = db_manager.config_data.get("site_url", "http://localhost:8501")
     
     # Truyền redirect_uri vào hàm get_user_info
-    user_info = get_user_info(redirect_uri=redirect_uri)
+    user_info = get_user_info(redirect_uri)
     # --- KẾT THÚC THAY ĐỔI ---
     
     if user_info:
