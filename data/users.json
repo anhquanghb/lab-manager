@@ -4,5 +4,11 @@
     },
     "anhquanghb@gmail.com": {
         "role": "user"
+    },
+    "baole@duytan.edu.vn": {
+        "role": "administrator"
+    },
+    "quangda@cee.edu.vn": {
+        "role": "registered"
     }
 }
