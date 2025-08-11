@@ -3,15 +3,18 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+import json
+import os
+import shutil
 
 # Import các lớp quản lý và tiện ích
 from src.database_manager import DatabaseManager
 from src.database_admin import AdminDatabaseManager
 from src.common_utils import remove_accents_and_normalize
+from src.convert_data import convert_csv_to_json_data
 
 # --- CẢI TIẾN KIẾN TRÚC ---
 # Khởi tạo các đối tượng manager một lần duy nhất và cache lại.
-# Hàm này giờ đây tuân thủ đúng mô hình kế thừa.
 @st.cache_resource
 def get_managers():
     """
@@ -40,7 +43,6 @@ def sort_options(options):
 
 def admin_page():
     """Hàm chính để vẽ giao diện trang quản lý."""
-    # --- KIỂM TRA QUYỀN TRUY CẬP ---
     user_role = st.session_state.get("user_role")
     if user_role not in ["moderator", "administrator"]:
         st.warning("Bạn không có quyền truy cập trang này.")
@@ -48,7 +50,6 @@ def admin_page():
 
     st.title("⚙️ Trang Quản lý & Theo dõi Vật tư")
 
-    # Khởi tạo session state cho chế độ cập nhật
     if "admin_update_mode" not in st.session_state:
         st.session_state["admin_update_mode"] = "none"
 
@@ -63,10 +64,9 @@ def admin_page():
     if st.button("Tìm kiếm theo ID", key="admin_search_button"):
         st.session_state['admin_current_item_id'] = item_id_to_find
         st.session_state['admin_search_results'] = db_manager.get_by_id(item_id_to_find)
-        st.session_state['admin_update_mode'] = "none" # Reset form khi tìm kiếm mới
+        st.session_state['admin_update_mode'] = "none"
         st.rerun()
 
-    # Hiển thị kết quả tìm kiếm và các form cập nhật
     if 'admin_search_results' in st.session_state:
         results = st.session_state['admin_search_results']
         if not results.empty:
@@ -75,6 +75,49 @@ def admin_page():
             display_update_forms(item_data)
         elif 'admin_current_item_id' in st.session_state:
             st.warning(f"Không tìm thấy mục nào với ID: '{st.session_state['admin_current_item_id']}'.")
+
+    st.markdown("---")
+    st.header("Cập nhật dữ liệu từ file CSV")
+    update_data_section()
+
+
+def update_data_section():
+    """Hiển thị giao diện cho phép admin cập nhật toàn bộ dữ liệu từ file CSV."""
+    with st.expander("Cập nhật toàn bộ dữ liệu (Import từ CSV)", expanded=False):
+        uploaded_file = st.file_uploader("Tải lên file CSV mới:", type=['csv'])
+
+        if uploaded_file is not None:
+            if st.button("Xử lý và Cập nhật dữ liệu"):
+                with st.spinner("Đang xử lý dữ liệu từ CSV..."):
+                    try:
+                        # Chuyển đổi dữ liệu từ CSV sang định dạng JSON
+                        df_csv = pd.read_csv(uploaded_file)
+                        new_data = convert_csv_to_json_data(df_csv)
+                        
+                        # Backup file inventory.json hiện tại
+                        timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+                        old_file_path = admin_db_manager.data_path
+                        backup_file_path = os.path.join(
+                            os.path.dirname(old_file_path),
+                            f"inventory_{timestamp_str}.json"
+                        )
+                        
+                        if os.path.exists(old_file_path):
+                            shutil.copyfile(old_file_path, backup_file_path)
+                            st.success(f"Đã sao lưu file cũ thành: `{os.path.basename(backup_file_path)}`")
+                        
+                        # Lưu dữ liệu mới vào inventory.json và đẩy lên GitHub
+                        commit_message = f"feat(data): Cập nhật dữ liệu tồn kho từ CSV ngày {datetime.now().strftime('%d-%m-%Y')}"
+                        if admin_db_manager.save_and_push_json(old_file_path, new_data, commit_message):
+                            st.session_state['admin_search_results'] = pd.DataFrame()
+                            st.session_state['admin_current_item_id'] = None
+                            st.cache_resource.clear()
+                            st.rerun()
+                        else:
+                            st.error("Có lỗi xảy ra khi lưu hoặc đẩy dữ liệu mới.")
+
+                    except Exception as e:
+                        st.error(f"Lỗi khi xử lý file: {e}")
 
 def display_item_details(item_data):
     """Hiển thị thông tin chi tiết của vật phẩm được tìm thấy."""
@@ -122,7 +165,6 @@ def update_tracking_form(item_data):
     with st.form("update_tracking_form"):
         st.markdown("##### Cập nhật trạng thái Theo dõi & Ghi chú")
         
-        # Lấy danh sách trạng thái từ config
         tracking_statuses = db_manager.get_tracking_statuses_from_config()
         current_status = item_data.get('tracking')
         try:
@@ -140,7 +182,6 @@ def update_tracking_form(item_data):
         
         submitted = st.form_submit_button("Lưu và Đẩy lên GitHub")
         if submitted:
-            # Logic cập nhật dữ liệu và push
             handle_update(item_data['id'], {
                 "tracking": selected_status, 
                 "note": new_note_input
@@ -205,7 +246,6 @@ def handle_update(item_id, updates):
             st.error("Lỗi: Không tìm thấy ID để cập nhật.")
             return
 
-        # Cập nhật ghi chú nếu có
         if "note" in updates and updates["note"].strip():
             old_note = db_manager.inventory_data.loc[idx_to_update[0], 'note']
             if pd.isna(old_note): old_note = ""
@@ -217,7 +257,6 @@ def handle_update(item_id, updates):
             db_manager.inventory_data.loc[idx_to_update, 'note'] = final_note_value
             db_manager.inventory_data.loc[idx_to_update, 'note_normalized'] = remove_accents_and_normalize(final_note_value)
         
-        # Cập nhật các trường khác
         for key, value in updates.items():
             if key != "note":
                 db_manager.inventory_data.loc[idx_to_update, key] = value
@@ -225,16 +264,14 @@ def handle_update(item_id, updates):
                     db_manager.inventory_data.loc[idx_to_update, f"{key}_normalized"] = remove_accents_and_normalize(value)
 
         # Lưu và push
-        if admin_db_manager.save_inventory_to_json():
-            st.success("Đã lưu thay đổi vào file inventory.json.")
-            commit_message = f"feat(admin): Cập nhật thông tin cho ID {item_id}"
-            if admin_db_manager.push_to_github(admin_db_manager.data_path, commit_message):
-                st.success("Đã đẩy thay đổi lên GitHub thành công!")
-                # Reset state và rerun để thấy thay đổi
-                st.session_state['admin_search_results'] = db_manager.get_by_id(item_id)
-                st.session_state['admin_update_mode'] = "none"
-                st.rerun()
-            else:
-                st.error("Lỗi: Không thể đẩy thay đổi lên GitHub.")
+        data_to_save = db_manager.inventory_data.to_dict(orient='records')
+        commit_message = f"feat(admin): Cập nhật thông tin cho ID {item_id}"
+        if admin_db_manager.save_and_push_json(admin_db_manager.data_path, data_to_save, commit_message):
+            st.success("Đã đẩy thay đổi lên GitHub thành công!")
+            # Reset state và rerun để thấy thay đổi
+            st.session_state['admin_search_results'] = db_manager.get_by_id(item_id)
+            st.session_state['admin_update_mode'] = "none"
+            st.cache_resource.clear()
+            st.rerun()
         else:
-            st.error("Lỗi: Không thể lưu thay đổi vào file inventory.json.")
+            st.error("Lỗi: Không thể đẩy thay đổi lên GitHub.")
