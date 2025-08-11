@@ -7204,7 +7204,7 @@
         "name": "SULFURIC ACID",
         "type": "Hóa chất",
         "quantity": 1,
-        "unit": "đơn vị",
+        "unit": "chai",
         "location": "Tủ 1B-304B",
         "description": "Công thức: H2SO4, CAS: 7664-93-9, Trạng thái/Nồng độ: LỎNG, Mô tả: còn nguyên",
         "iupac_name": "SULFURIC ACID",
