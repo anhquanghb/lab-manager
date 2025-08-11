@@ -1,4 +1,4 @@
-# src/admin_page.py
+# src/admin_page.py (Đã sửa)
 
 import streamlit as st
 import pandas as pd
@@ -11,7 +11,6 @@ import shutil
 from src.database_manager import DatabaseManager
 from src.database_admin import AdminDatabaseManager
 from src.common_utils import remove_accents_and_normalize
-from src.convert_data import convert_csv_to_json_data
 
 # --- CẢI TIẾN KIẾN TRÚC ---
 # Khởi tạo các đối tượng manager một lần duy nhất và cache lại.
@@ -83,6 +82,9 @@ def admin_page():
 
 def update_data_section():
     """Hiển thị giao diện cho phép admin cập nhật toàn bộ dữ liệu từ file CSV."""
+    # Hoãn việc import convert_data để tránh lỗi circular import
+    from src.convert_data import convert_csv_to_json_data
+
     with st.expander("Cập nhật toàn bộ dữ liệu (Import từ CSV)", expanded=False):
         uploaded_file = st.file_uploader("Tải lên file CSV mới:", type=['csv'])
 
@@ -263,12 +265,10 @@ def handle_update(item_id, updates):
                 if f"{key}_normalized" in db_manager.inventory_data.columns:
                     db_manager.inventory_data.loc[idx_to_update, f"{key}_normalized"] = remove_accents_and_normalize(value)
 
-        # Lưu và push
         data_to_save = db_manager.inventory_data.to_dict(orient='records')
         commit_message = f"feat(admin): Cập nhật thông tin cho ID {item_id}"
         if admin_db_manager.save_and_push_json(admin_db_manager.data_path, data_to_save, commit_message):
             st.success("Đã đẩy thay đổi lên GitHub thành công!")
-            # Reset state và rerun để thấy thay đổi
             st.session_state['admin_search_results'] = db_manager.get_by_id(item_id)
             st.session_state['admin_update_mode'] = "none"
             st.cache_resource.clear()
