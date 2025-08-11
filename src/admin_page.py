@@ -1,4 +1,4 @@
-# src/admin_page.py
+# src/admin_page.py (đã sửa đổi)
 
 import streamlit as st
 import pandas as pd
@@ -11,6 +11,7 @@ import shutil
 from src.database_manager import DatabaseManager
 from src.database_admin import AdminDatabaseManager
 from src.common_utils import remove_accents_and_normalize
+from src.convert_data import convert_csv_to_json_data
 
 # --- CẢI TIẾN KIẾN TRÚC ---
 # Khởi tạo các đối tượng manager một lần duy nhất và cache lại.
@@ -104,7 +105,13 @@ def update_data_section():
                         if os.path.exists(old_file_path):
                             shutil.copyfile(old_file_path, backup_file_path)
                             st.success(f"Đã sao lưu file cũ thành: `{os.path.basename(backup_file_path)}`")
-                        
+                            
+                            # Đẩy file backup lên GitHub
+                            backup_commit_message = f"backup: Sao lưu inventory.json cũ ngày {datetime.now().strftime('%d-%m-%Y')}"
+                            if not admin_db_manager.push_to_github(backup_file_path, backup_commit_message):
+                                st.warning("Lỗi: Không thể đẩy file sao lưu lên GitHub. Tiếp tục cập nhật file chính...")
+
+                        # Lưu dữ liệu mới vào inventory.json và đẩy lên GitHub
                         commit_message = f"feat(data): Cập nhật dữ liệu tồn kho từ CSV ngày {datetime.now().strftime('%d-%m-%Y')}"
                         if admin_db_manager.save_and_push_json(old_file_path, new_data, commit_message):
                             st.session_state['admin_search_results'] = pd.DataFrame()
