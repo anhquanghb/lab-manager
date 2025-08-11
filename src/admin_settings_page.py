@@ -1,4 +1,4 @@
-# src/admin_settings_page.py (đã sửa đổi)
+# src/admin_settings_page.py
 
 import streamlit as st
 from src.database_manager import DatabaseManager
@@ -13,13 +13,17 @@ def save_settings_and_push(config_key, new_value, admin_db_manager, db_manager, 
     else:
         db_manager.config_data[config_key] = new_value
 
-    commit_message = f"feat(config): Cập nhật cài đặt '{config_key}'"
-    if admin_db_manager.save_and_push_json(admin_db_manager.config_path, db_manager.config_data, commit_message):
-        st.success("Đã đẩy thay đổi lên GitHub! Ứng dụng sẽ tải lại để áp dụng.")
-        st.cache_resource.clear() # Xóa cache để đảm bảo các manager được tải lại với config mới
-        st.rerun()
+    if admin_db_manager.save_config_to_json():
+        st.success("Đã lưu thay đổi vào file config.json.")
+        commit_message = f"feat(config): Cập nhật cài đặt '{config_key}'"
+        if admin_db_manager.push_to_github(admin_db_manager.config_path, commit_message):
+            st.success("Đã đẩy thay đổi lên GitHub! Ứng dụng sẽ tải lại để áp dụng.")
+            st.cache_resource.clear() # Xóa cache để đảm bảo các manager được tải lại với config mới
+            st.rerun()
+        else:
+            st.error("Lỗi: Không thể đẩy thay đổi lên GitHub.")
     else:
-        st.error("Lỗi: Không thể lưu hoặc đẩy thay đổi lên GitHub.")
+        st.error("Lỗi: Không thể lưu thay đổi vào file config.json.")
 
 def display_list_editor(title, config_key, current_list, db_manager, admin_db_manager):
     """Hiển thị giao diện để thêm/xóa các mục trong một danh sách cấu hình."""
@@ -72,9 +76,6 @@ def display_system_settings(db_manager: DatabaseManager, admin_db_manager: Admin
         new_site_url = st.text_input("Site URL:", value=current_site_url)
 
         st.markdown("---")
-        st.subheader("Cài đặt API Gemini & Prompt")
-        current_api_key = db_manager.config_data.get('gemini_api_key', '')
-        new_api_key = st.text_input("Gemini API Key:", value=current_api_key, type="password")
         
         current_model = db_manager.config_data.get('gemini_model_name', 'gemini-1.5-flash')
         new_model = st.text_input("Tên mô hình Gemini:", value=current_model)
@@ -84,21 +85,18 @@ def display_system_settings(db_manager: DatabaseManager, admin_db_manager: Admin
 
         submitted = st.form_submit_button("Lưu tất cả cài đặt hệ thống")
         if submitted:
-            # Cập nhật các giá trị vào config data
-            db_manager.config_data["site_url"] = new_site_url.strip()
-            db_manager.config_data["gemini_api_key"] = new_api_key.strip()
-            db_manager.config_data["gemini_model_name"] = new_model.strip()
-            db_manager.config_data["ai_full_prompt"] = new_prompt.strip()
-
-            # Sử dụng hàm save_and_push_json để lưu và đẩy
-            commit_message = "feat(config): Cập nhật cài đặt hệ thống"
-            if admin_db_manager.save_and_push_json(admin_db_manager.config_path, db_manager.config_data, commit_message):
-                st.success("Đã đẩy thay đổi lên GitHub! Ứng dụng sẽ tải lại để áp dụng.")
-                st.cache_resource.clear()
-                st.rerun()
-            else:
-                st.error("Lỗi: Không thể lưu hoặc đẩy thay đổi lên GitHub.")
-
+            # Tạo một từ điển chứa các cập nhật
+            updates = {
+                "site_url": new_site_url.strip(),
+                "gemini_api_key": new_api_key.strip(),
+                "ai_full_prompt": new_prompt.strip()
+            }
+            # Cập nhật tất cả các giá trị vào config data
+            for key, value in updates.items():
+                db_manager.config_data[key] = value
+            
+            # Lưu một lần
+            save_settings_and_push("system_settings", db_manager.config_data, admin_db_manager, db_manager, is_list=False)
 
 def admin_settings_page(db_manager: DatabaseManager, admin_db_manager: AdminDatabaseManager):
     """Hàm chính, entry point của trang cài đặt."""

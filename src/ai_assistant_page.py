@@ -32,7 +32,7 @@ def ai_assistant_page():
 
     # Lấy API Key từ config.json hoặc session state
     db_manager = DatabaseManager()
-    gemini_api_key = db_manager.config_data.get('gemini_api_key', '')
+    gemini_api_key = st.secrets.get('gemini_api_key', '')
     
     if not gemini_api_key:
         st.warning("Admin chưa cung cấp Gemini API Key. Vui lòng nhập API của bạn để sử dụng.")
