@@ -52,12 +52,8 @@ class AdminDatabaseManager(DatabaseManager):
             
             print(f"Đã lưu dữ liệu vào {file_path} thành công.")
             
-            if self.push_to_github(file_path, commit_message):
-                st.success(f"Đã đẩy thay đổi của {file_path} lên GitHub!")
-                return True
-            else:
-                st.error(f"Lỗi: Không thể đẩy thay đổi của {file_path} lên GitHub.")
-                return False
+            return self.push_to_github(file_path, commit_message)
+            
         except Exception as e:
             st.error(f"Lỗi khi lưu và đẩy file JSON: {e}")
             print(f"Lỗi khi lưu và đẩy file JSON: {e}")

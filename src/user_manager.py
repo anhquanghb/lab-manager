@@ -4,9 +4,10 @@ import json
 import pandas as pd
 import os
 import streamlit as st
+from src.database_admin import AdminDatabaseManager
 
 class UserManager:
-    def __init__(self, admin_db_manager, users_file='data/users.json'):
+    def __init__(self, admin_db_manager: AdminDatabaseManager, users_file='data/users.json'):
         self.admin_db_manager = admin_db_manager
         self.users_file = users_file
         self.users_data = self._load_users()

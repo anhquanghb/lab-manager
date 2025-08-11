@@ -43,6 +43,10 @@ def setup_sidebar(user_info):
     else:
         # Nếu chưa đăng nhập, hiển thị thông báo
         st.sidebar.info("Vui lòng đăng nhập để sử dụng các tính năng.")
+        
+        # Thêm nút đăng nhập vào sidebar
+        redirect_uri = db_manager.config_data.get("site_url", "http://localhost:8501")
+        get_user_info(redirect_uri)
 
 def show_pages_by_role(user_role):
     """
@@ -100,9 +104,11 @@ def main():
         current_role = user_manager.get_user_role(user_email)
         
         if current_role == "guest":
-            user_manager.add_or_update_user(user_email, "registered")
-            st.session_state.user_role = "registered"
-            print(f"Người dùng mới '{user_email}' đã được tự động đăng ký.")
+            if user_manager.add_or_update_user(user_email, "registered"):
+                st.session_state.user_role = "registered"
+                st.success(f"Chào mừng {user_info.get('given_name', 'bạn')}, tài khoản của bạn đã được tạo! 🥳")
+            else:
+                st.error("Có lỗi xảy ra khi tạo tài khoản của bạn. Vui lòng thử lại.")
         else:
             if 'user_role' not in st.session_state or st.session_state.get('user_email') != user_email:
                 st.session_state.user_role = current_role
