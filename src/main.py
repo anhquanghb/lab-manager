@@ -9,18 +9,11 @@ project_root = Path(__file__).parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-# Import các module và trang của ứng dụng
+# Import các module cốt lõi, không phải các trang giao diện
 from src.auth import get_user_info, logout
 from src.user_manager import UserManager
 from src.database_manager import DatabaseManager
 from src.database_admin import AdminDatabaseManager
-from src.home_page import home_page
-from src.admin_page import admin_page
-from src.admin_settings_page import admin_settings_page
-from src.ai_assistant_page import ai_assistant_page
-from src.statistics_page import statistics_page
-from src.user_management_page import user_management_page
-from src.chatbot_page import chatbot_page
 
 # Cấu hình trang
 st.set_page_config(page_title="Hệ thống Quản lý Lab", layout="wide", initial_sidebar_state="expanded")
@@ -35,16 +28,12 @@ def setup_sidebar(user_info):
     st.sidebar.title("Menu")
     
     if user_info:
-        # Nếu đã đăng nhập, hiển thị thông tin người dùng và nút đăng xuất
         user_role = st.session_state.get('user_role', 'guest')
         st.sidebar.write(f"**Xin chào, {user_info.get('given_name', user_info.get('name', 'bạn'))}!**")
         st.sidebar.write(f"Vai trò: {user_role.capitalize()}")
         st.sidebar.button("Đăng xuất", on_click=logout, key="sidebar_logout")
     else:
-        # Nếu chưa đăng nhập, hiển thị thông báo
         st.sidebar.info("Vui lòng đăng nhập để sử dụng các tính năng.")
-        
-        # Thêm nút đăng nhập vào sidebar
         redirect_uri = db_manager.config_data.get("site_url", "http://localhost:8501")
         get_user_info(redirect_uri)
 
@@ -52,6 +41,15 @@ def show_pages_by_role(user_role):
     """
     Hiển thị các trang chức năng trong sidebar dựa trên vai trò của người dùng.
     """
+    # Hoãn việc import các trang giao diện để tránh lỗi circular import
+    from src.home_page import home_page
+    from src.admin_page import admin_page
+    from src.admin_settings_page import admin_settings_page
+    from src.ai_assistant_page import ai_assistant_page
+    from src.statistics_page import statistics_page
+    from src.user_management_page import user_management_page
+    from src.chatbot_page import chatbot_page
+
     page_dependencies = {
         "user_manager": user_manager,
         "db_manager": db_manager,
@@ -100,7 +98,6 @@ def main():
     
     if user_info:
         user_email = user_info.get('email')
-        
         current_role = user_manager.get_user_role(user_email)
         
         if current_role == "guest":
@@ -120,8 +117,8 @@ def main():
         setup_sidebar(None)
         
         st.title("Chào mừng đến với Hệ thống Quản lý Lab")
-        st.write("Vui lòng chọn 'Đăng nhập bằng Google' ở thanh bên để bắt đầu.")
-        st.info("Chức năng Chatbot có thể sử dụng mà không cần đăng nhập. Vui lòng chọn trên thanh điều hướng.")
+        st.write("Vui lòng đăng nhập bằng Google ở thanh bên để bắt đầu.")
+        st.info("Chức năng hệ thống sẽ được cung cấp sau khi đăng nhập. Vui lòng chọn trên thanh điều hướng.")
 
 if __name__ == "__main__":
     main()
