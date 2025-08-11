@@ -1,9 +1,9 @@
-# src/data_converter.py
+# src/convert_data.py
 
 import pandas as pd
 import json
 import os
-import io
+from pathlib import Path
 
 # Danh sách các trạng thái Tracking hợp lệ (trùng khớp với admin_page.py)
 VALID_TRACKING_STATUSES = [
@@ -17,30 +17,30 @@ VALID_TRACKING_STATUSES = [
     "Không rõ"
 ]
 
-def convert_csv_to_json(uploaded_file):
+def convert_csv_to_json_data(df_csv):
     """
-    Chuyển đổi dữ liệu từ file CSV đã upload sang định dạng JSON mong muốn.
-    Trả về dữ liệu JSON đã xử lý hoặc None nếu có lỗi.
+    Chuyển đổi dữ liệu từ DataFrame của CSV sang định dạng list of dicts
+    để lưu vào file JSON.
     """
-    try:
-        # Đọc file CSV đã upload
-        df_csv = pd.read_csv(io.BytesIO(uploaded_file.getvalue()))
-    except Exception as e:
-        raise ValueError(f"Lỗi khi đọc file CSV: {e}")
-
     transformed_data = []
 
-    # Lặp qua từng dòng trong DataFrame và chuyển đổi sang định dạng JSON
     for index, row in df_csv.iterrows():
+        # 'id': Sử dụng 'Code' từ CSV, nếu trống thì tạo ID dựa trên số thứ tự dòng
         item_id = str(row.get('Code', '')).strip() if pd.notna(row.get('Code')) and str(row.get('Code', '')).strip() != '0' else f"ITEM_{index + 1}"
-        
+
+        # 'name': Cải thiện logic để tránh tên 'không xác định'
         item_name_iupac = str(row.get('Tên Tiếng Anh/tên theo IUPAC', '')).strip() if pd.notna(row.get('Tên Tiếng Anh/tên theo IUPAC')) and str(row.get('Tên Tiếng Anh/tên theo IUPAC', '')).strip() != '0' else ''
         item_name_vn = str(row.get('Tên hóa chất/Vật tư/Thiết bị', '')).strip() if pd.notna(row.get('Tên hóa chất/Vật tư/Thiết bị')) and str(row.get('Tên hóa chất/Vật tư/Thiết bị', '')).strip().lower() != 'không' else ''
-
+        item_note_for_name = str(row.get('Ghi chú', '')).strip() if pd.notna(row.get('Ghi chú')) else ''
+        
         item_name = item_name_iupac if item_name_iupac else item_name_vn
         if not item_name:
-            item_name = f"Item {item_id} (Tên không xác định)"
+            if item_note_for_name:
+                item_name = item_note_for_name
+            else:
+                item_name = f"Item {item_id} (Tên không xác định)"
 
+        # 'type': Lấy trực tiếp từ cột 'Loại'
         item_type_raw = str(row.get('Loại', '')).strip().lower() if pd.notna(row.get('Loại')) else ""
         if item_type_raw == "hóa chất":
             item_type = "Hóa chất"
@@ -51,52 +51,61 @@ def convert_csv_to_json(uploaded_file):
         else:
             item_type = "Không xác định"
 
-        item_quantity = row.get('Số lượng', 1)
+        # 'quantity' và 'unit': Giữ nguyên giá trị mặc định đã có (hoặc lấy từ CSV nếu có)
+        item_quantity = row.get('Số lượng', 1) if pd.notna(row.get('Số lượng')) else 1
         item_unit = str(row.get('Đơn vị', 'đơn vị')).strip() if pd.notna(row.get('Đơn vị')) else "đơn vị"
 
-        item_location = str(row.get('Vị trí', 'Không rõ')).strip() if pd.notna(row.get('Vị trí')) else "Không rõ"
+        # 'location': Lấy từ 'Vị trí', nếu trống thì là "Không rõ"
+        item_location = str(row.get('Vị trí', '')).strip() if pd.notna(row.get('Vị trí')) else "Không rõ"
         if item_location.lower() == "không rõ":
             item_location = "Không rõ"
 
+        # Các trường khác
         item_chemical_formula = str(row.get('Công thức hóa chất', '')).strip() if pd.notna(row.get('Công thức hóa chất')) and str(row.get('Công thức hóa chất', '')).strip() != '0' else None
         item_cas_number = str(row.get('CAS', '')).strip() if pd.notna(row.get('CAS')) and str(row.get('CAS', '')).strip() != '0' else None
-        
         item_state_or_concentration = str(row.get('Nồng độ/Trạng thái', '')).strip() if pd.notna(row.get('Nồng độ/Trạng thái')) else None
-        if item_state_or_concentration:
-            item_state_or_concentration = item_state_or_concentration.lower()
-
-        item_status = str(row.get('Tình trạng chai, hộp', '')).strip() if pd.notna(row.get('Tình trạng chai, hộp')) else None
-        if item_status:
-            item_status = item_status.lower()
-            if item_status == "còn nguyên":
-                item_status = "còn nguyên"
-            elif item_status in ["đã mở", "đã sử dụng", "sử dụng"]:
-                item_status = "đã mở"
-            elif item_status in ["hết hạn", "hết", "không còn"]:
-                item_status = "hết"
-            elif item_status in ["đang mượn", "đang sử dụng"]:
-                item_status = "đang mượn"
-            elif item_status == "thất lạc":
-                item_status = "thất lạc"
-            elif item_status == "huỷ":
-                item_status = "huỷ"
-            else:
-                item_status = "không xác định"
-        
         item_purpose = str(row.get('Mục đích', '')).strip() if pd.notna(row.get('Mục đích')) else None
-        
-        raw_tracking_from_csv = str(row.get('Theo dõi', 'Không rõ')).strip() if pd.notna(row.get('Theo dõi')) else "Không rõ"
-        item_tracking = raw_tracking_from_csv.split(" - Note:")[0].strip()
-        if item_tracking not in VALID_TRACKING_STATUSES:
-            item_tracking = "Không rõ"
-        
+
+        # Xử lý trường 'Theo dõi' (tracking) và 'Ghi chú' (note)
         item_note = str(row.get('Ghi chú', '')).strip() if pd.notna(row.get('Ghi chú')) else None
         if item_note == "":
             item_note = None
 
+        # Logic chuẩn hóa cho trường 'status'
+        item_status_raw = str(row.get('Tình trạng chai, hộp', '')).strip().lower() if pd.notna(row.get('Tình trạng chai, hộp')) else None
+        item_status = None
+        if item_status_raw:
+            if item_status_raw == "còn nguyên":
+                item_status = "còn nguyên"
+            elif item_status_raw in ["đã mở", "đã sử dụng", "sử dụng"]:
+                item_status = "đã mở"
+            elif item_status_raw in ["hết hạn", "hết", "không còn"]:
+                item_status = "hết"
+            elif item_status_raw in ["đang mượn", "đang sử dụng"]:
+                item_status = "đang mượn"
+            elif item_status_raw == "thất lạc":
+                item_status = "thất lạc"
+            elif item_status_raw == "huỷ":
+                item_status = "huỷ"
+            else:
+                item_status = "không xác định"
+        
+        # Logic chuẩn hóa cho trường 'tracking'
+        raw_tracking_from_csv = str(row.get('Theo dõi', '')).strip() if pd.notna(row.get('Theo dõi')) else "Không rõ"
+        item_tracking = raw_tracking_from_csv.split(" - Note:")[0].strip()
+        if item_tracking not in VALID_TRACKING_STATUSES:
+            item_tracking = "Không rõ"
+        
+        # Nếu tracking là "Không rõ", thử lấy giá trị từ status nếu có
+        if item_tracking == "Không rõ" and item_status:
+            tracking_from_status = item_status.capitalize()
+            if tracking_from_status in VALID_TRACKING_STATUSES:
+                item_tracking = tracking_from_status
+
+        # Tạo lại trường 'description' để hiển thị đầy đủ
         description_parts = []
         if item_name_iupac and item_name_iupac != item_name:
-             description_parts.append(f"Tên IUPAC: {item_name_iupac}")
+            description_parts.append(f"Tên IUPAC: {item_name_iupac}")
         if item_name_vn and item_name_vn != item_name:
             description_parts.append(f"Tên Tiếng Việt: {item_name_vn}")
         if item_chemical_formula:
@@ -134,5 +143,5 @@ def convert_csv_to_json(uploaded_file):
             "tracking": item_tracking,
             "note": item_note
         })
-
+    
     return transformed_data

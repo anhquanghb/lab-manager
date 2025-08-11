@@ -1,4 +1,4 @@
-# src/admin_page.py (Đã sửa)
+# src/admin_page.py
 
 import streamlit as st
 import pandas as pd
@@ -82,7 +82,6 @@ def admin_page():
 
 def update_data_section():
     """Hiển thị giao diện cho phép admin cập nhật toàn bộ dữ liệu từ file CSV."""
-    # Hoãn việc import convert_data để tránh lỗi circular import
     from src.convert_data import convert_csv_to_json_data
 
     with st.expander("Cập nhật toàn bộ dữ liệu (Import từ CSV)", expanded=False):
@@ -92,11 +91,9 @@ def update_data_section():
             if st.button("Xử lý và Cập nhật dữ liệu"):
                 with st.spinner("Đang xử lý dữ liệu từ CSV..."):
                     try:
-                        # Chuyển đổi dữ liệu từ CSV sang định dạng JSON
                         df_csv = pd.read_csv(uploaded_file)
                         new_data = convert_csv_to_json_data(df_csv)
                         
-                        # Backup file inventory.json hiện tại
                         timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
                         old_file_path = admin_db_manager.data_path
                         backup_file_path = os.path.join(
@@ -108,7 +105,6 @@ def update_data_section():
                             shutil.copyfile(old_file_path, backup_file_path)
                             st.success(f"Đã sao lưu file cũ thành: `{os.path.basename(backup_file_path)}`")
                         
-                        # Lưu dữ liệu mới vào inventory.json và đẩy lên GitHub
                         commit_message = f"feat(data): Cập nhật dữ liệu tồn kho từ CSV ngày {datetime.now().strftime('%d-%m-%Y')}"
                         if admin_db_manager.save_and_push_json(old_file_path, new_data, commit_message):
                             st.session_state['admin_search_results'] = pd.DataFrame()
