@@ -73,7 +73,7 @@ def convert_csv_to_json_data(df_csv):
             item_note = None
 
         # Logic chuẩn hóa cho trường 'status'
-        item_status_raw = str(row.get('Tình trạng chai, hộp', '')).strip().lower() if pd.notna(row.get('Tình trạng chai, hộp')) else None
+        item_status_raw = str(row.get('Mô tả', '')).strip().lower() if pd.notna(row.get('Mô tả')) else None
         item_status = None
         if item_status_raw:
             if item_status_raw == "còn nguyên":
@@ -89,7 +89,7 @@ def convert_csv_to_json_data(df_csv):
             elif item_status_raw == "huỷ":
                 item_status = "huỷ"
             else:
-                item_status = "không xác định"
+                item_status = item_status_raw
         
         # Logic chuẩn hóa cho trường 'tracking'
         raw_tracking_from_csv = str(row.get('Theo dõi', '')).strip() if pd.notna(row.get('Theo dõi')) else "Không rõ"
