@@ -133,7 +133,7 @@ def display_item_details(item_data):
         st.write(f"**Loại:** {item_data.get('type', 'N/A')}")
         st.write(f"**Số lượng:** {item_data.get('quantity', 'N/A')} {item_data.get('unit', '')}")
         st.write(f"**Vị trí:** {item_data.get('location', 'N/A')}")
-        st.write(f"**Tình trạng:** {item_data.get('status', 'N/A')}")
+        st.write(f"**Mô tả ban đầu:** {item_data.get('status', 'N/A')}")
     with col2:
         st.write(f"**Số CAS:** {item_data.get('cas_number', 'N/A')}")
         st.write(f"**Công thức:** {item_data.get('chemical_formula', 'N/A')}")
