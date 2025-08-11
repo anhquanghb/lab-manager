@@ -1,9 +1,10 @@
 # src/convert_data.py
 
-import pandas as pd
+import pandas as pd # Import pandas here
 import json
 import os
 from pathlib import Path
+from datetime import datetime
 
 # Danh sách các trạng thái Tracking hợp lệ (trùng khớp với admin_page.py)
 VALID_TRACKING_STATUSES = [
@@ -118,10 +119,6 @@ def convert_csv_to_json_data(df_csv):
             description_parts.append(f"Mô tả: {item_status}")
         if item_purpose:
             description_parts.append(f"Mục đích: {item_purpose}")
-        if item_tracking and item_tracking != "Không rõ":
-            description_parts.append(f"Theo dõi: {item_tracking}")
-        if item_note:
-            description_parts.append(f"Ghi chú: {item_note}")
 
         item_description_for_display = ", ".join(description_parts) if description_parts else "Không có mô tả."
         
