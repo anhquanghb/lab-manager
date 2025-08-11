@@ -1,58 +1,47 @@
-# src/user_manager.py
+# src/user_manager.py (đã sửa đổi)
 
 import json
 import pandas as pd
 import os
+import streamlit as st
 
 class UserManager:
-    def __init__(self, users_file='data/users.json'):
-        # SỬA: Sử dụng trực tiếp string path để tương thích cloud
+    def __init__(self, admin_db_manager, users_file='data/users.json'):
+        self.admin_db_manager = admin_db_manager
         self.users_file = users_file
         self.users_data = self._load_users()
 
     def _load_users(self):
         """
-        Tải dữ liệu người dùng từ file JSON. 
+        Tải dữ liệu người dùng từ file JSON.
         Nếu file không tồn tại, tạo file và thư mục cần thiết.
         """
-        # SỬA: Dùng os.path.exists và os.makedirs để kiểm tra và tạo file/thư mục
         if not os.path.exists(self.users_file):
             print(f"Không tìm thấy file người dùng tại {self.users_file}, tạo file mới...")
-            
-            # Lấy ra tên thư mục từ đường dẫn
             dir_name = os.path.dirname(self.users_file)
-            
-            # Tạo thư mục nếu nó chưa tồn tại và không phải là thư mục gốc
             if dir_name and not os.path.exists(dir_name):
                 os.makedirs(dir_name)
-                
-            # Tạo file rỗng
             with open(self.users_file, 'w', encoding='utf-8') as f:
                 json.dump({}, f)
             return {}
-            
         try:
             with open(self.users_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except (json.JSONDecodeError, FileNotFoundError) as e:
-            print(f"Lỗi khi tải file người dùng: {e}")
+            st.error(f"Lỗi khi tải file người dùng: {e}")
             return {}
 
     def get_user_role(self, email):
         """Lấy vai trò của người dùng dựa trên email. Trả về 'guest' nếu không tìm thấy."""
-        # Dùng .get() để tránh lỗi nếu email không tồn tại
         user_data = self.users_data.get(email, {})
         return user_data.get("role", "guest")
         
     def save_users(self):
-        """Lưu dữ liệu người dùng hiện tại vào file JSON."""
-        try:
-            with open(self.users_file, 'w', encoding='utf-8') as f:
-                json.dump(self.users_data, f, ensure_ascii=False, indent=4)
-            return True
-        except Exception as e:
-            print(f"Lỗi khi lưu file người dùng: {e}")
-            return False
+        """
+        Lưu dữ liệu người dùng hiện tại và đẩy lên GitHub.
+        """
+        commit_message = "feat(users): Cập nhật dữ liệu người dùng"
+        return self.admin_db_manager.save_and_push_json(self.users_file, self.users_data, commit_message)
 
     def get_all_users_as_df(self):
         """Trả về danh sách tất cả người dùng dưới dạng DataFrame của Pandas."""

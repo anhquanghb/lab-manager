@@ -26,8 +26,9 @@ from src.chatbot_page import chatbot_page
 st.set_page_config(page_title="Hệ thống Quản lý Lab", layout="wide", initial_sidebar_state="expanded")
 
 # Khởi tạo các manager
-user_manager = UserManager()
 db_manager = DatabaseManager()
+admin_db_manager = AdminDatabaseManager()
+user_manager = UserManager(admin_db_manager)
 
 def setup_sidebar(user_info):
     """Thiết lập và hiển thị thanh bên (sidebar) dựa trên trạng thái đăng nhập."""
@@ -46,9 +47,7 @@ def setup_sidebar(user_info):
 def show_pages_by_role(user_role):
     """
     Hiển thị các trang chức năng trong sidebar dựa trên vai trò của người dùng.
-    Phiên bản này đã được đơn giản hóa để khắc phục lỗi "click hai lần".
     """
-    admin_db_manager = AdminDatabaseManager()
     page_dependencies = {
         "user_manager": user_manager,
         "db_manager": db_manager,
@@ -78,16 +77,11 @@ def show_pages_by_role(user_role):
         st.warning("Bạn không có quyền truy cập vào bất kỳ trang nào.")
         return
 
-    # --- THAY ĐỔI CHÍNH Ở ĐÂY ---
-    # Chúng ta không cần quản lý state 'page' hay 'index' một cách thủ công nữa.
-    # st.radio sẽ tự động ghi nhớ lựa chọn cuối cùng của người dùng.
     selected_page_name = st.sidebar.radio(
         "Điều hướng",
         options=allowed_pages,
-        # Không cần tham số 'index' nữa
     )
 
-    # Lấy thông tin và gọi hàm của trang được chọn
     page_details = PAGES[selected_page_name]
     page_function = page_details["func"]
     page_args = page_details["args"]
@@ -97,16 +91,10 @@ def show_pages_by_role(user_role):
 def main():
     """Hàm chính điều khiển luồng của ứng dụng."""
     
-    # --- THAY ĐỔI: Đọc redirect_uri từ file config ---
-    # Cung cấp giá trị mặc định để chạy lokal nếu không tìm thấy trong config
     redirect_uri = db_manager.config_data.get("site_url", "http://localhost:8501")
-    
-    # Truyền redirect_uri vào hàm get_user_info
     user_info = get_user_info(redirect_uri)
-    # --- KẾT THÚC THAY ĐỔI ---
     
     if user_info:
-        # Nếu người dùng đã đăng nhập:
         user_email = user_info.get('email')
         
         current_role = user_manager.get_user_role(user_email)
@@ -123,7 +111,6 @@ def main():
         setup_sidebar(user_info)
         show_pages_by_role(st.session_state.user_role)
     else:
-        # Nếu người dùng chưa đăng nhập:
         setup_sidebar(None)
         
         st.title("Chào mừng đến với Hệ thống Quản lý Lab")
