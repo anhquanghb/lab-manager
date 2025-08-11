@@ -34,8 +34,8 @@ def setup_sidebar(user_info):
         st.sidebar.button("Đăng xuất", on_click=logout, key="sidebar_logout")
     else:
         st.sidebar.info("Vui lòng đăng nhập để sử dụng các tính năng.")
-        redirect_uri = db_manager.config_data.get("site_url", "http://localhost:8501")
-        get_user_info(redirect_uri)
+        # Removed the call to get_user_info(redirect_uri) here.
+        # It's now handled by the main() function.
 
 def show_pages_by_role(user_role):
     """
@@ -94,7 +94,7 @@ def main():
     """Hàm chính điều khiển luồng của ứng dụng."""
     
     redirect_uri = db_manager.config_data.get("site_url", "http://localhost:8501")
-    user_info = get_user_info(redirect_uri)
+    user_info = get_user_info(redirect_uri) # This single call handles the login button display
     
     if user_info:
         user_email = user_info.get('email')
@@ -114,6 +114,8 @@ def main():
         setup_sidebar(user_info)
         show_pages_by_role(st.session_state.user_role)
     else:
+        # For the logged-out state, we don't need to call get_user_info again.
+        # It has already been called and displayed the login button.
         setup_sidebar(None)
         
         st.title("Chào mừng đến với Hệ thống Quản lý Lab")
