@@ -15,7 +15,6 @@ class AdminDatabaseManager(DatabaseManager):
     """
     def __init__(self, data_path='data/inventory.json', config_path='data/config.json'):
         # Gọi hàm __init__ của lớp cha (DatabaseManager) để tải dữ liệu.
-        # Cấu trúc này không cần nhận db_manager_instance nữa.
         super().__init__(data_path, config_path)
 
     def save_inventory_to_json(self):
@@ -32,37 +31,36 @@ class AdminDatabaseManager(DatabaseManager):
         
         cols_to_save = [col for col in original_cols if col in self.inventory_data.columns]
         data_to_save = self.inventory_data[cols_to_save].to_dict(orient='records')
-
-        try:
-            # Dùng os.makedirs để tạo thư mục, đảm bảo tương thích cloud
-            dir_name = os.path.dirname(self.data_path)
-            if dir_name:
-                os.makedirs(dir_name, exist_ok=True)
-            
-            with open(self.data_path, 'w', encoding='utf-8') as f:
-                json.dump(data_to_save, f, ensure_ascii=False, indent=2)
-            print(f"Đã lưu inventory_data vào {self.data_path} thành công.")
-            return True
-        except Exception as e:
-            print(f"Lỗi khi lưu inventory_data vào JSON: {e}")
-            st.error(f"Lỗi khi lưu inventory_data vào JSON: {e}")
-            return False
+        
+        commit_message = f"feat(admin): Cập nhật thông tin từ giao diện Admin"
+        return self.save_and_push_json(self.data_path, data_to_save, commit_message)
 
     def save_config_to_json(self):
         """Lưu cấu hình hiện tại vào file config.json."""
+        commit_message = f"feat(config): Cập nhật cài đặt từ giao diện Admin"
+        return self.save_and_push_json(self.config_path, self.config_data, commit_message)
+
+    def save_and_push_json(self, file_path, data, commit_message):
+        """Hàm chung để lưu dữ liệu vào file JSON và đẩy lên GitHub."""
         try:
-            # Dùng os.makedirs để đảm bảo thư mục tồn tại
-            dir_name = os.path.dirname(self.config_path)
+            dir_name = os.path.dirname(file_path)
             if dir_name:
                 os.makedirs(dir_name, exist_ok=True)
-
-            with open(self.config_path, 'w', encoding='utf-8') as f:
-                json.dump(self.config_data, f, ensure_ascii=False, indent=2)
-            print(f"Đã lưu cấu hình vào {self.config_path} thành công.")
-            return True
+            
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+            
+            print(f"Đã lưu dữ liệu vào {file_path} thành công.")
+            
+            if self.push_to_github(file_path, commit_message):
+                st.success(f"Đã đẩy thay đổi của {file_path} lên GitHub!")
+                return True
+            else:
+                st.error(f"Lỗi: Không thể đẩy thay đổi của {file_path} lên GitHub.")
+                return False
         except Exception as e:
-            print(f"Lỗi khi lưu cấu hình vào JSON: {e}")
-            st.error(f"Lỗi khi lưu cấu hình vào JSON: {e}")
+            st.error(f"Lỗi khi lưu và đẩy file JSON: {e}")
+            print(f"Lỗi khi lưu và đẩy file JSON: {e}")
             return False
 
     def push_to_github(self, file_path_to_push, commit_message):
