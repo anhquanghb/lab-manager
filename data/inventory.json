@@ -6415,7 +6415,7 @@
         "status": "đã mở",
         "purpose": null,
         "tracking": "Đã mở",
-        "note": null,
+        "note": "05/11/2025 09:40: Cập nhật mới",
         "id_normalized": "a074a",
         "name_normalized": "sodium hydroxide",
         "type_normalized": "hoa chat",
@@ -6429,7 +6429,7 @@
         "iupac_name_normalized": "sodium hydroxide",
         "vietnamese_name_normalized": "",
         "description_normalized": "cong thuc: naoh, cas: 1310-73-2, trang thai/nong do: ran, mo ta: da mo",
-        "note_normalized": ""
+        "note_normalized": "05/11/2025 09:40: cap nhat moi"
     },
     {
         "id": "A074B",
